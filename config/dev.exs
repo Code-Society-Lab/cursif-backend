@@ -2,10 +2,7 @@ import Config
 
 # Configure your database
 config :cursif, Cursif.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "cursif_dev",
+  url: System.get_env("DATABASE_URL") || "ecto://postgres:postgres@localhost/cursif_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
