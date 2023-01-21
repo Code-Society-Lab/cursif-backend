@@ -19,9 +19,11 @@ aimes to help teams manage their projects.
   - [Postgresql](https://www.postgresql.org/download/)
 
 ### Configurations
+Make sure you have installed the requirement above before continuing.
 
 ### Start the application:
 
+  * In the `cursif` directory,, create the file `.env`
   * Set the environemnent source with `source .env`
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
