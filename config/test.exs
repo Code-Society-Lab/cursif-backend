@@ -6,10 +6,13 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :cursif, Cursif.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "cursif_test#{System.get_env("MIX_TEST_PARTITION")}",
+  username: System.get_env("DATABASE_USERNAME"),
+  password: System.get_env("DATABASE_PASSWORD"),
+  hostname: System.get_env("DATABASE_HOSTNAME", "localhost"),
+  database: System.get_env(
+    "DATABASE_NAME",
+    "cursif_test#{System.get_env("MIX_TEST_PARTITION")}"
+  ),
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
