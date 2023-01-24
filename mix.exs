@@ -20,7 +20,7 @@ defmodule Cursif.MixProject do
   def application do
     [
       mod: {Cursif.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
@@ -47,7 +47,7 @@ defmodule Cursif.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:timex, "~> 3.7.9"},
-      {:tzdata, "~> 0.1.9", override: true},
+      {:tzdata, "~> 1.1"},
     ]
   end
 
