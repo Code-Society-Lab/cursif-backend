@@ -23,7 +23,11 @@ Make sure you have installed the requirement above before continuing.
 
 ### Start the application:
 
+<<<<<<< HEAD
   * In the `cursif` directory,, create the file `.env`
+=======
+  * In the `cursif` directory, create the file `.env`
+>>>>>>> 348c9797681f6a4aa2e02e6b259974f93abfe4da
   * Set the environemnent source with `source .env`
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
