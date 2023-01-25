@@ -5,8 +5,23 @@ defmodule CursifWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :graphql do
+    # Will be used later
+  end
+
   scope "/api", CursifWeb do
     pipe_through :api
+  end
+
+  # GraphQL API
+  scope "/api" do
+    pipe_through :graphql
+
+    forward "/", Absinthe.Plug, schema: CursifWeb.Schema
+  end
+
+  if Mix.env == :dev do
+    forward "/graphql", Absinthe.Plug.GraphiQL, schema: CursifWeb.Schema
   end
 
   # Enables LiveDashboard only for development

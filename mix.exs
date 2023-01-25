@@ -48,6 +48,8 @@ defmodule Cursif.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:timex, "~> 3.7.9"},
       {:tzdata, "~> 1.1"},
+      {:absinthe, "~> 1.5"},
+      {:absinthe_plug, "~> 1.5"},
     ]
   end
 
