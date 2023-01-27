@@ -32,5 +32,6 @@ jobs:
       - run: mix deps.compile
       - run: mix test
         env:
+          DATABASE_USERNAME: postgres
           DATABASE_PASSWORD: postgres
           DATABASE_HOSTNAME: postgres
