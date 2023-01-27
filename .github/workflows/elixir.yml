@@ -33,4 +33,4 @@ jobs:
       - run: mix test
         env:
           DATABASE_PASSWORD: postgres
-          POSTGRES_HOST: postgres
+          DATABASE_HOSTNAME: postgres
