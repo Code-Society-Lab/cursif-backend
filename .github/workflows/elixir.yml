@@ -10,25 +10,39 @@ permissions:
   contents: read
 
 jobs:
-  build:
-
-    name: Build and test
+  mix-test:
+    name: Mix Test
     runs-on: ubuntu-latest
-
+    env:
+      MIX_ENV: test
+      ELIXIR_ENV: test
+      DATABASE_HOST: localhost
+      DATABASE_USER: postgres
+      DATABASE_PORT: 5432
+      DATABASE_PASSWORD: postgres
+    services:
+      postgres:
+        image: postgres:10.4
+        env:
+          POSTGRES_PASSWORD: "postgres"
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Elixir
-      uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
-      with:
-        elixir-version: '1.12.3' # Define the elixir version [required]
-        otp-version: '24.1' # Define the OTP version [required]
-    - name: Restore dependencies cache
-      uses: actions/cache@v3
-      with:
-        path: deps
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-mix-
-    - name: Install dependencies
-      run: mix deps.get
-    - name: Run tests
-      run: mix test
+      - uses: actions/checkout@v2
+
+      - name: Initial setup
+        uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: "1.14.3"
+          otp-version: "25.0.0"
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Run tests
+        run: mix test --exclude lambda_development
