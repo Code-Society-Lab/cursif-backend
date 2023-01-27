@@ -3,6 +3,7 @@
 [![Join on Discord](https://discordapp.com/api/guilds/823178343943897088/widget.png?style=shield)](https://discord.gg/code-society-823178343943897088)
 [![License](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](https://opensource.org/licenses/gpl-3.0)
 [![Last Updated](https://img.shields.io/github/last-commit/code-society-lab/cursif.svg)](https://github.com/code-society-lab/cursif/commits/main)
+[![Elixir CI](https://github.com/Code-Society-Lab/cursif/actions/workflows/elixir.yml/badge.svg)](https://github.com/Code-Society-Lab/cursif/actions/workflows/elixir.yml)
 [![Elixir](https://img.shields.io/badge/Elixir-1.14.3-4e2a8e)](https://hexdocs.pm/elixir/Kernel.html)
 [![Elixir](https://img.shields.io/badge/Phoenix-1.6.15-ff6f61)](https://hexdocs.pm/phoenix/overview.html)
 [![Postgresql](https://img.shields.io/badge/Phoenix-1.6.15-336791)](https://hexdocs.pm/phoenix/overview.html)
