@@ -21,24 +21,49 @@ aimes to help teams manage their projects.
 ### Configurations
 Make sure you have installed the requirement above before continuing.
 
-### Start the application:
+#### Connect your database
+In project root directoy, create and edit and file named `.env`. Add the following
+information inside.
 
-  * In the `cursif` directory, create the file `.env`
-  * Set the environemnent source with `source .env`
+```
+export DATABASE_USERNAME=<your database username>
+export DATABASE_PASSWORD=<your database password>
+```
+
+Once done, set the environement source by executing `source .env`
+
+> Note that this command needs to be excuted once each time you want to execute the application
+
+#### Setup the application
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+### Start the application:
+Start Cursif with `mix phx.server` or inside IEx with `iex -S mix phx.server` (recommended for development). You can, now, consume the API from `localhost:4000/api`.
+You can test queries at [`localhost:4000/graphql`](http://localhost:4000/graphql)
 
-### Learn more
+> To monitor the application, you can access the dashboard at [`localhost:4000/dashboard`](http://localhost:4000/dashboard) from your browser. 
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+## Resources
+  
+### Elixir
+
+  * [Official website](https://elixir-lang.org)  
+    * [Docs](https://hexdocs.pm/elixir)
+    * [Style guide](https://github.com/christopheradams/elixir_style_guide)
+    * [Mix](https://hexdocs.pm/mix/1.14/Mix.html)
+
+### Phoenix
+  
+  * [Official website](https://www.phoenixframework.org/)
+  * [Docs](https://hexdocs.pm/phoenix)
+    * [Guides](https://hexdocs.pm/phoenix/overview.html) 
+    * [Ecto](https://hexdocs.pm/ecto/)
+
+### Absinthe & GraphQL 
+  
+  * [Absinthe docs](https://hexdocs.pm/absinthe/overview.html)
+  * [GraphQL](https://graphql.org/)
 
 ## Contribution
-You can contribute to the project by simply opening an issue, by improving some current features or even by adding your own features.
-Before contributing please refer to our [contribution guidelines](https://github.com/Code-Society-Lab/grace/blob/main/docs/CONTRIBUTING.md) and [Code of Conduct for contributor (temporary unavailable)](#).
+Contribution are always welcomed and appreciated! See the [contribution guidelines](https://github.com/Code-Society-Lab/cursif/blob/main/CONTRIBUTING.md).
