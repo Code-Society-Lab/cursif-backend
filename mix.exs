@@ -50,6 +50,7 @@ defmodule Cursif.MixProject do
       {:tzdata, "~> 1.1"},
       {:absinthe, "~> 1.5"},
       {:absinthe_plug, "~> 1.5"},
+      {:dotenv, "~> 3.0.0", only: [:dev, :test]}
     ]
   end
 

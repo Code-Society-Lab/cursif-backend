@@ -31,8 +31,6 @@ export DATABASE_USERNAME=<your database username>
 export DATABASE_PASSWORD=<your database password>
 ```
 
-Once done, set the environement source by executing `source .env`
-
 > Note that this command needs to be excuted once each time you want to execute the application
 
 #### Setup the application
@@ -61,7 +59,7 @@ You can test queries at [`localhost:4000/graphql`](http://localhost:4000/graphql
     * [Guides](https://hexdocs.pm/phoenix/overview.html) 
     * [Ecto](https://hexdocs.pm/ecto/)
 
-### Absinthe & GraphQL 
+### Absinthe & GraphQL
   
   * [Absinthe docs](https://hexdocs.pm/absinthe/overview.html)
   * [GraphQL](https://graphql.org/)
