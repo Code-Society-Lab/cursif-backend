@@ -31,8 +31,6 @@ export DATABASE_USERNAME=<your database username>
 export DATABASE_PASSWORD=<your database password>
 ```
 
-> Note that this command needs to be excuted once each time you want to execute the application
-
 #### Setup the application
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
