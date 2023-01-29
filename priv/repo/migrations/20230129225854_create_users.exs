@@ -4,11 +4,10 @@ defmodule Cursif.Repo.Migrations.CreateUsers do
   def change do
     create table(:users, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :username, :string, null: false
-      add :first_name, :string, null: false
-      add :last_name, :string, null: false
-      add :email, :string, null: false
-      add :phone_number, :string, null: true
+      add :username, :string
+      add :first_name, :string
+      add :last_name, :string
+      add :email, :string
       add :hashed_password, :string
 
       timestamps()
