@@ -6,7 +6,6 @@
 [![Elixir CI](https://github.com/Code-Society-Lab/cursif/actions/workflows/elixir.yml/badge.svg)](https://github.com/Code-Society-Lab/cursif/actions/workflows/elixir.yml)
 [![Elixir](https://img.shields.io/badge/Elixir-1.14.3-4e2a8e)](https://hexdocs.pm/elixir/Kernel.html)
 [![Elixir](https://img.shields.io/badge/Phoenix-1.6.15-ff6f61)](https://hexdocs.pm/phoenix/overview.html)
-[![Postgresql](https://img.shields.io/badge/Phoenix-1.6.15-336791)](https://hexdocs.pm/phoenix/overview.html)
 
 Cursif is a collaborative, scriptable and flexible note taking application that
 aimes to help teams manage their projects. 
