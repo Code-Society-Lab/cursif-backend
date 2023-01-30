@@ -1,4 +1,8 @@
 defmodule CursifWeb.UserView do
+  @moduledoc """
+  Contains the user's representation in JSON
+  """
+
   use CursifWeb, :view
   alias CursifWeb.UserView
 
