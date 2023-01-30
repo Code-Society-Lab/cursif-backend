@@ -10,7 +10,14 @@ defmodule Cursif.MixProject do
       compilers: [] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -53,7 +60,8 @@ defmodule Cursif.MixProject do
       {:dotenv, "~> 3.0.0", only: [:dev, :test]},
       {:oauth2, "~> 0.9"},
       {:joken, "~> 2.0"},
-      {:bcrypt_elixir, "~> 3.0"}
+      {:bcrypt_elixir, "~> 3.0"},
+      {:excoveralls, "~> 0.10", only: :test},
     ]
   end
 
