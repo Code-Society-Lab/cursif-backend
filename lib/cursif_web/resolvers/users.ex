@@ -13,6 +13,9 @@ defmodule CursifWeb.Resolvers.Users do
     {:ok, Users.list_users()}
   end
 
+  @doc """
+  Returns a user.
+  """
   @spec get_user!(map(), map()) :: {:ok, User.t()}
   def get_user!(%{id: id}, _context) do
     {:ok, Users.get_user!(id)}

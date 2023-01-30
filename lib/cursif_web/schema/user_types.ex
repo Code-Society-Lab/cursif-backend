@@ -1,4 +1,4 @@
-defmodule CursifWeb.Schemas.UserTypes do
+defmodule CursifWeb.Schema.UserTypes do
   @moduledoc """
   The User types.
   """
