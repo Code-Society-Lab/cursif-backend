@@ -27,6 +27,7 @@ defmodule Cursif.Users.User do
   end
 
   @doc false
+  @spec changeset(User.t(), %{}, list()) :: User.t()
   def changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:username, :first_name, :last_name, :email, :password])
@@ -69,5 +70,4 @@ defmodule Cursif.Users.User do
       changeset
     end
   end
-
 end

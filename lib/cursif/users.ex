@@ -6,42 +6,6 @@ defmodule Cursif.Users do
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Users.{User}
-
-  @doc """
-  Gets a single user by it's id.
-
-  Raises `Ecto.NoResultsError` if the User does not exist.
-
-  ## Examples
-
-      iex> get_by_id!(123)
-      %User{}
-
-      iex> get_by_id!(456)
-      ** (Ecto.NoResultsError)
-  """
-  @spec get_by_id!(binary()) :: User.t()
-  def get_by_id!(id), do: Repo.get!(User, id)
-
-  @doc """
-  Registers a user.
-
-  ## Examples
-
-      iex> register_user(%{field: value})
-      {:ok, %User{}}
-
-      iex> register_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-  """
-  @spec register_user(map()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
-  def register_user(params) do
-    %User{}
-    |> User.changeset(params)
-    |> Repo.insert()
-  end
-
   alias Cursif.Users.User
 
   @doc """
@@ -53,6 +17,7 @@ defmodule Cursif.Users do
       [%User{}, ...]
 
   """
+  @spec list_users :: list(User.t())
   def list_users do
     Repo.all(User)
   end
@@ -71,6 +36,7 @@ defmodule Cursif.Users do
       ** (Ecto.NoResultsError)
 
   """
+  @spec get_user!(binary()) :: User.t()
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
@@ -83,9 +49,9 @@ defmodule Cursif.Users do
 
       iex> create_user(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
-
   """
-  def create_user(attrs \\ %{}) do
+  @spec create_user(map()) :: {:ok, User.t()} | {:error, %Ecto.Changeset{}}
+  def create_user(attrs) do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
@@ -103,6 +69,7 @@ defmodule Cursif.Users do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec update_user(User.t(), map()) :: {:ok, User.t()} | {:error, %Ecto.Changeset{}}
   def update_user(%User{} = user, attrs) do
     user
     |> User.changeset(attrs)
@@ -121,6 +88,7 @@ defmodule Cursif.Users do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec delete_user(User.t()) :: {:ok, User.t()} | {:error, %Ecto.Changeset{}}
   def delete_user(%User{} = user) do
     Repo.delete(user)
   end
@@ -134,6 +102,7 @@ defmodule Cursif.Users do
       %Ecto.Changeset{data: %User{}}
 
   """
+  @spec change_user(User.t(), map()) ::  %Ecto.Changeset{data: User.t()}
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end
