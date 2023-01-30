@@ -53,6 +53,7 @@ defmodule Cursif.MixProject do
       {:dotenv, "~> 3.0.0", only: [:dev, :test]},
       {:oauth2, "~> 0.9"},
       {:joken, "~> 2.0"},
+      {:bcrypt_elixir, "~> 3.0"}
     ]
   end
 
