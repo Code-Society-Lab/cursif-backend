@@ -1,15 +1,13 @@
 defmodule Cursif.Users.User do
-  @moduledoc false
-
   use Ecto.Schema
   import Ecto.Changeset
 
   @type t :: %__MODULE__{
                username: String.t(),
                email: String.t(),
+               hashed_password: String.t(),
                first_name: String.t() | nil,
                last_name: String.t() | nil,
-               hashed_password: String.t(),
                # Timestamps
                inserted_at: any(),
                updated_at: any()
@@ -22,29 +20,20 @@ defmodule Cursif.Users.User do
     field :email, :string
     field :first_name, :string
     field :last_name, :string
-    field :hashed_password, :string
+    field :password, :string, virtual: true, redact: true
+    field :hashed_password, :string, redact: true
 
     timestamps()
   end
 
   @doc false
-  def changeset(user, attrs) do
+  def changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:username, :first_name, :last_name, :email, :hashed_password])
-    |> validate_required([:username, :first_name, :last_name, :email, :hashed_password])
-    |> unique_constraint(:email)
-    |> unique_constraint(:username)
-  end
-
-  @doc """
-  A user changeset for registration.
-  """
-  def registration_changeset(user, attrs, opts \\ []) do
-    user
-    |> cast(attrs, [:username, :email, :password])
+    |> cast(attrs, [:username, :first_name, :last_name, :email, :password])
     |> validate_email()
     |> validate_password(opts)
-    |> unique_constraint(:username, name: :usernames_index)
+    |> unique_constraint(:email)
+    |> unique_constraint(:username)
   end
 
   defp validate_email(changeset) do
@@ -59,7 +48,7 @@ defmodule Cursif.Users.User do
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 72)
+    |> validate_length(:password, min: 8, max: 72)
     |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
     |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
@@ -72,6 +61,7 @@ defmodule Cursif.Users.User do
 
     if hash_password? && password && changeset.valid? do
       changeset
+      # If using Bcrypt, then further validate it is at most 72 bytes long
       |> validate_length(:password, max: 72, count: :bytes)
       |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
       |> delete_change(:password)
@@ -80,30 +70,4 @@ defmodule Cursif.Users.User do
     end
   end
 
-  @doc """
-  Verifies the password.
-
-  If there is no user or the user doesn't have a password, we call
-  `Bcrypt.no_user_verify/0` to avoid timing attacks.
-  """
-  def valid_password?(%Cursif.Users.User{hashed_password: hashed_password}, password)
-      when is_binary(hashed_password) and byte_size(password) > 0 do
-    Bcrypt.verify_pass(password, hashed_password)
-  end
-
-  def valid_password?(_, _) do
-    Bcrypt.no_user_verify()
-    false
-  end
-
-  @doc """
-  Validates the current password otherwise adds an error to the changeset.
-  """
-  def validate_current_password(changeset, password) do
-    if valid_password?(changeset.data, password) do
-      changeset
-    else
-      add_error(changeset, :current_password, "is not valid")
-    end
-  end
 end

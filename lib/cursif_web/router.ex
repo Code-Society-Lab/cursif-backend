@@ -11,6 +11,8 @@ defmodule CursifWeb.Router do
 
   scope "/api", CursifWeb do
     pipe_through :api
+
+    resources "/users", UserController, except: [:new, :edit]
   end
 
   # GraphQL API

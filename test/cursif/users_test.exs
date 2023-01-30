@@ -1,19 +1,84 @@
-defmodule Forum.AccountsTest do
+defmodule Cursif.UsersTest do
   use Cursif.DataCase
 
   alias Cursif.Users
 
-  import Cursif.UsersFixtures
-  alias Cursif.Users.{User}
-  
-  describe "get user by id" do
-    test "does not return the user if it doesn't exists" do
-      refute Users.get_by_id!("-1")
+  describe "users" do
+    alias Cursif.Users.User
+
+    import Cursif.UsersFixtures
+
+    @invalid_attrs %{
+      email: nil,
+      first_name: nil,
+      hashed_password: nil,
+      password: "Hello!worlD",
+      last_name: nil,
+      username: nil
+    }
+
+    test "list_users/0 returns all users" do
+      user = user_fixture()
+      assert Users.list_users() == [user]
     end
 
-    test "return the user if exists" do
-      %{id: id} = user = user_fixture()
-      assert %User{id: ^id} = Users.get_by_id!(user.id)
+    test "get_user!/1 returns the user with given id" do
+      user = user_fixture()
+      assert Users.get_user!(user.id) == user
+    end
+
+    test "create_user/1 with valid data creates a user" do
+      valid_attrs = %{
+        username: "jdoe",
+        email: "jdoe@email.com",
+        first_name: "John",
+        last_name: "Doe",
+        password: "HelloWorld!",
+      }
+
+      assert {:ok, %User{} = user} = Users.create_user(valid_attrs)
+      assert user.email == "jdoe@email.com"
+      assert user.first_name == "John"
+      assert user.last_name == "Doe"
+      assert user.username == "jdoe"
+    end
+
+    test "create_user/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Users.create_user(@invalid_attrs)
+    end
+
+    test "update_user/2 with valid data updates the user" do
+      user = user_fixture()
+      update_attrs = %{
+        username: "jdoe",
+        email: "jdoe@email.com",
+        first_name: "John",
+        last_name: "Doe",
+        password: "HelloWorld!",
+      }
+
+      assert {:ok, %User{} = user} = Users.update_user(user, update_attrs)
+      assert user.email == "jdoe@email.com"
+      assert user.first_name == "John"
+      assert user.last_name == "Doe"
+      assert user.username == "jdoe"
+    end
+
+    test "update_user/2 with invalid data returns error changeset" do
+      user = user_fixture()
+      assert {:error, %Ecto.Changeset{}} = Users.update_user(user, @invalid_attrs)
+      assert user == Users.get_user!(user.id)
+    end
+
+    test "delete_user/1 deletes the user" do
+      user = user_fixture()
+      assert {:ok, %User{}} = Users.delete_user(user)
+      assert_raise Ecto.NoResultsError, fn -> Users.get_user!(user.id) end
+    end
+
+    test "change_user/1 returns a user changeset" do
+      user = user_fixture()
+      assert %Ecto.Changeset{} = Users.change_user(user)
     end
   end
 end
