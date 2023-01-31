@@ -30,16 +30,7 @@ export DATABASE_USERNAME=<your database username>
 export DATABASE_PASSWORD=<your database password>
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-  * In the `cursif` directory,, create the file `.env`
-=======
-  * In the `cursif` directory, create the file `.env`
->>>>>>> 348c9797681f6a4aa2e02e6b259974f93abfe4da
-  * Set the environemnent source with `source .env`
-=======
 #### Setup the application
->>>>>>> 2bc59eb653252705f4bdc50a4170e04e2e7d159a
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
 
