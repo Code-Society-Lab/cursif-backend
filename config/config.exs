@@ -8,7 +8,8 @@
 import Config
 
 config :cursif,
-  ecto_repos: [Cursif.Repo]
+  ecto_repos: [Cursif.Repo],
+  generators: [binary_id: true]
 
 # Configures the endpoint
 config :cursif, CursifWeb.Endpoint,
