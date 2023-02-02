@@ -62,12 +62,14 @@ defmodule Cursif.UsersTest do
       assert user.first_name == "John"
       assert user.last_name == "Doe"
       assert user.username == "jdoe"
+      assert {:ok, user} == Argon2.check_pass(user, "HelloWorld!", hash_key: :hashed_password)
     end
 
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Users.update_user(user, @invalid_attrs)
       assert user == Users.get_user!(user.id)
+      assert {:ok, user} == Argon2.check_pass(user, "HelloWorld!", hash_key: :hashed_password)
     end
 
     test "delete_user/1 deletes the user" do

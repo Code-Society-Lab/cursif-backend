@@ -58,10 +58,9 @@ defmodule Cursif.MixProject do
       {:absinthe, "~> 1.5"},
       {:absinthe_plug, "~> 1.5"},
       {:dotenv, "~> 3.0.0", only: [:dev, :test]},
-      {:oauth2, "~> 0.9"},
-      {:joken, "~> 2.0"},
-      {:bcrypt_elixir, "~> 3.0"},
       {:excoveralls, "~> 0.10", only: :test},
+      {:guardian, "~> 2.3.1"},
+      {:argon2_elixir, "~> 2.0"},
     ]
   end
 

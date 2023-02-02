@@ -8,6 +8,29 @@ defmodule Cursif.Users do
 
   alias Cursif.Users.User
 
+  alias Argon2
+  import Ecto.Query, only: [from: 2]
+
+
+  @doc """
+  Authenticates a user by its username and password
+  """
+  def authenticate_user(email, plain_text_password) do
+    query = from u in User, where: u.email == ^email
+
+    case Repo.one(query) do
+      nil ->
+        Argon2.no_user_verify()
+        {:error, :invalid_credentials}
+      user ->
+        if Argon2.verify_pass(plain_text_password, user.hashed_password) do
+          {:ok, user}
+        else
+          {:error, :invalid_credentials}
+        end
+    end
+  end
+
   @doc """
   Returns the list of users.
 
