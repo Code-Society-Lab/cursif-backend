@@ -11,10 +11,18 @@ defmodule Cursif.Users do
   alias Argon2
   import Ecto.Query, only: [from: 2]
 
-
   @doc """
   Authenticates a user by its username and password
+
+  ## Examples
+
+      iex> authenticate_user("ghopper@example.com", "GraceHopper1234")
+      {:ok, %User{}}
+
+      iex> authenticate_user("ghopper@example.com", "BadPassword")
+      {:error, :invalid_credentials}
   """
+  @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t()} | {:error, :invalid_credentials}
   def authenticate_user(email, plain_text_password) do
     query = from u in User, where: u.email == ^email
 

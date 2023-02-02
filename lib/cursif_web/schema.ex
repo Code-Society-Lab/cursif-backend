@@ -12,4 +12,9 @@ defmodule CursifWeb.Schema do
     import_fields(:get_users)
     import_fields(:get_user)
   end
+
+  mutation do
+    import_fields(:login_mutation)
+    import_fields(:register_mutation)
+  end
 end

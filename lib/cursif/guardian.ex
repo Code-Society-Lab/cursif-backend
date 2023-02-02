@@ -1,4 +1,4 @@
-defmodule Cursif.Users.Guardian do
+defmodule Cursif.Guardian do
   use Guardian, otp_app: :cursif
 
   alias Cursif.Users

@@ -6,31 +6,27 @@ defmodule CursifWeb.Router do
   end
 
   pipeline :graphql do
-    # Will be used later
-  end
-
-  pipeline :require_authenticated_user do
-    plug Cursif.Users.Pipeline
+    plug CursifWeb.Context
   end
 
   # Public API
   scope "/api", CursifWeb do
     pipe_through :api
 
-    post "/login", SessionController, :login
-    post "/register", SessionController, :register
+#    post "/login", SessionController, :login
+#    post "/register", SessionController, :register
   end
 
   # Private API
   scope "/api", CursifWeb do
-    pipe_through [:api, :require_authenticated_user]
+    pipe_through :api
 
     resources "/users", UserController, except: [:new, :edit, :create]
   end
 
   # GraphQL API (authenticate required)
   scope "/api" do
-    pipe_through [:graphql, :require_authenticated_user]
+    pipe_through :graphql
 
     forward "/", Absinthe.Plug, schema: CursifWeb.Schema
   end

@@ -49,7 +49,7 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # Guardian setup
-config :cursif, Cursif.Users.Guardian,
+config :cursif, Cursif.Guardian,
        issuer: "cursif",
        secret_key: System.fetch_env!("SECRET_KEY_BASE") # mix guardian.gen.secret
 
