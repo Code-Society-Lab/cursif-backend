@@ -15,12 +15,6 @@ defmodule CursifWeb.Schema.UserTypes do
     field :last_name, :string
   end
 
-  @desc "session value"
-  object :session do
-    field(:token, :string)
-    field(:user, :user)
-  end
-
   object :get_users do
     @desc """
     Get a list of users
@@ -44,6 +38,12 @@ defmodule CursifWeb.Schema.UserTypes do
   end
 
   # Mutation objects
+  @desc "session value"
+  object :session do
+    field(:token, :string)
+    field(:user, :user)
+  end
+
   object :register_mutation do
     @desc """
     create user

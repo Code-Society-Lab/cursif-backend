@@ -12,16 +12,11 @@ defmodule CursifWeb.Router do
   # Public API
   scope "/api", CursifWeb do
     pipe_through :api
-
-#    post "/login", SessionController, :login
-#    post "/register", SessionController, :register
   end
 
   # Private API
   scope "/api", CursifWeb do
     pipe_through :api
-
-    resources "/users", UserController, except: [:new, :edit, :create]
   end
 
   # GraphQL API (authenticate required)

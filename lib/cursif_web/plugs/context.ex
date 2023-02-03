@@ -2,23 +2,35 @@ defmodule CursifWeb.Context do
   @behaviour Plug
 
   import Plug.Conn
+  import Ecto.Query, only: [from: 2]
+
+  alias Cursif.Repo
 
   def init(opts), do: opts
 
   def call(conn, _) do
-    case build_context(conn) do
-      {:ok, context} ->
-        put_private(conn, :absinthe, %{context: context})
+    context = build_context(conn)
+    Absinthe.Plug.put_options(conn, context: context)
+  end
 
-      _ ->
-        conn
+  def build_context(conn) do
+    with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
+         {:ok, current_user} <- authorize(token) do
+      %{current_user: current_user}
+    else
+      _ -> %{}
     end
   end
 
-  defp build_context(conn) do
-    with ["" <> token] <- get_req_header(conn, "authorization"),
-         {:ok, user, _claims} <- Cursif.Guardian.resource_from_token(token) do
-      {:ok, %{current_user: user}}
-    end
+  defp authorize(token) do
+    query = from s in "user_tokens",
+                 where: s.token == ^token and (is_nil(s.expires_at) or s.expires_at > ^DateTime.utc_now),
+                 select: s.user_id
+    query
+    |> Repo.one
+    |> case do
+         nil -> {:error, "invalid authorization token"}
+         user -> {:ok, user}
+       end
   end
 end

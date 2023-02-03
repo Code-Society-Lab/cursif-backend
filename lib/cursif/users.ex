@@ -6,7 +6,7 @@ defmodule Cursif.Users do
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Users.User
+  alias Cursif.Users.{User, UserToken}
 
   alias Argon2
   import Ecto.Query, only: [from: 2]
@@ -136,5 +136,23 @@ defmodule Cursif.Users do
   @spec change_user(User.t(), map()) ::  %Ecto.Changeset{data: User.t()}
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
+  end
+
+  @doc """
+  Creates a user token.
+
+  ## Examples
+
+      iex> create_user_token(%{field: value})
+      {:ok, %UserToken{}}
+
+      iex> create_user_token(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+  """
+  @spec create_user_token(map()) :: {:ok, UserToken.t()} | {:error, %Ecto.Changeset{}}
+  def create_user_token(attrs) do
+    %UserToken{}
+    |> UserToken.changeset(attrs)
+    |> Repo.insert()
   end
 end

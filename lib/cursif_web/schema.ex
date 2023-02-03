@@ -4,7 +4,7 @@ defmodule CursifWeb.Schema do
   """
 
   use Absinthe.Schema
-  alias CursifWeb.Schema.{UserTypes}
+  alias CursifWeb.Schema.UserTypes
 
   import_types(UserTypes)
 
