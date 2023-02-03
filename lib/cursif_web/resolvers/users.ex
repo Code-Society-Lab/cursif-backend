@@ -31,12 +31,19 @@ defmodule CursifWeb.Resolvers.Users do
     Users.create_user(args)
   end
 
-  # TODO: ADD DOC
   def login(%{email: email, password: password}, _info) do
     user = Users.authenticate_user(email, password)
+
     case user do
       {:ok, %User{} = user} -> create_token(user)
       {:error, _} -> {:error, "User could not be authenticated."}
+    end
+  end
+
+  defp create_token(user) do
+    case Cursif.Guardian.encode_and_sign(user, %{}) do
+      nil -> {:error, "An Error occured creating the token"}
+      {:ok, token, _full_claims} -> {:ok, %{token: token}}
     end
   end
 end
