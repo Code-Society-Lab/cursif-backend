@@ -26,14 +26,20 @@ defmodule CursifWeb.Resolvers.Users do
 
   def get_user!(_args, _context), do: {:error, :not_authorized}
 
+  def get_me!(_args, %{context: %{current_user: current_user}}) do
+    {:ok, current_user}
+  end
+
+  def get_me!(_args, _context), do: {:error, :not_authorized}
+
   # TODO: ADD DOC
   def register(_parent, args, _context) do
     Users.create_user(args)
   end
 
+  # TODO: ADD DOC
   def login(%{email: email, password: password}, _info) do
     user = Users.authenticate_user(email, password)
-
     case user do
       {:ok, %User{} = user} -> create_token(user)
       {:error, _} -> {:error, "User could not be authenticated."}

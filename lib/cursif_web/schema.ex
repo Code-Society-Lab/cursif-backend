@@ -11,6 +11,7 @@ defmodule CursifWeb.Schema do
   query do
     import_fields(:get_users)
     import_fields(:get_user)
+    import_fields(:get_me)
   end
 
   mutation do

@@ -10,6 +10,12 @@ defmodule CursifWeb.Schema.UserTypes do
   object :user do
     field :id, :id
     field :username, :string
+  end
+
+  @desc "The current user"
+  object :current_user do
+    field :id, :id
+    field :username, :string
     field :email, :string
     field :first_name, :string
     field :last_name, :string
@@ -36,6 +42,17 @@ defmodule CursifWeb.Schema.UserTypes do
       resolve(&Resolvers.Users.get_user!/2)
     end
   end
+
+  object :get_me do
+    @desc """
+    Get the current user
+    """
+
+    field :me, :current_user do
+      resolve(&Resolvers.Users.get_me!/2)
+    end
+  end
+
 
   # Mutation objects
   @desc "session value"
