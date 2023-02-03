@@ -3,6 +3,8 @@ defmodule CursifWeb.Resolvers.Users do
   The user resolver
   """
 
+  import CursifWeb.GraphqlHelpers, only: [translate_ecto_error: 1]
+
   alias Cursif.Users
   alias Cursif.Users.User
 
@@ -26,6 +28,8 @@ defmodule CursifWeb.Resolvers.Users do
 
   def get_user!(_args, _context), do: {:error, :not_authorized}
 
+  # TODO: ADD DOC
+  @spec get_me!(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
   def get_me!(_args, %{context: %{current_user: current_user}}) do
     {:ok, current_user}
   end
@@ -33,15 +37,20 @@ defmodule CursifWeb.Resolvers.Users do
   def get_me!(_args, _context), do: {:error, :not_authorized}
 
   # TODO: ADD DOC
+  @spec register(map(), map(), map()) :: {:ok, User.t()} | {:error, list(map())}
   def register(_parent, args, _context) do
-    Users.create_user(args)
+    case Users.create_user(args) do
+      {:ok, user} -> {:ok, user}
+      {:error, changeset} ->
+        {:error, translate_ecto_error(changeset)}
+    end
   end
 
   # TODO: ADD DOC
+  @spec login(%{email: String.t(), password: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
   def login(%{email: email, password: password}, _info) do
-    user = Users.authenticate_user(email, password)
-    case user do
-      {:ok, %User{} = user} -> create_token(user)
+    case Users.authenticate_user(email, password) do
+      {:ok, user} -> create_token(user)
       {:error, _} -> {:error, "User could not be authenticated."}
     end
   end
