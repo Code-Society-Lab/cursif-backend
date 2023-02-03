@@ -53,6 +53,7 @@ config :cursif, Cursif.Guardian,
        issuer: "cursif",
        secret_key: System.fetch_env!("SECRET_KEY_BASE") # mix guardian.gen.secret
 
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

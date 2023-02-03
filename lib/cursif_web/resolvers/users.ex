@@ -10,7 +10,7 @@ defmodule CursifWeb.Resolvers.Users do
   Returns the list of users.
   """
   @spec get_users(map(), %{context: %{current_user: User.t()}}) :: {:ok, list(User.t())}
-  def get_users(_args, %{context: %{current_user: _user}}) do
+  def get_users(_args, %{context: %{current_user: _current_user}}) do
     {:ok, Users.list_users()}
   end
 
@@ -33,13 +33,10 @@ defmodule CursifWeb.Resolvers.Users do
 
   # TODO: ADD DOC
   def login(%{email: email, password: password}, _info) do
-    case Users.authenticate_user(email, password) do
-      {:ok, user} ->
-        {:ok, jwt, _full_claims} = Cursif.Guardian.encode_and_sign(user, %{})
-        Users.create_user_token(%{user: user, token: jwt})
-        {:ok, %{user: user, token: jwt}}
-      {:error, :invalid_credentials} ->
-        {:error, "Incorrect email or password"}
+    user = Users.authenticate_user(email, password)
+    case user do
+      {:ok, %User{} = user} -> create_token(user)
+      {:error, _} -> {:error, "User could not be authenticated."}
     end
   end
 end

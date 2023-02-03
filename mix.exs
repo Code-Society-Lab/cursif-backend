@@ -59,7 +59,7 @@ defmodule Cursif.MixProject do
       {:absinthe_plug, "~> 1.5"},
       {:dotenv, "~> 3.0.0", only: [:dev, :test]},
       {:excoveralls, "~> 0.10", only: :test},
-      {:guardian, "~> 2.3.1"},
+      {:guardian, "~> 2.0"},
       {:argon2_elixir, "~> 2.0"},
     ]
   end
