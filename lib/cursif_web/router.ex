@@ -9,14 +9,23 @@ defmodule CursifWeb.Router do
     plug CursifWeb.Context
   end
 
-  # Public API
+  # Public API routes
   scope "/api", CursifWeb do
     pipe_through :api
   end
 
-  # Private API
+  # Private API routes
   scope "/api", CursifWeb do
     pipe_through :api
+  end
+
+  # Querying interface available in development
+  if Mix.env() == :dev do
+    scope "/graphiql" do
+      pipe_through :graphql
+
+      forward "/", Absinthe.Plug.GraphiQL, schema: CursifWeb.Schema
+    end
   end
 
   # GraphQL API (authenticate required)
@@ -24,11 +33,6 @@ defmodule CursifWeb.Router do
     pipe_through :graphql
 
     forward "/", Absinthe.Plug, schema: CursifWeb.Schema
-  end
-
-  # Querying interface available in development (no authentication required)
-  if Mix.env() == :dev do
-    forward "/graphql", Absinthe.Plug.GraphiQL, schema: CursifWeb.Schema
   end
 
   # Enables LiveDashboard only for development
