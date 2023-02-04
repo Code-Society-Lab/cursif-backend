@@ -18,4 +18,10 @@ defmodule CursifWeb.Schema do
     import_fields(:login_mutation)
     import_fields(:register_mutation)
   end
+
+  def middleware(middleware, _field, %{identifier: :mutation}) do
+    middleware ++ [Cursif.Middlewares.HandleChangesetErrors]
+  end
+
+  def middleware(middleware, _field, _object), do: middleware
 end
