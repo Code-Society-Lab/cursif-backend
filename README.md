@@ -40,6 +40,9 @@ You can test queries at [`localhost:4000/graphiql`](http://localhost:4000/graphi
 
 > To monitor the application, you can access the dashboard at [`localhost:4000/dashboard`](http://localhost:4000/dashboard) from your browser. 
 
+#### Troubleshooting
+If the application fails to load the environment variable, execute `source .env` from the root directory
+
 ## Resources
   
 ### Elixir
