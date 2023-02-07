@@ -4,22 +4,76 @@ defmodule Cursif.UsersFixtures do
   entities via the `Cursif.Users` context.
   """
 
+  alias Cursif.Users
+
+  @valid_user_attributes %{
+      email: "grace.hopper@example.com",
+      password: "AdaLovelace123!",
+      first_name: "Grace",
+      last_name: "Hopper",
+      username: "grace"
+    }
+
+  @doc """
+  Generates a random unique user
+  """
+  def unique_user_attributes do
+    first_name = "user"
+    last_name = "#{System.unique_integer([:positive])}"
+
+    %{
+      email: "#{first_name}.#{last_name}@example.com",
+      username: "u#{last_name}",
+      password: "AdaLovelace123!",
+      first_name: first_name,
+      last_name: last_name
+    }
+  end
+
   @doc """
   Generate a user.
   """
   def user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs
-      |> Enum.into(%{
-        email: "grace.hopper@email.com",
-        first_name: "Grace",
-        last_name: "Hopper",
-        hashed_password: "**redacted**",
-        password: "Hello!worlD",
-        username: "grace"
-      })
+      |> Enum.into(@valid_user_attributes)
       |> Cursif.Users.create_user()
 
     user
+  end
+
+  @doc """
+  Callback to creates a unique user before a test is executed.
+  """
+  def create_unique_user(_) do
+    user_attrs =unique_user_attributes()
+    {:ok, user} = Users.create_user(user_attrs)
+    {:ok, user: user, password: user_attrs.password}
+  end
+
+  @doc """
+  Callback to authenticate a user before a test is executed.
+
+  # Example
+    setup [:authenticated]
+    test "require authentication" %{conn: conn, user: user, token: token} do
+      ...
+    end
+
+    setup [:authenticated]
+    @tag user_attr user_attribute_map
+    test "require authentication from tag" %{conn: conn, user: user, token: token} do
+      ...
+    end
+
+    setup [:authenticated]
+    test "require raw authentication" %{conn: conn, user: user, token: token, password: password} do
+      ...
+    end
+  """
+  def authenticated(context) do
+    {:ok, user: user, password: password} = create_unique_user(context)
+    {:ok, current_user, token} = Users.authenticate_user(user.email, password)
+    {:ok, current_user: current_user, token: token, password: password}
   end
 end

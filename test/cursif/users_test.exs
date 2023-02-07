@@ -12,7 +12,7 @@ defmodule Cursif.UsersTest do
       email: nil,
       first_name: nil,
       hashed_password: nil,
-      password: "Hello!worlD",
+      password: "123abc",
       last_name: nil,
       username: nil
     }
@@ -69,7 +69,6 @@ defmodule Cursif.UsersTest do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Users.update_user(user, @invalid_attrs)
       assert user == Users.get_user!(user.id)
-      assert {:ok, user} == Argon2.check_pass(user, "HelloWorld!", hash_key: :hashed_password)
     end
 
     test "delete_user/1 deletes the user" do

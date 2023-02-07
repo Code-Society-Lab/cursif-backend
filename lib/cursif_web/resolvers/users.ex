@@ -8,14 +8,12 @@ defmodule CursifWeb.Resolvers.Users do
   def get_users(_args, %{context: %{current_user: _current_user}}) do
     {:ok, Users.list_users()}
   end
-
   def get_users(_args, _context), do: {:error, :not_authorized}
 
   @spec get_user!(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
   def get_user!(%{id: id}, %{context: %{current_user: _user}}) do
     {:ok, Users.get_user!(id)}
   end
-
   def get_user!(_args, _context), do: {:error, :not_authorized}
 
   @spec get_me!(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
@@ -37,16 +35,8 @@ defmodule CursifWeb.Resolvers.Users do
   @spec login(%{email: String.t(), password: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
   def login(%{email: email, password: password}, _info) do
     case Users.authenticate_user(email, password) do
-      {:ok, user} -> create_token(user)
+      {:ok, user, token} -> {:ok, %{user: user, token: token}}
       {:error, _} -> {:error, :invalid_credentials}
-    end
-  end
-
-  @spec create_token(User.t()) :: {:ok, String.t(), map()} | {:error, String.t()}
-  defp create_token(user) do
-    case Cursif.Guardian.encode_and_sign(user, %{}) do
-      nil -> {:error, "An Error occured creating the token"}
-      {:ok, token, _full_claims} -> {:ok, %{token: token}}
     end
   end
 end

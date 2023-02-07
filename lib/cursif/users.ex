@@ -12,34 +12,6 @@ defmodule Cursif.Users do
   import Ecto.Query, only: [from: 2]
 
   @doc """
-  Authenticates a user by its username and password
-
-  ## Examples
-
-      iex> authenticate_user("ghopper@example.com", "GraceHopper1234")
-      {:ok, %User{}}
-
-      iex> authenticate_user("ghopper@example.com", "BadPassword")
-      {:error, :invalid_credentials}
-  """
-  @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t()} | {:error, :invalid_credentials}
-  def authenticate_user(email, plain_text_password) do
-    query = from u in User, where: u.email == ^email
-
-    case Repo.one(query) do
-      nil ->
-        Argon2.no_user_verify()
-        {:error, :invalid_credentials}
-      user ->
-        if Argon2.verify_pass(plain_text_password, user.hashed_password) do
-          {:ok, user}
-        else
-          {:error, :invalid_credentials}
-        end
-    end
-  end
-
-  @doc """
   Returns the list of users.
 
   ## Examples
@@ -136,5 +108,43 @@ defmodule Cursif.Users do
   @spec change_user(User.t(), map()) ::  %Ecto.Changeset{data: User.t()}
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
+  end
+
+  # Authentication
+
+  @doc """
+  Authenticates a user by its username and password
+
+  ## Examples
+
+      iex> authenticate_user("ghopper@example.com", "GraceHopper1234")
+      {:ok, %User{}}
+
+      iex> authenticate_user("ghopper@example.com", "BadPassword")
+      {:error, :invalid_credentials}
+  """
+  @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t(), String.t()} | {:error, :invalid_credentials}
+  def authenticate_user(email, plain_text_password) do
+    query = from u in User, where: u.email == ^email
+
+    case Repo.one(query) do
+      nil ->
+        Argon2.no_user_verify()
+        {:error, :invalid_credentials}
+      user ->
+        if Argon2.verify_pass(plain_text_password, user.hashed_password) do
+          {:ok, user, create_token(user)}
+        else
+          {:error, :invalid_credentials}
+        end
+    end
+  end
+
+  @spec create_token(User.t()) :: {:ok, String.t(), map()} | {:error, String.t()}
+  defp create_token(user) do
+    case Cursif.Guardian.encode_and_sign(user, %{}) do
+      nil -> {:error, "An Error occurred creating the token"}
+      {:ok, token, _full_claims} -> token
+    end
   end
 end
