@@ -39,7 +39,7 @@ defmodule CursifWeb.Schema.UserTypes do
     field :user, :user do
       arg(:id, non_null(:id))
 
-      resolve(&Resolvers.Users.get_user!/2)
+      resolve(&Resolvers.Users.get_user/2)
     end
   end
 
@@ -49,7 +49,7 @@ defmodule CursifWeb.Schema.UserTypes do
     """
 
     field :me, :current_user do
-      resolve(&Resolvers.Users.get_me!/2)
+      resolve(&Resolvers.Users.get_current_user/2)
     end
   end
 
@@ -72,7 +72,7 @@ defmodule CursifWeb.Schema.UserTypes do
       arg(:email, non_null(:string))
       arg(:password, non_null(:string))
 
-      resolve(&Resolvers.Users.register/3)
+      resolve(&Resolvers.Users.register/2)
     end
   end
 

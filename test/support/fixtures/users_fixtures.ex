@@ -74,6 +74,6 @@ defmodule Cursif.UsersFixtures do
   def authenticated(context) do
     {:ok, user: user, password: password} = create_unique_user(context)
     {:ok, current_user, token} = Users.authenticate_user(user.email, password)
-    {:ok, current_user: current_user, token: token, password: password}
+    {:ok, current_user: current_user, token: token, current_user_password: password}
   end
 end

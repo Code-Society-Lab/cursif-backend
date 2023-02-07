@@ -31,6 +31,7 @@ defmodule Cursif.Users.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:username, :first_name, :last_name, :email, :password])
+    |> validate_required([:username, :email, :password])
     |> unique_constraint(:email)
     |> unique_constraint(:username)
     |> validate_email()
@@ -39,16 +40,13 @@ defmodule Cursif.Users.User do
 
   defp validate_email(changeset) do
     changeset
-    |> validate_required([:email])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
     |> validate_length(:email, max: 160)
-    |> unsafe_validate_unique(:email, Cursif.Repo)
     |> unique_constraint(:email)
   end
 
   defp validate_password(changeset) do
     changeset
-    |> validate_required([:password])
     |> validate_length(:password, min: 8, max: 72)
     |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
