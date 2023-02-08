@@ -7,9 +7,7 @@ defmodule Cursif.Users do
   alias Cursif.Repo
 
   alias Cursif.Users.User
-
   alias Argon2
-  import Ecto.Query, only: [from: 2]
 
   @doc """
   Returns the list of users.
@@ -110,8 +108,6 @@ defmodule Cursif.Users do
     User.changeset(user, attrs)
   end
 
-  # Authentication
-
   @doc """
   Authenticates a user by its username and password
 
@@ -125,9 +121,7 @@ defmodule Cursif.Users do
   """
   @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t(), String.t()} | {:error, :invalid_credentials}
   def authenticate_user(email, plain_text_password) do
-    query = from u in User, where: u.email == ^email
-
-    case Repo.one(query) do
+    case Repo.get_by(User, email: email) do
       nil ->
         Argon2.no_user_verify()
         {:error, :invalid_credentials}
@@ -143,7 +137,6 @@ defmodule Cursif.Users do
   @spec create_token(User.t()) :: {:ok, String.t(), map()} | {:error, String.t()}
   defp create_token(user) do
     case Cursif.Guardian.encode_and_sign(user, %{}) do
-      nil -> {:error, "An Error occurred creating the token"}
       {:ok, token, _full_claims} -> token
     end
   end

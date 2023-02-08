@@ -9,7 +9,7 @@ defmodule CursifWeb.Schema do
   import_types(UserTypes)
 
   query do
-    import_fields(:get_users)
+    import_fields(:list_users)
     import_fields(:get_user)
     import_fields(:get_me)
   end
@@ -20,7 +20,7 @@ defmodule CursifWeb.Schema do
   end
 
   def middleware(middleware, _field, %{identifier: :mutation}) do
-    middleware ++ [Cursif.Middlewares.HandleChangesetErrors]
+    middleware ++ [CursifWeb.Middlewares.HandleChangesetErrors]
   end
 
   def middleware(middleware, _field, _object), do: middleware

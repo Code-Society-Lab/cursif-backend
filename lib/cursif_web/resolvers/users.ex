@@ -1,27 +1,39 @@
 defmodule CursifWeb.Resolvers.Users do
-  @moduledoc false
-
   alias Cursif.Users
   alias Cursif.Users.User
 
-  @spec get_users(map(), %{context: %{current_user: User.t()}}) :: {:ok, list(User.t())}
-  def get_users(_args, %{context: %{current_user: _current_user}}) do
+  @doc """
+  Resolve a list users
+  """
+  @spec list_users(map(), %{context: %{current_user: User.t()}}) :: {:ok, list(User.t())}
+  def list_users(_args, %{context: %{current_user: _current_user}}) do
     {:ok, Users.list_users()}
   end
-  def get_users(_args, _context), do: {:error, :not_authorized}
+  def list_users(_args, _context), do: {:error, :not_authorized}
 
-  @spec get_user(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
-  def get_user(%{id: id}, %{context: %{current_user: _user}}) do
+  @doc """
+  Resolve a specific user.
+
+  Only a limited number of information is visible.
+  """
+  @spec get_user_by_id(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
+  def get_user_by_id(%{id: id}, %{context: %{current_user: _user}}) do
     {:ok, Users.get_user!(id)}
   end
-  def get_user(_args, _context), do: {:error, :not_authorized}
+  def get_user_by_id(_args, _context), do: {:error, :not_authorized}
 
+  @doc """
+  Resolve the current user
+  """
   @spec get_current_user(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
   def get_current_user(_args, %{context: %{current_user: current_user}}) do
     {:ok, current_user}
   end
   def get_current_user(_args, _context), do: {:error, :not_authorized}
 
+  @doc """
+  Resolve the current user
+  """
   @spec register(map(), map()) :: {:ok, User.t()} | {:error, list(map())}
   def register(args, _context) do
     case Users.create_user(args) do

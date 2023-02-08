@@ -1,4 +1,4 @@
-defmodule Cursif.Middlewares.HandleChangesetErrors do
+defmodule CursifWeb.Middlewares.HandleChangesetErrors do
   @moduledoc false
 
   @behaviour Absinthe.Middleware

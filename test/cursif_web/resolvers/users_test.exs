@@ -7,23 +7,23 @@ defmodule CursifWeb.Resolvers.UsersTest do
 
   setup [:create_unique_user, :authenticated]
 
-  describe "get_users/2" do
-    test "successfully list users", %{current_user: current_user, user: user} do
-      assert Users.get_users(%{}, %{context: %{current_user: current_user}}) == {:ok, [user, current_user]}
+  describe "list_users/2" do
+    test "list_users/2 successfully list users", %{current_user: current_user, user: user} do
+      assert Users.list_users(%{}, %{context: %{current_user: current_user}}) == {:ok, [user, current_user]}
     end
 
     test "not authenticated", %{conn: conn} do
-      assert Users.get_users(%{}, conn) == {:error, :not_authorized}
+      assert Users.list_users(%{}, conn) == {:error, :not_authorized}
     end
   end
 
   describe "get_user/2" do
     test "successfully fetch specific user id", %{current_user: current_user, user: user} do
-      assert Users.get_user(%{id: user.id}, %{context: %{current_user: current_user}}) == {:ok, user}
+      assert Users.get_user_by_id(%{id: user.id}, %{context: %{current_user: current_user}}) == {:ok, user}
     end
 
     test "not authenticated", %{conn: conn} do
-      assert Users.get_user(%{}, conn) == {:error, :not_authorized}
+      assert Users.get_user_by_id(%{}, conn) == {:error, :not_authorized}
     end
   end
 
@@ -39,8 +39,7 @@ defmodule CursifWeb.Resolvers.UsersTest do
 
   describe "register/2" do
     test "successful user registration", %{conn: conn} do
-      unique_user = unique_user_attributes()
-      assert {:ok, %User{} = _} = Users.register(unique_user, conn)
+      assert {:ok, %User{} = _} = Users.register(unique_user_attributes(), conn)
     end
 
     test "failing user registration, missing attributes", %{conn: conn} do
@@ -51,6 +50,7 @@ defmodule CursifWeb.Resolvers.UsersTest do
     test "failing user registration, invalide attributes", %{conn: conn, user: user} do
       unique_user = unique_user_attributes()
       assert {:error, %Ecto.Changeset{}} = Users.register(%{unique_user | username: user.username}, conn)
+      assert {:error, %Ecto.Changeset{}} = Users.register(%{unique_user | email: user.email}, conn)
     end
   end
 
@@ -60,7 +60,8 @@ defmodule CursifWeb.Resolvers.UsersTest do
     end
 
     test "failing login", %{conn: conn} do
-
+      user = unique_user_attributes()
+      assert {:error, :invalid_credentials} = Users.login(%{email: user.email, password: user.password}, conn)
     end
   end
 end

@@ -21,32 +21,28 @@ defmodule CursifWeb.Schema.UserTypes do
     field :last_name, :string
   end
 
-  object :get_users do
+  object :list_users do
     @desc """
     Get a list of users
     """
 
     field :users, list_of(:user) do
-      resolve(&Resolvers.Users.get_users/2)
+      resolve(&Resolvers.Users.list_users/2)
     end
   end
 
   object :get_user do
-    @desc """
-    Get a user
-    """
+    @desc "Get a specific user by it's id"
 
     field :user, :user do
       arg(:id, non_null(:id))
 
-      resolve(&Resolvers.Users.get_user/2)
+      resolve(&Resolvers.Users.get_user_by_id/2)
     end
   end
 
   object :get_me do
-    @desc """
-    Get the current user
-    """
+    @desc "Get the current user"
 
     field :me, :current_user do
       resolve(&Resolvers.Users.get_current_user/2)
