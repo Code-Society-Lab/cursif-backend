@@ -1,13 +1,13 @@
-defmodule CursifWeb.Resolvers.Users do
-  alias Cursif.Users
-  alias Cursif.Users.User
+defmodule CursifWeb.Resolvers.Accounts do
+  alias Cursif.Accounts
+  alias Cursif.Accounts.User
 
   @doc """
-  Resolve a list users
+  Resolve a list accounts
   """
   @spec list_users(map(), %{context: %{current_user: User.t()}}) :: {:ok, list(User.t())}
   def list_users(_args, %{context: %{current_user: _current_user}}) do
-    {:ok, Users.list_users()}
+    {:ok, Accounts.list_users()}
   end
   def list_users(_args, _context), do: {:error, :not_authorized}
 
@@ -18,7 +18,7 @@ defmodule CursifWeb.Resolvers.Users do
   """
   @spec get_user_by_id(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
   def get_user_by_id(%{id: id}, %{context: %{current_user: _user}}) do
-    {:ok, Users.get_user!(id)}
+    {:ok, Accounts.get_user!(id)}
   end
   def get_user_by_id(_args, _context), do: {:error, :not_authorized}
 
@@ -36,7 +36,7 @@ defmodule CursifWeb.Resolvers.Users do
   """
   @spec register(map(), map()) :: {:ok, User.t()} | {:error, list(map())}
   def register(args, _context) do
-    case Users.create_user(args) do
+    case Accounts.create_user(args) do
       {:ok, user} -> {:ok, user}
       {:error, changeset} -> {:error, changeset}
     end
@@ -44,7 +44,7 @@ defmodule CursifWeb.Resolvers.Users do
 
   @spec login(%{email: String.t(), password: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
   def login(%{email: email, password: password}, _context) do
-    case Users.authenticate_user(email, password) do
+    case Accounts.authenticate_user(email, password) do
       {:ok, user, token} -> {:ok, %{user: user, token: token}}
       {:error, _} -> {:error, :invalid_credentials}
     end

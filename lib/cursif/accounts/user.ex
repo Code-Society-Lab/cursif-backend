@@ -1,4 +1,4 @@
-defmodule Cursif.Users.User do
+defmodule Cursif.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 

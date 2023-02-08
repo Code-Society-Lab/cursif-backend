@@ -1,10 +1,10 @@
-defmodule Cursif.UsersFixtures do
+defmodule Cursif.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `Cursif.Users` context.
+  entities via the `Cursif.Accounts` context.
   """
 
-  alias Cursif.Users
+  alias Cursif.Accounts
 
   @valid_user_attributes %{
       email: "grace.hopper@example.com",
@@ -37,7 +37,7 @@ defmodule Cursif.UsersFixtures do
     {:ok, user} =
       attrs
       |> Enum.into(@valid_user_attributes)
-      |> Cursif.Users.create_user()
+      |> Cursif.Accounts.create_user()
 
     user
   end
@@ -47,7 +47,7 @@ defmodule Cursif.UsersFixtures do
   """
   def create_unique_user(_) do
     user_attrs =unique_user_attributes()
-    {:ok, user} = Users.create_user(user_attrs)
+    {:ok, user} = Accounts.create_user(user_attrs)
     {:ok, user: user, password: user_attrs.password}
   end
 
@@ -73,7 +73,7 @@ defmodule Cursif.UsersFixtures do
   """
   def authenticated(context) do
     {:ok, user: user, password: password} = create_unique_user(context)
-    {:ok, current_user, token} = Users.authenticate_user(user.email, password)
+    {:ok, current_user, token} = Accounts.authenticate_user(user.email, password)
     {:ok, current_user: current_user, token: token, current_user_password: password}
   end
 end

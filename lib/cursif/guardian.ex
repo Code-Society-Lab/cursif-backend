@@ -1,7 +1,8 @@
 defmodule Cursif.Guardian do
   use Guardian, otp_app: :cursif
 
-  alias Cursif.Users
+  alias Cursif.Accounts
+  alias Cursif.Accounts.User
 
   @doc """
   Retrieves the subject's id from the authentication token.
@@ -19,7 +20,7 @@ defmodule Cursif.Guardian do
   """
   @spec resource_from_claims(%{sub: binary()}) ::  {:ok, User.t()} | {:error, :resource_not_found}
   def resource_from_claims(%{"sub" => id}) do
-    {:ok,  Users.get_user!(id)}
+    {:ok,  Accounts.get_user!(id)}
   end
   def resource_from_claims(_claims), do: {:error, :resource_not_found}
 end

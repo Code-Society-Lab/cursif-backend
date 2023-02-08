@@ -1,10 +1,10 @@
-defmodule CursifWeb.Schema.UserTypes do
+defmodule CursifWeb.Schema.AccountTypes do
   @moduledoc """
   The User types.
   """
 
   use Absinthe.Schema.Notation
-  alias CursifWeb.Resolvers
+  alias CursifWeb.Resolvers.Accounts
 
   @desc "A user"
   object :user do
@@ -23,11 +23,11 @@ defmodule CursifWeb.Schema.UserTypes do
 
   object :list_users do
     @desc """
-    Get a list of users
+    Get a list of accounts
     """
 
     field :users, list_of(:user) do
-      resolve(&Resolvers.Users.list_users/2)
+      resolve(&Accounts.list_users/2)
     end
   end
 
@@ -37,7 +37,7 @@ defmodule CursifWeb.Schema.UserTypes do
     field :user, :user do
       arg(:id, non_null(:id))
 
-      resolve(&Resolvers.Users.get_user_by_id/2)
+      resolve(&Accounts.get_user_by_id/2)
     end
   end
 
@@ -45,7 +45,7 @@ defmodule CursifWeb.Schema.UserTypes do
     @desc "Get the current user"
 
     field :me, :current_user do
-      resolve(&Resolvers.Users.get_current_user/2)
+      resolve(&Accounts.get_current_user/2)
     end
   end
 
@@ -68,7 +68,7 @@ defmodule CursifWeb.Schema.UserTypes do
       arg(:email, non_null(:string))
       arg(:password, non_null(:string))
 
-      resolve(&Resolvers.Users.register/2)
+      resolve(&Accounts.register/2)
     end
   end
 
@@ -81,7 +81,7 @@ defmodule CursifWeb.Schema.UserTypes do
       arg(:email, non_null(:string))
       arg(:password, non_null(:string))
 
-      resolve(&Resolvers.Users.login/2)
+      resolve(&Accounts.login/2)
     end
   end
 end

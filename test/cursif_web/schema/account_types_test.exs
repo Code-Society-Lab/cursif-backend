@@ -1,12 +1,12 @@
-defmodule CursifWeb.Schema.UserTypesTest do
+defmodule CursifWeb.Schema.AccountTypesTest do
   use CursifWeb.ConnCase
 
-  import Cursif.UsersFixtures, only: [create_unique_user: 1, authenticated: 1, unique_user_attributes: 0]
+  import Cursif.AccountsFixtures, only: [create_unique_user: 1, authenticated: 1, unique_user_attributes: 0]
 
   setup [:create_unique_user, :authenticated]
 
   describe "queries" do
-    test "list of users", %{conn: conn, user: user, current_user: current_user, token: token} do
+    test "list of accounts", %{conn: conn, user: user, current_user: current_user, token: token} do
       conn = conn
       |> put_req_header("authorization", "Bearer " <> token)
       |> post("/api", %{

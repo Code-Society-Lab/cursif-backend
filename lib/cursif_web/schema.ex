@@ -4,9 +4,9 @@ defmodule CursifWeb.Schema do
   """
 
   use Absinthe.Schema
-  alias CursifWeb.Schema.UserTypes
+  alias CursifWeb.Schema.AccountTypes
 
-  import_types(UserTypes)
+  import_types(AccountTypes)
 
   query do
     import_fields(:list_users)

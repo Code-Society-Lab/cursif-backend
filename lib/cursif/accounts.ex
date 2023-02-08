@@ -1,16 +1,16 @@
-defmodule Cursif.Users do
+defmodule Cursif.Accounts do
   @moduledoc """
-  The Users context.
+  The Accounts context.
   """
 
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Users.User
+  alias Cursif.Accounts.User
   alias Argon2
 
   @doc """
-  Returns the list of users.
+  Returns the list of accounts.
 
   ## Examples
 
