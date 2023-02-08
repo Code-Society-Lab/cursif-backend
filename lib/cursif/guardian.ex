@@ -11,7 +11,7 @@ defmodule Cursif.Guardian do
   def subject_for_token(%{id: id}, _claims) do
     {:ok, to_string(id)}
   end
-  def subject_for_token(_, _), do: {:error, :not_id_provided}
+  def subject_for_token(_, _), do: {:error, :no_id_provided}
 
   @doc """
    We look up our resource from the claims, the subject can be
