@@ -1,7 +1,6 @@
 defmodule CursifWeb.Middlewares.HandleChangesetErrors do
-  @moduledoc false
-
   @behaviour Absinthe.Middleware
+
   def call(resolution, _) do
     %{resolution |
       errors: Enum.flat_map(resolution.errors, &handle_error/1)

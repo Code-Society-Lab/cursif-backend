@@ -7,7 +7,7 @@ defmodule Cursif.Guardian do
   @doc """
   Retrieves the subject's id from the authentication token.
   """
-  @spec subject_for_token(User.t(), map()) :: {:ok, String.t()}
+  @spec subject_for_token(User.t(), map()) :: {:ok, String.t()} | {:error, :no_id_provided}
   def subject_for_token(%{id: id}, _claims) do
     {:ok, to_string(id)}
   end

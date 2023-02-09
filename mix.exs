@@ -11,18 +11,13 @@ defmodule Cursif.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      test_coverage: [
-        tool: ExCoveralls,
-        exclude_modules: [
-          CursifWeb.Endpoint,
-          CursifWeb.Gettext,
-        ]
-      ],
+      test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
+        "coveralls.json": :test,
         "coveralls.post": :test,
-        "coveralls.html": :test
+        "coveralls.html": :test,
       ]
     ]
   end
@@ -62,7 +57,7 @@ defmodule Cursif.MixProject do
       {:absinthe, "~> 1.7.1"},
       {:absinthe_plug, "~> 1.5.8"},
       {:dotenv, "~> 3.1.0", only: [:dev, :test]},
-      {:excoveralls, "~> 0.10", only: :test},
+      {:excoveralls, "~> 0.15.3", only: :test},
       {:guardian, "~> 2.0"},
       {:argon2_elixir, "~> 2.0"},
     ]
