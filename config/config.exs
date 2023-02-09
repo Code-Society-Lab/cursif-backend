@@ -51,7 +51,7 @@ config :phoenix, :json_library, Jason
 # Guardian setup
 config :cursif, Cursif.Guardian,
        issuer: "cursif",
-       secret_key: System.fetch_env!("SECRET_KEY_BASE") # mix guardian.gen.secret
+       secret_key: System.get_env("SECRET_KEY_BASE") # mix guardian.gen.secret
 
 
 # Import environment specific config. This must remain at the bottom
