@@ -5,6 +5,7 @@ defmodule CursifWeb.Schema do
 
   use Absinthe.Schema
   alias CursifWeb.Schema.AccountTypes
+  alias CursifWeb.Middlewares.{ErrorHandler, SafeResolution}
 
   import_types(AccountTypes)
 
@@ -19,8 +20,8 @@ defmodule CursifWeb.Schema do
     import_fields(:register_mutation)
   end
 
-  def middleware(middleware, _field, %{identifier: :mutation}) do
-    middleware ++ [CursifWeb.Middlewares.ChangesetErrorHandler]
+  def middleware(middleware, _field, %{identifier: type}) when type in [:query, :mutation] do
+    SafeResolution.apply(middleware) ++ [ErrorHandler]
   end
 
   def middleware(middleware, _field, _object), do: middleware

@@ -13,7 +13,7 @@ defmodule CursifWeb.Resolvers.AccountsTest do
     end
 
     test "not authenticated", %{conn: conn} do
-      assert Accounts.list_users(%{}, conn) == {:error, :not_authorized}
+      assert Accounts.list_users(%{}, conn) == {:error, :unauthenticated}
     end
   end
 
@@ -28,7 +28,7 @@ defmodule CursifWeb.Resolvers.AccountsTest do
     end
 
     test "not authenticated", %{conn: conn} do
-      assert Accounts.get_user_by_id(%{}, conn) == {:error, :not_authorized}
+      assert Accounts.get_user_by_id(%{}, conn) == {:error, :unauthenticated}
     end
   end
 
@@ -38,7 +38,7 @@ defmodule CursifWeb.Resolvers.AccountsTest do
     end
 
     test "not authenticated", %{conn: conn} do
-      assert Accounts.get_current_user(%{}, conn) == {:error, :not_authorized}
+      assert Accounts.get_current_user(%{}, conn) == {:error, :unauthenticated}
     end
   end
 

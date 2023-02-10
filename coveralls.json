@@ -9,6 +9,7 @@
     "lib/cursif_web.ex",
     "lib/cursif_web/schema.ex",
     "lib/cursif_web/router.ex",
+    "lib/cursif_web/middlewares",
     "lib/cursif_web/views/error_helpers.ex"
   ]
 }
