@@ -22,7 +22,7 @@ defmodule CursifWeb.Resolvers.AccountsTest do
       assert Accounts.get_user_by_id(%{id: user.id}, %{context: %{current_user: current_user}}) == {:ok, user}
     end
 
-    test "fetch user with invalid id", %{current_user: current_user, user: user} do
+    test "fetch user with invalid id", %{current_user: current_user} do
       context = %{context: %{current_user: current_user}}
       assert Accounts.get_user_by_id(%{id: "wrong id"}, context) == {:error, :user_not_found}
     end

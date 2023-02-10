@@ -1,10 +1,8 @@
-defmodule CursifWeb.Middlewares.HandleChangesetErrors do
+defmodule CursifWeb.Middlewares.ChangesetErrorHandler do
   @behaviour Absinthe.Middleware
 
   def call(resolution, _) do
-    %{resolution |
-      errors: Enum.flat_map(resolution.errors, &handle_error/1)
-    }
+    %{resolution | errors: Enum.flat_map(resolution.errors, &handle_error/1)}
   end
 
   defp handle_error(%Ecto.Changeset{} = changeset) do
@@ -12,5 +10,10 @@ defmodule CursifWeb.Middlewares.HandleChangesetErrors do
     |> Ecto.Changeset.traverse_errors(fn {err, _opts} -> err end)
     |> Enum.map(fn({k,v}) -> "#{k}: #{v}" end)
   end
+
   defp handle_error(error), do: [error]
+
+  defp handle_error(:unauthorized) do
+    [{:error, %{status: 401, error: %{code: "unauthorized"}}}]
+  end
 end

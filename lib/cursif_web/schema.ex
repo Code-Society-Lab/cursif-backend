@@ -20,7 +20,7 @@ defmodule CursifWeb.Schema do
   end
 
   def middleware(middleware, _field, %{identifier: :mutation}) do
-    middleware ++ [CursifWeb.Middlewares.HandleChangesetErrors]
+    middleware ++ [CursifWeb.Middlewares.ChangesetErrorHandler]
   end
 
   def middleware(middleware, _field, _object), do: middleware
