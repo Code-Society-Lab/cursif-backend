@@ -91,7 +91,7 @@ defmodule Cursif.Utils.ErrorTest do
       attrs = %{username: "Ada", email: "ada@example.ca"}
 
       {:error, changeset} = %User{}
-                            |> User.changeset(%{username: "Ada", email: "ada@example.ca"})
+                            |> User.changeset(attrs)
                             |> Repo.insert()
 
       error = Error.normalize({:error, changeset.action, changeset.errors, changeset.changes})

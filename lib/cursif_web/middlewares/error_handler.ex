@@ -1,4 +1,8 @@
 defmodule CursifWeb.Middlewares.ErrorHandler do
+  @moduledoc """
+  This module is helps to handle various type of errors that
+  might happen in the resolver.
+  """
   @behaviour Absinthe.Middleware
 
   alias Cursif.Utils.Error

@@ -1,4 +1,10 @@
 defmodule CursifWeb.Middlewares.SafeResolution do
+  @moduledoc """
+  This module is a wrapper for `Absinthe.Resolution` middleware to gracefully handle
+  exceptions raised during the execution.
+
+  This solution is from https://shyr.io/blog/absinthe-exception-error-handling
+  """
   alias Absinthe.Resolution
   require Logger
 

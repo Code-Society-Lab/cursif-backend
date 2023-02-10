@@ -1,6 +1,6 @@
 defmodule Cursif.Utils.Error do
   @moduledoc """
-  This module standardize errors for Absinthe.
+  This module standardize errors.
 
   This solution is from https://shyr.io/blog/absinthe-exception-error-handling
   """
