@@ -50,4 +50,4 @@ config :logger, level: :info
 
 config :cursif,
        :secret_key, System.fetch_env!("SECRET_KEY_BASE"),
-       :ttl, {1, :month}
+       :ttl, {4, :weeks}
