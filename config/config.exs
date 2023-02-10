@@ -55,6 +55,7 @@ config :phoenix, :json_library, Jason
 # `mix guardian.gen.secret` and that you set it in your environment variables under `SECRET_KEY_BASE`.
 config :cursif, Cursif.Guardian,
        issuer: "cursif",
+       ttl: Application.get_env(:cursif, :ttl, {12, :months}),
        secret_key: Application.get_env(:cursif, :secret_key)
 
 

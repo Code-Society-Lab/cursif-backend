@@ -48,4 +48,6 @@ config :logger, level: :info
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
 
-config :cursif, :secret_key, System.fetch_env!("SECRET_KEY_BASE")
+config :cursif,
+       :secret_key, System.fetch_env!("SECRET_KEY_BASE"),
+       :ttl, {1, :month}
