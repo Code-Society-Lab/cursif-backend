@@ -49,9 +49,13 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # Guardian setup
+#
+# In test and development environment, it is permissible to not generate any secret key for authentification, in that
+# case one will be temporarily generated at startup but in production, you will that you generate one via
+# `mix guardian.gen.secret` and that you set it in your environment variables under `SECRET_KEY_BASE`.
 config :cursif, Cursif.Guardian,
        issuer: "cursif",
-       secret_key: System.get_env("SECRET_KEY_BASE") # mix guardian.gen.secret
+       secret_key: Application.get_env(:cursif, :secret_key)
 
 
 # Import environment specific config. This must remain at the bottom

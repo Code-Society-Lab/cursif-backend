@@ -12,7 +12,7 @@ defmodule CursifWeb.Resolvers.Accounts do
   @spec get_user_by_id(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
   def get_user_by_id(%{id: id}, %{context: %{current_user: _user}}) do
     {:ok, Accounts.get_user!(id)}
-  rescue e ->
+  rescue _ ->
     {:error, :user_not_found}
   end
   def get_user_by_id(_args, _context), do: {:error, :unauthenticated}
