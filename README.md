@@ -7,8 +7,7 @@
 [![Elixir](https://img.shields.io/badge/Elixir-1.14.3-4e2a8e)](https://hexdocs.pm/elixir/Kernel.html)
 [![Elixir](https://img.shields.io/badge/Phoenix-1.6.15-ff6f61)](https://hexdocs.pm/phoenix/overview.html)
 
-Cursif is a collaborative, scriptable and flexible note taking application that
-aimes to help teams manage their projects. 
+Cursif is a collaborative, scriptable and flexible note-taking application that aimes to help teams manage their projects. 
 
 ## Getting Started
 
@@ -22,7 +21,7 @@ aimes to help teams manage their projects.
 Make sure you have installed the requirement above before continuing.
 
 #### Connect your database
-In project root directoy, create and edit and file named `.env`. Add the following
+In project root directory, create and edit and file named `.env`. Add the following
 information inside.
 
 ```
