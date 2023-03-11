@@ -5,6 +5,7 @@ defmodule Cursif.Notebooks.Notebook do
   @type t :: %__MODULE__{
                title: String.t(),
                description: String.t(),
+               visibility: String.t(),
                # Timestamps
                inserted_at: any(),
                updated_at: any()
@@ -15,6 +16,7 @@ defmodule Cursif.Notebooks.Notebook do
   schema "notebooks" do
     field :description, :string
     field :title, :string
+    field :visibility,   Cursif.Visibility
 
     timestamps()
   end
@@ -23,7 +25,7 @@ defmodule Cursif.Notebooks.Notebook do
   @spec changeset(Notebook.t(), %{}) :: Notebook.t()
   def changeset(notebook, attrs) do
     notebook
-    |> cast(attrs, [:title, :description])
-    |> validate_required([:title, :description])
+    |> cast(attrs, [:title, :description, :visibility])
+    |> validate_required([:title, :description, :visibility])
   end
 end
