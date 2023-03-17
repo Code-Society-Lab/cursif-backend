@@ -5,7 +5,7 @@ defmodule Cursif.Notebooks.Notebook do
   @type t :: %__MODULE__{
                title: String.t(),
                description: String.t(),
-               visibility: String.t(),
+               visibility: Cursif.Visibility,
                # Timestamps
                inserted_at: any(),
                updated_at: any()
