@@ -12,21 +12,19 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :title, :string
     field :description, :string
     field :visibility, :string
-
-    @desc """
-    Get a list of available notebooks
-    """
-    field :list_notebooks, list_of(:notebook) do
-      resolve(&Notebook.list_notebooks/2)
-    end
   end
 
-  object :list_notebooks do
-    @desc """
-    Get a list of available notebooks
-    """
+  @desc "Notebook queries"
+  object :notebook_queries do
+    @desc "Get the list of notebooks"
     field :notebooks, list_of(:notebook) do
-      resolve(&Notebook.list_notebooks/2)
+      resolve(&Notebooks.list_notebooks/2)
+    end
+
+    @desc "Get a notebook by id"
+    field :notebook, :notebook do
+      arg(:id, non_null(:id))
+      resolve(&Notebooks.get_notebook_by_id/2)
     end
   end
 end

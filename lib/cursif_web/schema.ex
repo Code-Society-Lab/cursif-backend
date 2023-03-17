@@ -12,18 +12,14 @@ defmodule CursifWeb.Schema do
 
   query do
     # Users
-    import_fields(:list_users)
-    import_fields(:get_user)
-    import_fields(:get_me)
+    import_fields(:user_queries)
 
     # Notebooks
-    import_fields(:list_notebooks)
+    import_fields(:notebook_queries)
   end
 
   mutation do
-    # Users
-    import_fields(:login_mutation)
-    import_fields(:register_mutation)
+    import_fields(:session_mutations)
   end
 
   def middleware(middleware, _field, %{identifier: type}) when type in [:query, :mutation] do
