@@ -25,8 +25,6 @@ defmodule Cursif.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
 
-    has_many :pages, Page, foreign_key: :author_id
-
     timestamps()
   end
 
