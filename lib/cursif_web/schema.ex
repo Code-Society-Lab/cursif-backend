@@ -16,14 +16,16 @@ defmodule CursifWeb.Schema do
     import_fields(:get_user)
     import_fields(:get_me)
 
-    import_fields(:get_page)
+    # Pages
+    import_fields(:page_queries)
   end
 
   mutation do
     import_fields(:login_mutation)
     import_fields(:register_mutation)
 
-    import_fields(:create_mutation)
+    # Pages
+    import_fields(:page_mutations)
   end
 
   def middleware(middleware, _field, %{identifier: type}) when type in [:query, :mutation] do

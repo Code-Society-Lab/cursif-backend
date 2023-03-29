@@ -13,9 +13,9 @@ defmodule CursifWeb.Schema.PageTypes do
     field :contents, :string
   end
 
-  object :get_page do
+  @desc "Page queries"
+  object :page_queries do
     @desc "Get a specific page by id"
-
     field :page, :page do
       arg(:id, non_null(:id))
 
@@ -24,11 +24,7 @@ defmodule CursifWeb.Schema.PageTypes do
   end
 
   # Mutation objects
-  object :create_mutation do
-    @desc """
-    create page
-    """
-
+  object :page_mutations do
     @desc "Create a page"
     field :create_page, :page do
       arg(:title, non_null(:string))
