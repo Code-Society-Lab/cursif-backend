@@ -47,10 +47,10 @@ defmodule Cursif.Accounts.User do
 
   defp validate_password(changeset) do
     changeset
-    |> validate_length(:password, min: 8, max: 72)
-    |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_length(:password, min: 8, max: 160, message: "must be between 8 and 160 characters")
+    |> validate_format(:password, ~r/[a-z]/, message: "must have at least one lower case character")
+    |> validate_format(:password, ~r/[A-Z]/, message: "must have at least one upper case character")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "must have at least one digit or punctuation character")
     |> put_password_hash()
   end
 

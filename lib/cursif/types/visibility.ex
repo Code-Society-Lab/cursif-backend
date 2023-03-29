@@ -1,7 +1,5 @@
 defmodule Cursif.Visibility do
-  @moduledoc """
-  The Visibility type.
-  """
+  @typedoc "The visibility of a notebook or page."
 
   use Ecto.Type
 
