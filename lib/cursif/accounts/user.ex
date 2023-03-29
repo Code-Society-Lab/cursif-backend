@@ -2,6 +2,8 @@ defmodule Cursif.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Cursif.Pages.Page
+
   @type t :: %__MODULE__{
                username: String.t(),
                email: String.t(),
@@ -22,6 +24,8 @@ defmodule Cursif.Accounts.User do
     field :last_name, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+
+    has_many :pages, Page, foreign_key: :author_id
 
     timestamps()
   end
