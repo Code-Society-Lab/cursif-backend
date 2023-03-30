@@ -1,25 +1,23 @@
 defmodule CursifWeb.Schema do
-  @moduledoc """
-  Contains types query and mutation schema
-  """
+  @moduledoc "Contains types query and mutation schema"
 
   use Absinthe.Schema
-  alias CursifWeb.Schema.{AccountTypes, NotebookTypes}
+  alias CursifWeb.Schema.{AccountTypes, NotebookTypes, PageTypes}
   alias CursifWeb.Middlewares.{ErrorHandler, SafeResolution}
 
   import_types(AccountTypes)
   import_types(NotebookTypes)
+  import_types(PageTypes)
 
   query do
-    # Users
     import_fields(:user_queries)
-
-    # Notebooks
     import_fields(:notebook_queries)
+    import_fields(:page_queries)
   end
 
   mutation do
     import_fields(:session_mutations)
+    import_fields(:page_mutations)
   end
 
   def middleware(middleware, _field, %{identifier: type}) when type in [:query, :mutation] do
