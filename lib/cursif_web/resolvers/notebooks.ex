@@ -17,7 +17,10 @@ defmodule CursifWeb.Resolvers.Notebooks do
 
   @spec create_notebook(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
   def create_notebook(%{title: title, description: description, visibility: visibility}, %{context: %{current_user: _current_user}}) do
-    {:ok, Notebooks.create_notebook(%{title: title, description: description, visibility: visibility})}
+    case Notebooks.create_notebook(%{title: title, description: description, visibility: visibility}) do
+      {:ok, notebook} -> {:ok, notebook}
+      {:error, changeset} -> {:error, changeset}
+    end
   end
   def create_notebook(_args, _context), do: {:error, :unauthenticated}
 end

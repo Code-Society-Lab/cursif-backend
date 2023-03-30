@@ -20,8 +20,6 @@ defmodule Cursif.Pages.Page do
                updated_at: any()
              }
 
-  @parent_types [:notebook, :page]
-
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "pages" do
