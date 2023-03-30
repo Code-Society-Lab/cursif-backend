@@ -12,6 +12,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :title, :string
     field :description, :string
     field :visibility, :string
+    field :pages, list_of(:page)
   end
 
   @desc "Notebook queries"
@@ -25,6 +26,18 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :notebook, :notebook do
       arg(:id, non_null(:id))
       resolve(&Notebooks.get_notebook_by_id/2)
+    end
+  end
+
+  # Mutation objects
+  object :notebook_mutations do
+    @desc "Create a notebook"
+    field :create_notebook, :notebook do
+      arg(:title, non_null(:string))
+      arg(:description, non_null(:string))
+      arg(:visibility, non_null(:string))
+
+      resolve(&Notebooks.create_notebook/2)
     end
   end
 end

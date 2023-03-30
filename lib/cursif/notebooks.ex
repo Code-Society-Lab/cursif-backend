@@ -18,7 +18,7 @@ defmodule Cursif.Notebooks do
 
   """
   def list_notebooks do
-    Repo.all(Notebook)
+    Repo.all(Notebook) |> Repo.preload(:pages)
   end
 
   @doc """
@@ -35,7 +35,7 @@ defmodule Cursif.Notebooks do
       ** (Ecto.NoResultsError)
 
   """
-  def get_notebook!(id), do: Repo.get!(Notebook, id)
+  def get_notebook!(id), do: Repo.get!(Notebook, id) |> Repo.preload(pages: [:children, :author])
 
   @doc """
   Creates a notebook.

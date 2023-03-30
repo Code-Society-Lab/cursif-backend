@@ -20,7 +20,7 @@ defmodule Cursif.Pages do
       ** (Ecto.NoResultsError)
   """
   @spec get_page!(binary()) :: Page.t()
-  def get_page!(id), do: Repo.get!(Page, id)
+  def get_page!(id), do: Repo.get!(Page, id) |> Repo.preload([:author, :children])
 
   @doc """
   Creates a page.
@@ -48,7 +48,7 @@ defmodule Cursif.Pages do
       iex> update_page(page, %{field: new_value})
       {:ok, %Page{}}
 
-      iex> update_page(page, %{field: badvalue})
+      iex> update_page(page, %{field: bad_value})
       {:error, %Ecto.Changeset()}
   """
   @spec update_page(Page.t(), map()) :: {:ok, Page.t()} | {:error, %Ecto.Changeset{}}

@@ -17,6 +17,7 @@ defmodule CursifWeb.Schema do
 
   mutation do
     import_fields(:session_mutations)
+    import_fields(:notebook_mutations)
     import_fields(:page_mutations)
   end
 

@@ -5,7 +5,7 @@ defmodule Cursif.Repo.Migrations.CreateNotebooks do
     create table(:notebooks, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :title, :string
-      add :description, :text
+      add :description, :string
       add :visibility, :string
 
       timestamps()

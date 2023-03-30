@@ -10,7 +10,11 @@ defmodule CursifWeb.Schema.PageTypes do
   object :page do
     field :id, :id
     field :title, :string
-    field :contents, :string
+    field :content, :string
+    field :author, :user
+    field :parent_id, :id
+    field :parent_type, :string
+    field :children, list_of(:page)
   end
 
   @desc "Page queries"
@@ -28,7 +32,9 @@ defmodule CursifWeb.Schema.PageTypes do
     @desc "Create a page"
     field :create_page, :page do
       arg(:title, non_null(:string))
-      arg(:contents, :string)
+      arg(:content, :string)
+      arg(:parent_id, non_null(:id))
+      arg(:parent_type, non_null(:string))
 
       resolve(&Pages.create_page/2)
     end
