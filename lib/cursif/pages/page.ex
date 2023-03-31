@@ -57,4 +57,8 @@ defmodule Cursif.Pages.Page do
   rescue
     Ecto.NoResultsError -> add_error(changeset, :parent_id, "is not a valid page")
   end
+
+  def validate_parent_association(_) do
+    add_error(changeset, :parent_type, "is not a valid parent type")
+  end
 end

@@ -101,4 +101,16 @@ defmodule Cursif.Notebooks do
   def change_notebook(%Notebook{} = notebook, attrs \\ %{}) do
     Notebook.changeset(notebook, attrs)
   end
+
+  @doc """
+  Returns the owner of a notebook.
+
+  ## Examples
+
+      iex> get_owner!(%{owner_id: owner_id, owner_type: "user"})
+      %User{}
+  """
+  def get_owner!(%{owner_id: owner_id, owner_type: "user"}) do
+    Repo.get!(User, owner_id)
+  end
 end
