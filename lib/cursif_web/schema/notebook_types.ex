@@ -2,7 +2,6 @@ defmodule CursifWeb.Schema.NotebookTypes do
   @moduledoc """
   The User types.
   """
-
   use Absinthe.Schema.Notation
   alias CursifWeb.Resolvers.Notebooks
 

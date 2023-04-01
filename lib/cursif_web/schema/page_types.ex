@@ -2,7 +2,6 @@ defmodule CursifWeb.Schema.PageTypes do
   @moduledoc """
   The page types.
   """
-
   use Absinthe.Schema.Notation
   alias CursifWeb.Resolvers.Pages
 
