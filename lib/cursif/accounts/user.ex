@@ -2,6 +2,8 @@ defmodule Cursif.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Cursif.Notebooks.{Notebook, Collaborator}
+
   @type t :: %__MODULE__{
                username: String.t(),
                email: String.t(),

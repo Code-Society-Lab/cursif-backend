@@ -6,7 +6,11 @@ defmodule CursifWeb.Schema.PageTypes do
   use Absinthe.Schema.Notation
   alias CursifWeb.Resolvers.Pages
 
-  @desc "A page"
+  union :parent do
+    types [:page, :notebook]
+    resolve_type(&Pages.get_parent/2)
+  end
+
   object :page do
     field :id, :id
     field :title, :string
@@ -14,10 +18,11 @@ defmodule CursifWeb.Schema.PageTypes do
     field :author, :user
     field :parent_id, :id
     field :parent_type, :string
+    field :parent, :parent
     field :children, list_of(:page)
   end
 
-  @desc "Page queries"
+  @desc "Collection of queries"
   object :page_queries do
     @desc "Get a specific page by id"
     field :page, :page do
@@ -27,9 +32,8 @@ defmodule CursifWeb.Schema.PageTypes do
     end
   end
 
-  # Mutation objects
+  @desc "Collection of mutations"
   object :page_mutations do
-    @desc "Create a page"
     field :create_page, :page do
       arg(:title, non_null(:string))
       arg(:content, :string)

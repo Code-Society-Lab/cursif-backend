@@ -2,6 +2,8 @@ defmodule Cursif.Notebooks.Notebook do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Cursif.Repo
+
   alias Cursif.Pages.Page
   alias Cursif.Accounts.User
   alias Cursif.Notebooks.Collaborator
@@ -11,8 +13,9 @@ defmodule Cursif.Notebooks.Notebook do
                title: String.t(),
                description: String.t(),
                visibility: Visibility,
+               owner_id: binary(),
+               owner_type: String.t(),
                pages: [Page.t()],
-               collaborators: [User.t()],
 
                # Timestamps
                inserted_at: any(),
@@ -28,8 +31,8 @@ defmodule Cursif.Notebooks.Notebook do
     field :owner_id, :binary_id
     field :owner_type, :string
 
-    has_many :collaborators, User, through: Collaborator, join_keys: [notebook_id: :id, user_id: :id]
-    has_many :pages, Page, foreign_key: :parent_id, where: [parent_type: "notebook"]
+    many_to_many :collaborators, User, join_through: Collaborator
+    has_many :pages, Page, foreign_key: :parent_id
 
     timestamps()
   end
@@ -38,20 +41,20 @@ defmodule Cursif.Notebooks.Notebook do
   @spec changeset(Notebook.t(), %{}) :: Notebook.t()
   def changeset(notebook, attrs) do
     notebook
-    |> cast(attrs, [:title, :description, :visibility])
+    |> cast(attrs, [:title, :description, :visibility, :owner_id, :owner_type])
     |> cast_assoc(:pages)
-    |> validate_required([:title, :description, :visibility])
-    |> validate_parent_association()
+    |> validate_required([:title, :description, :visibility, :owner_id, :owner_type])
+    |> validate_association()
   end
 
-  def validate_parent_association(%{changes: %{owner_type: "user", owner_id: owner_id}} = changeset) do
+  defp validate_association(%{changes: %{owner_type: "user", owner_id: owner_id}} = changeset) do
     Repo.get!(User, owner_id)
     changeset
   rescue
     Ecto.NoResultsError -> add_error(changeset, :owner_id, "is not a valid user")
   end
 
-  def validate_parent_association(_) do
+  defp validate_association(changeset) do
     add_error(changeset, :owner_type, "is not a valid owner type")
   end
 end

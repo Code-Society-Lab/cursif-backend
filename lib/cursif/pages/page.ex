@@ -40,25 +40,25 @@ defmodule Cursif.Pages.Page do
     page
     |> cast(attrs, [:title, :content, :author_id, :parent_id, :parent_type])
     |> validate_required([:title, :author_id, :parent_id, :parent_type])
-    |> validate_parent_association()
+    |> validate_association()
   end
 
   # TODO: See if there's a better way to handle that. Maybe a custom validator?
-  def validate_parent_association(%{changes: %{parent_type: "notebook", parent_id: parent_id}} = changeset) do
+  defp validate_association(%{changes: %{parent_type: "notebook", parent_id: parent_id}} = changeset) do
     Repo.get!(Notebook, parent_id)
     changeset
   rescue
     Ecto.NoResultsError -> add_error(changeset, :parent_id, "is not a valid notebook")
   end
 
-  def validate_parent_association(%{changes: %{parent_type: "page", parent_id: parent_id}} = changeset) do
+  defp validate_association(%{changes: %{parent_type: "page", parent_id: parent_id}} = changeset) do
     Repo.get!(Page, parent_id)
     changeset
   rescue
     Ecto.NoResultsError -> add_error(changeset, :parent_id, "is not a valid page")
   end
 
-  def validate_parent_association(_) do
+  defp validate_association(changeset) do
     add_error(changeset, :parent_type, "is not a valid parent type")
   end
 end
