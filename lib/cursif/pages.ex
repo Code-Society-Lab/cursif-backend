@@ -54,7 +54,7 @@ defmodule Cursif.Pages do
   @spec update_page(Page.t(), map()) :: {:ok, Page.t()} | {:error, %Ecto.Changeset{}}
   def update_page(%Page{} = page, attrs) do
     page
-    |> Page.changeset(attrs)
+    |> Page.update_changeset(attrs)
     |> Repo.update()
   end
 

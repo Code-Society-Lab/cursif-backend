@@ -43,6 +43,12 @@ defmodule Cursif.Pages.Page do
     |> validate_association()
   end
 
+  @doc false
+  @spec update_changeset(Page.t(), %{}) :: Page.t()
+  def update_changeset(page, attrs) do
+    page |> cast(attrs, [:title, :content, :author_id])
+  end
+
   # TODO: See if there's a better way to handle that. Maybe a custom validator?
   defp validate_association(%{changes: %{parent_type: "notebook", parent_id: parent_id}} = changeset) do
     Repo.get!(Notebook, parent_id)

@@ -1,7 +1,6 @@
 defmodule CursifWeb.Schema.PageTypes do
-  @moduledoc """
-  The page types.
-  """
+  @moduledoc "Contains types for pages"
+
   use Absinthe.Schema.Notation
   alias CursifWeb.Resolvers.Pages
 
@@ -40,6 +39,16 @@ defmodule CursifWeb.Schema.PageTypes do
       arg(:parent_type, non_null(:string))
 
       resolve(&Pages.create_page/2)
+    end
+
+    field :update_page, :page do
+      arg(:id, non_null(:id))
+      arg(:title, :string)
+      arg(:content, :string)
+      arg(:parent_id, :id)
+      arg(:parent_type, :string)
+
+      resolve(&Pages.update_page/2)
     end
   end
 end
