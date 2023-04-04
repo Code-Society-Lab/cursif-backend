@@ -7,7 +7,7 @@ defmodule CursifWeb.Resolvers.Pages do
   def get_page_by_id(%{id: id}, _context) do
     {:ok, Pages.get_page!(id)}
   rescue _ ->
-    {:error, :page_not_found}
+    {:error, :not_found}
   end
 
   @spec create_page(map(), map()) :: {:ok, Page.t()} | {:error, atom()}
@@ -40,6 +40,6 @@ defmodule CursifWeb.Resolvers.Pages do
   end
 
   def get_parent(_args, _context) do
-    {:error, :parent_not_found}
+    {:error, :not_found}
   end
 end
