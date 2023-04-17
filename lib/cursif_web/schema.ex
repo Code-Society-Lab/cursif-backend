@@ -37,7 +37,7 @@ defmodule CursifWeb.Schema do
   def middleware(middleware, _field, _object),
       do: default_middleware(middleware)
 
-  @doc "Add the default middleware to the list of middleware."
-  defp default_middleware(middleware), do:
-    SafeResolution.apply(middleware ++ [ErrorHandler])
+  # Add the default middleware to the list of middleware.
+  defp default_middleware(middleware),
+       do: SafeResolution.apply(middleware ++ [ErrorHandler])
 end

@@ -11,24 +11,9 @@ defmodule Cursif.NotebooksFixtures do
     {:ok, notebook} =
       attrs
       |> Enum.into(%{
-        description: "some description",
-        title: "some title"
-      })
-      |> Cursif.Notebooks.create_notebook()
-
-    notebook
-  end
-
-  @doc """
-  Generate a notebook.
-  """
-  def notebook_fixture(attrs \\ %{}) do
-    {:ok, notebook} =
-      attrs
-      |> Enum.into(%{
-        description: "some description",
         title: "some title",
-        visibility: "some visibility"
+        description: "some description",
+        visibility: "public",
       })
       |> Cursif.Notebooks.create_notebook()
 

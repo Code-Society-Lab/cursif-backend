@@ -12,7 +12,6 @@ defmodule Cursif.Visibility do
 
   for visibility <- visibilities do
     def cast(visibility), do: {:ok, visibility}
-    def cast(_), do: :error
     def load(visibility), do: {:ok, visibility}
     def dump(visibility), do: {:ok, visibility}
   end
