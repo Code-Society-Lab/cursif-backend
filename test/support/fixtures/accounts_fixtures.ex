@@ -45,7 +45,7 @@ defmodule Cursif.AccountsFixtures do
   @doc """
   Callback to creates a unique user before a test is executed.
   """
-  def create_unique_user(_) do
+  def create_unique_user do
     user_attrs = unique_user_attributes()
     {:ok, user} = Accounts.create_user(user_attrs)
     {:ok, user: user, password: user_attrs.password}
@@ -55,25 +55,28 @@ defmodule Cursif.AccountsFixtures do
   Callback to authenticate a user before a test is executed.
 
   # Example
-    setup [:authenticated]
+    setup [:authenticate]
     test "require authentication" %{conn: conn, user: user, token: token} do
       ...
     end
 
-    setup [:authenticated]
+    setup [:authenticate]
     @tag user_attr user_attribute_map
     test "require authentication from tag" %{conn: conn, user: user, token: token} do
       ...
     end
 
-    setup [:authenticated]
+    setup [:authenticate]
     test "require raw authentication" %{conn: conn, user: user, token: token, password: password} do
       ...
     end
   """
-  def authenticated(context) do
-    {:ok, user: user, password: password} = create_unique_user(context)
+  def authenticate(%{authenticated: true}) do
+    {:ok, user: user, password: password} = create_unique_user()
     {:ok, current_user, token} = Accounts.authenticate_user(user.email, password)
     {:ok, current_user: current_user, token: token, current_user_password: password}
   end
+
+  def authenticate(_),
+      do: :ok
 end

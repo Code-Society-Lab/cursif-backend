@@ -15,11 +15,12 @@ defmodule CursifWeb.Resolvers.Accounts do
     {:error, :user_not_found}
   end
 
-
   @spec get_current_user(map(), %{context: %{current_user: User.t()}}) :: {:ok, User.t()}
-  def get_current_user(_args, %{context: %{current_user: current_user}}) do
-    {:ok, current_user}
-  end
+  def get_current_user(_args, %{context: %{current_user: current_user}}),
+    do: {:ok, current_user}
+
+  def get_current_user(_, _),
+    do: {:error, :unauthenticated}
 
 
   @spec register(map(), map()) :: {:ok, User.t()} | {:error, list(map())}

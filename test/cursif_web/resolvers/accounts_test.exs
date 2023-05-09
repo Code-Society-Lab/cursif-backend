@@ -1,18 +1,22 @@
 defmodule CursifWeb.Resolvers.AccountsTest do
+  use ExUnit.Case, async: true
+
   use CursifWeb.ConnCase
   import Cursif.AccountsFixtures
 
   alias CursifWeb.Resolvers.Accounts
   alias Cursif.Accounts.User
 
-  setup [:create_unique_user, :authenticated]
+
+  setup [:authenticate]
 
   describe "list_users/2" do
-    test "list_users/2 successfully list accounts", %{current_user: current_user, user: user} do
-      assert Accounts.list_users(%{}, %{context: %{current_user: current_user}}) == {:ok, [user, current_user]}
+    @tag authenticated: true
+    test "list_users/2 successfully list accounts", %{current_user: current_user, conn: conn} do
+      assert Accounts.list_users(%{}, conn) == {:ok, [current_user]}
     end
 
-    test "not authenticated", %{conn: conn} do
+    test "unauthenticated", %{conn: conn} do
       assert Accounts.list_users(%{}, conn) == {:error, :unauthenticated}
     end
   end
@@ -24,10 +28,10 @@ defmodule CursifWeb.Resolvers.AccountsTest do
 
     test "fetch user with invalid id", %{current_user: current_user} do
       context = %{context: %{current_user: current_user}}
-      assert Accounts.get_user_by_id(%{id: "wrong id"}, context) == {:error, :user_not_found}
+      assert Accounts.get_user_by_id(%{id: :binary_id}, context) == {:error, :user_not_found}
     end
 
-    test "not authenticated", %{conn: conn} do
+    test "unauthenticated", %{conn: conn} do
       assert Accounts.get_user_by_id(%{}, conn) == {:error, :unauthenticated}
     end
   end
