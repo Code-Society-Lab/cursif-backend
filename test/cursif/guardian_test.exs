@@ -1,10 +1,10 @@
 defmodule Cursif.GuardianTest do
   use CursifWeb.ConnCase
-  import Cursif.AccountsFixtures, only: [authenticated: 1, create_unique_user: 1]
+  import Cursif.AccountsFixtures, only: [authenticate: 1, create_unique_user: 1]
 
   alias Cursif.Guardian
 
-  setup [:authenticated, :create_unique_user]
+  setup [:authenticate, :create_unique_user]
 
   describe "subject_for_token/2" do
     test "successful subject id retrieval", %{conn: conn, current_user: current_user} do

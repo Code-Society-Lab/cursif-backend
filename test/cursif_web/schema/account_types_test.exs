@@ -1,9 +1,9 @@
 defmodule CursifWeb.Schema.AccountTypesTest do
   use CursifWeb.ConnCase
 
-  import Cursif.AccountsFixtures, only: [create_unique_user: 1, authenticated: 1, unique_user_attributes: 0]
+  import Cursif.AccountsFixtures
 
-  setup [:create_unique_user, :authenticated]
+  setup [:create_unique_user, :authenticate]
 
   describe "queries" do
     test "list of accounts", %{conn: conn, user: user, current_user: current_user, token: token} do
