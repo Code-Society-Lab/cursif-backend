@@ -9,6 +9,13 @@ defmodule Cursif.NotebooksTest do
     import Cursif.{NotebooksFixtures, AccountsFixtures}
 
     @invalid_attrs %{description: nil, title: nil}
+    @valid_attrs %{
+      title: "some title",
+      description: "some description",
+      owner_type: "user",
+      owner_id: user_fixture().id,
+      visibility: "public",
+    }
 
     test "list_notebooks/0 returns all notebooks" do
       user = user_fixture()
@@ -29,9 +36,7 @@ defmodule Cursif.NotebooksTest do
     end
 
     test "create_notebook/1 with valid data creates a notebook" do
-      valid_attrs = %{description: "some description", title: "some title"}
-
-      assert {:ok, %Notebook{} = notebook} = Notebooks.create_notebook(valid_attrs)
+      assert {:ok, %Notebook{} = notebook} = Notebooks.create_notebook(@valid_attrs)
       assert notebook.description == "some description"
       assert notebook.title == "some title"
     end
