@@ -1,12 +1,12 @@
 defmodule CursifWeb.ContextTest do
   use CursifWeb.ConnCase
 
-  import Cursif.AccountsFixtures, only: [authenticated: 1]
+  import Cursif.AccountsFixtures, only: [authenticate: 1]
 
   alias CursifWeb.Context
 
   describe "authorize/1" do
-    setup [:authenticated]
+    setup [:authenticate]
 
     test "successful authorization", %{conn: _conn, token: token} do
       assert {:ok, _claim} = Context.authorize(token)

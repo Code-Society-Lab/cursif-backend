@@ -1,19 +1,19 @@
 defmodule CursifWeb.Schema.AccountTypes do
   @moduledoc """
-  The User types.
+  The types associated with an account.
   """
 
   use Absinthe.Schema.Notation
   alias CursifWeb.Resolvers.Accounts
 
-  @desc "A user"
-  object :user do
+  @desc "Represents a partial user"
+  object :partial_user do
     field :id, :id
     field :username, :string
   end
 
-  @desc "The current user"
-  object :current_user do
+  @desc "Represents a user"
+  object :user do
     field :id, :id
     field :username, :string
     field :email, :string
@@ -21,47 +21,14 @@ defmodule CursifWeb.Schema.AccountTypes do
     field :last_name, :string
   end
 
-  object :list_users do
-    @desc """
-    Get a list of accounts
-    """
-
-    field :users, list_of(:user) do
-      resolve(&Accounts.list_users/2)
-    end
-  end
-
-  object :get_user do
-    @desc "Get a specific user by it's id"
-
-    field :user, :user do
-      arg(:id, non_null(:id))
-
-      resolve(&Accounts.get_user_by_id/2)
-    end
-  end
-
-  object :get_me do
-    @desc "Get the current user"
-
-    field :me, :current_user do
-      resolve(&Accounts.get_current_user/2)
-    end
-  end
-
-
-  # Mutation objects
-  @desc "session value"
+  @desc "Represents a session"
   object :session do
     field(:token, :string)
     field(:user, :user)
   end
 
-  object :register_mutation do
-    @desc """
-    create user
-    """
-
+  @desc "Session mutations"
+  object :session_mutations do
     @desc "Create a user"
     field :register, :user do
       arg(:username, non_null(:string))
@@ -70,18 +37,31 @@ defmodule CursifWeb.Schema.AccountTypes do
 
       resolve(&Accounts.register/2)
     end
-  end
 
-  object :login_mutation do
-    @desc """
-    login with the params
-    """
-
+    @desc "Login with the params"
     field :login, :session do
       arg(:email, non_null(:string))
       arg(:password, non_null(:string))
 
       resolve(&Accounts.login/2)
+    end
+  end
+
+  @desc "User queries"
+  object :user_queries do
+
+    @desc "Get a list of users"
+    field :users, list_of(:partial_user) do
+      resolve(&Accounts.list_users/2)
+    end
+
+    field :user, :partial_user do
+      arg(:id, non_null(:id))
+      resolve(&Accounts.get_user_by_id/2)
+    end
+
+    field :me, :user do
+      resolve(&Accounts.get_current_user/2)
     end
   end
 end

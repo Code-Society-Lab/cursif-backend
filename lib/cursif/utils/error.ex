@@ -47,10 +47,10 @@ defmodule Cursif.Utils.Error do
   defp handle(%Ecto.Changeset{} = changeset) do
     changeset
     |> Ecto.Changeset.traverse_errors(fn {err, _opts} -> err end)
-    |> Enum.map(fn {k, v} ->
+    |> Enum.map(fn {key, messages} ->
       %Error{
         code: :validation,
-        message: String.capitalize("#{k} #{v}"),
+        message: format_error(key, messages),
         status_code: 422,
       }
     end)
@@ -59,6 +59,12 @@ defmodule Cursif.Utils.Error do
   defp handle(other) do
     if Mix.env != :test, do: Logger.error("Unhandled error term:\n#{inspect(other)}")
     handle(:unknown)
+  end
+
+  defp format_error(key, messages) do
+    Enum.map messages, fn message ->
+      String.capitalize("#{key} #{message}.")
+    end
   end
 
   # Build Error Metadata

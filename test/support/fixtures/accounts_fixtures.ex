@@ -52,26 +52,25 @@ defmodule Cursif.AccountsFixtures do
   end
 
   @doc """
-  Callback to authenticate a user before a test is executed.
+  Callback to authenticate a user before a test is executed. The authentication can be disabled by passing
+  `authenticated: false` to the test tag.
 
   # Example
-    setup [:authenticated]
-    test "require authentication" %{conn: conn, user: user, token: token} do
+    setup [:authenticate]
+    test "require authentication" context do
       ...
     end
 
-    setup [:authenticated]
-    @tag user_attr user_attribute_map
-    test "require authentication from tag" %{conn: conn, user: user, token: token} do
-      ...
-    end
-
-    setup [:authenticated]
-    test "require raw authentication" %{conn: conn, user: user, token: token, password: password} do
+    setup [:authenticate]
+    @tag authenticated: false
+    test "authentication disabled" context do
       ...
     end
   """
-  def authenticated(context) do
+  def authenticate(%{authenticated: false}),
+    do: :ok
+
+  def authenticate(context) do
     {:ok, user: user, password: password} = create_unique_user(context)
     {:ok, current_user, token} = Accounts.authenticate_user(user.email, password)
     {:ok, current_user: current_user, token: token, current_user_password: password}

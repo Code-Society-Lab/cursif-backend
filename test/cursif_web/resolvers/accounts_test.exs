@@ -1,44 +1,34 @@
 defmodule CursifWeb.Resolvers.AccountsTest do
+  use ExUnit.Case, async: true
+
   use CursifWeb.ConnCase
   import Cursif.AccountsFixtures
 
   alias CursifWeb.Resolvers.Accounts
   alias Cursif.Accounts.User
 
-  setup [:create_unique_user, :authenticated]
+
+  setup [:create_unique_user]
 
   describe "list_users/2" do
-    test "list_users/2 successfully list accounts", %{current_user: current_user, user: user} do
-      assert Accounts.list_users(%{}, %{context: %{current_user: current_user}}) == {:ok, [user, current_user]}
-    end
-
-    test "not authenticated", %{conn: conn} do
-      assert Accounts.list_users(%{}, conn) == {:error, :unauthenticated}
+    test "list_users/2 successfully list accounts", %{user: user, conn: conn} do
+      assert Accounts.list_users(%{}, conn) == {:ok, [user]}
     end
   end
 
   describe "get_user/2" do
-    test "successfully fetch specific user id", %{current_user: current_user, user: user} do
-      assert Accounts.get_user_by_id(%{id: user.id}, %{context: %{current_user: current_user}}) == {:ok, user}
+    test "successfully fetch specific user id", %{user: user, conn: conn} do
+      assert Accounts.get_user_by_id(%{id: user.id}, conn) == {:ok, user}
     end
 
-    test "fetch user with invalid id", %{current_user: current_user} do
-      context = %{context: %{current_user: current_user}}
-      assert Accounts.get_user_by_id(%{id: "wrong id"}, context) == {:error, :user_not_found}
-    end
-
-    test "not authenticated", %{conn: conn} do
-      assert Accounts.get_user_by_id(%{}, conn) == {:error, :unauthenticated}
+    test "fetch user with invalid id", %{conn: conn} do
+      assert Accounts.get_user_by_id(%{id: "1a2b34c5-6def-78gh-ijkl-m9101112n131"}, conn) == {:error, :user_not_found}
     end
   end
 
   describe "get_current_user/2" do
-    test "successfully fetch current user", %{current_user: current_user} do
-      assert Accounts.get_current_user(%{}, %{context: %{current_user: current_user}}) == {:ok, current_user}
-    end
-
-    test "not authenticated", %{conn: conn} do
-      assert Accounts.get_current_user(%{}, conn) == {:error, :unauthenticated}
+    test "successfully fetch current user", %{user: user} do
+      assert Accounts.get_current_user(%{}, %{context: %{current_user: user}}) == {:ok, user}
     end
   end
 
