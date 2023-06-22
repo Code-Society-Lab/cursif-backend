@@ -35,3 +35,5 @@ jobs:
           DATABASE_USERNAME: postgres
           DATABASE_PASSWORD: postgres
           DATABASE_HOSTNAME: postgres
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3

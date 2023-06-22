@@ -1,15 +1,16 @@
-defmodule Cursif.Users do
+defmodule Cursif.Accounts do
   @moduledoc """
-  The Users context.
+  The Accounts context.
   """
 
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Users.User
+  alias Cursif.Accounts.User
+  alias Argon2
 
   @doc """
-  Returns the list of users.
+  Returns the list of accounts.
 
   ## Examples
 
@@ -105,5 +106,38 @@ defmodule Cursif.Users do
   @spec change_user(User.t(), map()) ::  %Ecto.Changeset{data: User.t()}
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
+  end
+
+  @doc """
+  Authenticates a user by its username and password
+
+  ## Examples
+
+      iex> authenticate_user("ghopper@example.com", "GraceHopper1234")
+      {:ok, %User{}}
+
+      iex> authenticate_user("ghopper@example.com", "BadPassword")
+      {:error, :invalid_credentials}
+  """
+  @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t(), String.t()} | {:error, :invalid_credentials}
+  def authenticate_user(email, plain_text_password) do
+    case Repo.get_by(User, email: email) do
+      nil ->
+        Argon2.no_user_verify()
+        {:error, :invalid_credentials}
+      user ->
+        if Argon2.verify_pass(plain_text_password, user.hashed_password) do
+          {:ok, user, create_token(user)}
+        else
+          {:error, :invalid_credentials}
+        end
+    end
+  end
+
+  @spec create_token(User.t()) :: {:ok, String.t(), map()} | {:error, String.t()}
+  defp create_token(user) do
+    case Cursif.Guardian.encode_and_sign(user, %{}) do
+      {:ok, token, _full_claims} -> token
+    end
   end
 end

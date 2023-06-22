@@ -5,9 +5,9 @@ defmodule Cursif.MixProject do
     [
       app: :cursif,
       version: "0.1.0",
-      elixir: "~> 1.12",
+      elixir: "~> 1.14.2",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [] ++ Mix.compilers(),
+      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -15,8 +15,9 @@ defmodule Cursif.MixProject do
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
+        "coveralls.json": :test,
         "coveralls.post": :test,
-        "coveralls.html": :test
+        "coveralls.html": :test,
       ]
     ]
   end
@@ -49,19 +50,16 @@ defmodule Cursif.MixProject do
       {:swoosh, "~> 1.3"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.18"},
+      {:gettext, "~> 0.22"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:timex, "~> 3.7.9"},
-      {:tzdata, "~> 1.1"},
-      {:absinthe, "~> 1.5"},
-      {:absinthe_plug, "~> 1.5"},
-      {:dotenv, "~> 3.0.0", only: [:dev, :test]},
-      {:oauth2, "~> 0.9"},
-      {:joken, "~> 2.0"},
-      {:bcrypt_elixir, "~> 3.0"},
-      {:excoveralls, "~> 0.10", only: :test},
+      {:absinthe, "~> 1.7.1"},
+      {:absinthe_plug, "~> 1.5.8"},
+      {:dotenv, "~> 3.1.0", only: [:dev, :test]},
+      {:excoveralls, "~> 0.15.3", only: :test},
+      {:guardian, "~> 2.0"},
+      {:argon2_elixir, "~> 2.0"},
     ]
   end
 

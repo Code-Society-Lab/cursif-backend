@@ -7,8 +7,7 @@
 [![Elixir](https://img.shields.io/badge/Elixir-1.14.3-4e2a8e)](https://hexdocs.pm/elixir/Kernel.html)
 [![Elixir](https://img.shields.io/badge/Phoenix-1.6.15-ff6f61)](https://hexdocs.pm/phoenix/overview.html)
 
-Cursif is a collaborative, scriptable and flexible note taking application that
-aimes to help teams manage their projects. 
+Cursif is a collaborative, scriptable and flexible note-taking application that aimes to help teams manage their projects. 
 
 ## Getting Started
 
@@ -22,7 +21,7 @@ aimes to help teams manage their projects.
 Make sure you have installed the requirement above before continuing.
 
 #### Connect your database
-In project root directoy, create and edit and file named `.env`. Add the following
+In project root directory, create and edit and file named `.env`. Add the following
 information inside.
 
 ```
@@ -36,9 +35,12 @@ export DATABASE_PASSWORD=<your database password>
 
 ### Start the application:
 Start Cursif with `mix phx.server` or inside IEx with `iex -S mix phx.server` (recommended for development). You can, now, consume the API from `localhost:4000/api`.
-You can test queries at [`localhost:4000/graphql`](http://localhost:4000/graphql)
+You can test queries at [`localhost:4000/graphiql`](http://localhost:4000/graphiql)
 
 > To monitor the application, you can access the dashboard at [`localhost:4000/dashboard`](http://localhost:4000/dashboard) from your browser. 
+
+#### Troubleshooting
+If the application fails to load the environment variable, execute `source .env` from the root directory
 
 ## Resources
   

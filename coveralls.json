@@ -1,0 +1,15 @@
+{
+  "coverage_options": {
+    "minimum_coverage": 90
+  },
+  "skip_files": [
+    "test",
+    "deps",
+    "lib/cursif.ex",
+    "lib/cursif_web.ex",
+    "lib/cursif_web/schema.ex",
+    "lib/cursif_web/router.ex",
+    "lib/cursif_web/middlewares",
+    "lib/cursif_web/views/error_helpers.ex"
+  ]
+}
