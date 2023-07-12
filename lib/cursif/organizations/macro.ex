@@ -2,6 +2,7 @@ defmodule Cursif.Organizations.Macro do
     use Ecto.Schema
 
     alias Cursif.Organizations.Member
+    alias Cursif.Accounts.User
 
     @type t :: %__MODULE__{
                 title: String.t(),
