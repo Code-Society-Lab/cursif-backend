@@ -67,6 +67,7 @@ defmodule Cursif.Notebooks do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec update_notebook(Notebook.t(), map()) :: {:ok, Notebook.t()} | {:error, %Ecto.Changeset{}}
   def update_notebook(%Notebook{} = notebook, attrs) do
     notebook
     |> Notebook.changeset(attrs)
