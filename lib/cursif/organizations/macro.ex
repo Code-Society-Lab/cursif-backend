@@ -22,7 +22,7 @@ defmodule Cursif.Organizations.Macro do
         field :pattern, :string
         field :code, :string
         
-        has_many :member, Member, join_through: User
+        many_to_many :member, Member, join_through: User
 
         timestamps()
     end

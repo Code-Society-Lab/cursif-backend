@@ -6,13 +6,13 @@ defmodule Cursif.Organizations.Member do
     alias Cursif.Accounts.User
 
     @type t :: %__MODULE__{
-                organization: Organization.t(),
-                user: User.t(),
+        organization: Organization.t(),
+        user: User.t(),
 
-                # Timestamps
-                inserted_at: any(),
-                updated_at: any()
-            }
+        # Timestamps
+        inserted_at: any(),
+        updated_at: any()
+    }
 
     schema "members" do
         belongs_to :organization, Organization

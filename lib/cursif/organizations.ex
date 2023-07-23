@@ -5,14 +5,19 @@ defmodule Cursif.Organizations do
 
   import Ecto.Query, warn: false
   alias Cursif.Repo
-
   alias Cursif.Organizations.Organization
+
+  @doc """
+  Returns the list of organizations.
+  """
+  def list_organizations do
+    Repo.all(Organization) |> Repo.preload(:members)
+  end
 
   @doc """
   Gets an Organization
   """
-  @spec get_organization!(binary()) :: Organization.t()
-  def get_organization!(id), do: Repo.get!(Organization, id) |> Repo.preload([:name, :member])
+  def get_organization!(name), do: Repo.get!(Organization, name) |> Repo.preload([:member])
 
   @doc """
   Creates an organization.
@@ -40,5 +45,12 @@ defmodule Cursif.Organizations do
   @spec delete_organization(Organization.t()) :: {:ok, Organization.t()} | {:error, %Ecto.Changeset{}}
   def delete_organization(%Organization{} = organization) do
     Repo.delete(organization)
+  end
+
+  @doc """
+  Returns the owner of a notebook.
+  """
+  def get_owner!(%{owner_id: owner_id, owner_type: "admin"}) do
+    Repo.get!(User, owner_id)
   end
 end
