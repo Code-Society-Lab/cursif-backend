@@ -5,8 +5,6 @@ defmodule Cursif.Organizations.Organization do
 
     alias Cursif.Organizations.Member
     alias Cursif.Accounts.User
-    alias Cursif.Notebooks
-    alias Cursif.Notebooks.Notebook
 
     @type t :: %__MODULE__{
         name: String.t(),
@@ -56,4 +54,10 @@ defmodule Cursif.Organizations.Organization do
 
     defp validate_association(changeset),
         do: changeset
+
+      @doc false
+    @spec update_changeset(Organization.t(), %{}) :: Organization.t()
+    def update_changeset(organization, attrs) do
+        organization |> cast(attrs, [:name, :owner_id, :owner_type])
+    end
 end

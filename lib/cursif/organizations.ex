@@ -35,7 +35,7 @@ defmodule Cursif.Organizations do
   @spec update_organization(Organization.t(), map()) :: {:ok, Organization.t()} | {:error, %Ecto.Changeset{}}
   def update_organization(%Organization{} = organization, attrs) do
     organization
-    |> Page.update_changeset(attrs)
+    |> Organization.update_changeset(attrs)
     |> Repo.update()
   end
 
