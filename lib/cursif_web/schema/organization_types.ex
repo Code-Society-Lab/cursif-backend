@@ -6,6 +6,17 @@ defmodule CursifWeb.Schema.OrganizationTypes do
     alias CursifWeb.Resolvers.Organizations
 
     @desc "Represents an organization"
+    # Define the :member object type
+    object :member do
+        field :id, :id
+        field :name, :string
+    end
+
+    # Define the :name object type
+    object :name do
+        field :name, :string
+    end
+
     object :organization do
         field :name, :string
         field :members, list_of(:member)
@@ -20,20 +31,20 @@ defmodule CursifWeb.Schema.OrganizationTypes do
 
         @desc "Get a organization by name"
         field :organization, :organization do
-            arg(:name, non_null(:name))
+            arg(:name, non_null(:string))
             resolve(&Organizations.get_organization_by_name/2)
         end
     end
 
     # Mutation objects
     object :organization_mutations do
-    @desc "Create an organization"
-    field :create_organization, :organization do
-      arg(:name, non_null(:string))
-      arg(:owner_id, non_null(:id))
-      arg(:owner_type, non_null(:string))
+        @desc "Create an organization"
+        field :create_organization, :organization do
+        arg(:name, non_null(:string))
+        arg(:owner_id, non_null(:id))
+        arg(:owner_type, non_null(:string))
 
-      resolve(&Organizations.create_organization/2)
+        resolve(&Organizations.create_organization/2)
+        end
     end
-  end
 end
