@@ -48,7 +48,7 @@ defmodule Cursif.Organizations do
   end
 
   @doc """
-  Returns the owner of a notebook.
+  Returns the owner of an organization.
   """
   def get_owner!(%{owner_id: owner_id, owner_type: "admin"}) do
     Repo.get!(User, owner_id)
