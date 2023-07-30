@@ -17,18 +17,12 @@ defmodule Cursif.Organizations do
   @doc """
   Gets an Organization
   """
-  def get_organization!(name), do: Repo.get!(Organization, name)
+  def get_organization!(name), do: Repo.get!(Organization, name) |> Repo.preload([:members])
 
   @doc """
   Gets an Organization by its name
   """
-  def get_by_name(name), do: Repo.get_by(Organization, name: name) |> Repo.preload([members: [:user], notebooks: [:pages]])
-
-    @doc """
-  Gets an Organization by its id
-  """
-  def get_by_id!(id), do: Repo.get!(Organization, id) |> Repo.preload([members: [:user], notebooks: [:pages]])
-
+  def get_by_name(name), do: Repo.get_by(Organization, :name, name) |> Repo.preload([:members])
 
   @doc """
   Creates an organization.
