@@ -9,7 +9,7 @@ defmodule Cursif.Organizations.Organization do
 
     @type t :: %__MODULE__{
         name: String.t(),
-        members: list(Member.t()),
+        members: [Member.t()],
         owner_id: binary(),
 
         # Timestamps
