@@ -12,9 +12,9 @@ defmodule CursifWeb.Resolvers.Organizations do
     @spec get_organization_by_name(map(), map()) :: {:ok, Organization.t()}
     def get_organization_by_name(%{name: name}, _context) do
       {:ok, Organizations.get_by_name(name)}
-    rescue e ->
-        IO.inspect(e)
-        {:error, :not_found}
+    rescue error ->
+      Phoenix.log(error)
+      {:error, :not_found}
     end
   
     @spec create_organization(map(), map()) :: {:ok, Organization.t()}
