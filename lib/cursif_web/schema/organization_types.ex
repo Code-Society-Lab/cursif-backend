@@ -19,6 +19,7 @@ defmodule CursifWeb.Schema.OrganizationTypes do
 
     object :organization do
         field :id, :id
+        field :id, :id
         field :name, :string
         field :members, list_of(:member)
         field :notebooks, list_of(:notebook)
@@ -42,6 +43,12 @@ defmodule CursifWeb.Schema.OrganizationTypes do
             arg(:id, non_null(:id))
             resolve(&Organizations.get_by_id/2)
         end
+
+        @desc "Get a specific organization by id"
+        field :organization_id, :organization do
+            arg(:id, non_null(:id))
+            resolve(&Organizations.get_by_id/2)
+        end
     end
 
     # Mutation objects
@@ -50,7 +57,10 @@ defmodule CursifWeb.Schema.OrganizationTypes do
         field :create_organization, :organization do
             arg(:name, non_null(:string))
             arg(:owner_id, non_null(:id))
+            arg(:name, non_null(:string))
+            arg(:owner_id, non_null(:id))
 
+            resolve(&Organizations.create_organization/2)
             resolve(&Organizations.create_organization/2)
         end
 
@@ -64,10 +74,18 @@ defmodule CursifWeb.Schema.OrganizationTypes do
 
         @desc "Update an organization"
         field :update_organization, :organization do
-        arg(:name, :string)
-        arg(:owner_id, non_null(:id))
+            arg(:id, non_null(:id))  
+            arg(:name, :string)
 
-        resolve(&Organizations.update_organization/2)
+            resolve(&Organizations.update_organization/2)
+        end
+
+        @desc "Update an organization"
+        field :update_organization, :organization do
+            arg(:id, non_null(:id))  
+            arg(:name, :string)
+
+            resolve(&Organizations.update_organization/2)
         end
     end
 end
