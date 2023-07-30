@@ -7,6 +7,7 @@ defmodule Cursif.Notebooks do
   alias Cursif.Repo
 
   alias Cursif.Notebooks.Notebook
+  alias Cursif.Accounts
 
   @doc """
   Returns the list of notebooks.
@@ -111,7 +112,6 @@ defmodule Cursif.Notebooks do
       iex> get_owner!(%{owner_id: owner_id, owner_type: "user"})
       %User{}
   """
-  def get_owner!(%{owner_id: owner_id, owner_type: "user"}) do
-    Repo.get!(User, owner_id)
-  end
+  def get_owner!(%Notebook{owner_id: owner_id, owner_type: "user"}),
+      do: Accounts.get_user!(owner_id)
 end
