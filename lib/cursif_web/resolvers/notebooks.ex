@@ -24,4 +24,14 @@ defmodule CursifWeb.Resolvers.Notebooks do
       {:error, changeset} -> {:error, changeset}
     end
   end
+
+  @spec update_notebook(map(), map()) :: {:ok, Notebook.t()} | {:error, atom()}
+  def update_notebook(%{name: name} = args, _context) do
+    notebook = Notebooks.get_notebook!(id)
+
+    case Notebooks.update_notebook(notebook, args) do
+      {:ok, notebook} -> {:ok, notebook}
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
 end
