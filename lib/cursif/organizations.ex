@@ -6,6 +6,8 @@ defmodule Cursif.Organizations do
   import Ecto.Query, warn: false
   alias Cursif.Repo
   alias Cursif.Organizations.Organization
+  # alias Cursif.Organizations.Member
+  # alias Cursif.Accounts.User
 
   @doc """
   Returns the list of organizations.
@@ -24,7 +26,7 @@ defmodule Cursif.Organizations do
   """
   def get_by_name(name), do: Repo.get_by(Organization, name: name) |> Repo.preload([members: [:user], notebooks: [:pages]])
 
-    @doc """
+  @doc """
   Gets an Organization by its id
   """
   def get_by_id!(id), do: Repo.get!(Organization, id) |> Repo.preload([members: [:user], notebooks: [:pages]])
@@ -64,4 +66,11 @@ defmodule Cursif.Organizations do
   def get_owner!(%{owner_id: owner_id}) do
     Repo.get!(User, owner_id)
   end
+  
+  # @spec add_member(User.t(), map()) :: {:ok, User.t()} | {:error, %Ecto.Changeset{}}
+  # def add_member(attrs) do
+  #   %Organization{}
+  #   |> Member.changeset(attrs)
+  #   |> Repo.insert()
+  # end
 end
