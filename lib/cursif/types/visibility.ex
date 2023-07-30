@@ -1,5 +1,6 @@
 defmodule Cursif.Visibility do
   @typedoc "The visibility of a notebook or page."
+  @type visibility :: atom()
 
   use Ecto.Type
 
@@ -10,9 +11,7 @@ defmodule Cursif.Visibility do
 
   def type, do: :string
 
-  for visibility <- visibilities do
-    def cast(visibility), do: {:ok, visibility}
-    def load(visibility), do: {:ok, visibility}
-    def dump(visibility), do: {:ok, visibility}
-  end
+  def cast(visibility), do: {:ok, visibility}
+  def load(visibility), do: {:ok, visibility}
+  def dump(visibility), do: {:ok, visibility}
 end

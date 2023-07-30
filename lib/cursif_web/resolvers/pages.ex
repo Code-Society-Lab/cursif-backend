@@ -1,6 +1,7 @@
 defmodule CursifWeb.Resolvers.Pages do
   alias Cursif.Pages
   alias Cursif.Pages.Page
+  alias Cursif.Notebooks
   alias Cursif.Notebooks.Notebook
 
   @spec get_page_by_id(map(), map()) :: {:ok, Page.t()} | {:error, atom()}
