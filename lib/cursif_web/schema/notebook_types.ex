@@ -11,8 +11,10 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :title, :string
     field :description, :string
     field :visibility, :string
+    field :owner_id, :id
+    field :owner_type, :string
     field :pages, list_of(:page)
-#    field :owner, :partial_user
+    field :collaborators, list_of(:partial_user)
   end
 
   @desc "Notebook queries"
