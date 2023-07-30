@@ -43,6 +43,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
 
     @desc "Update a notebook"
     field :update_notebook, :notebook do
+      arg(:id, non_null(:id))
       arg(:title, :string)
       arg(:description, :string)
       arg(:visibility, :string)
