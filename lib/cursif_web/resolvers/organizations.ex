@@ -24,4 +24,14 @@ defmodule CursifWeb.Resolvers.Organizations do
         {:error, changeset} -> {:error, changeset}
       end
     end
+
+    @spec update_organization(map(), map()) :: {:ok, Organization.t()} | {:error, atom()}
+    def update_organization(%{name: name} = args, _context) do
+      organization = Organizations.get_by_name(name)
+
+      case Organizations.update_organization(organization, args) do
+        {:ok, organization} -> {:ok, organization}
+        {:error, changeset} -> {:error, changeset}
+      end
+    end
   end
