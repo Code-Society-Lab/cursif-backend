@@ -17,7 +17,12 @@ defmodule Cursif.Organizations do
   @doc """
   Gets an Organization
   """
-  def get_organization!(name), do: Repo.get!(Organization, name) |> Repo.preload([:member])
+  def get_organization!(name), do: Repo.get!(Organization, name) |> Repo.preload([:members])
+
+  @doc """
+  Gets an Organization by its name
+  """
+  def get_by_name(name), do: Repo.get_by(Organization, :name, name) |> Repo.preload([:members])
 
   @doc """
   Creates an organization.
@@ -50,7 +55,7 @@ defmodule Cursif.Organizations do
   @doc """
   Returns the owner of an organization.
   """
-  def get_owner!(%{owner_id: owner_id, owner_type: "admin"}) do
+  def get_owner!(%{owner_id: owner_id}) do
     Repo.get!(User, owner_id)
   end
 end

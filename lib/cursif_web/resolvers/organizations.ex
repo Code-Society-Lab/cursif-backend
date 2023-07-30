@@ -11,7 +11,9 @@ defmodule CursifWeb.Resolvers.Organizations do
 
     @spec get_organization_by_name(map(), map()) :: {:ok, Organization.t()}
     def get_organization_by_name(%{name: name}, _context) do
-        {:ok, Organizations.get_organization!(name)}
+      org = Organizations.get_by_name(name)
+      IO.inspect(org)
+      {:ok, org}
     rescue _ ->
         {:error, :not_found}
     end

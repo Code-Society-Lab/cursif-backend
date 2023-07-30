@@ -114,4 +114,11 @@ defmodule Cursif.Notebooks do
   """
   def get_owner!(%Notebook{owner_id: owner_id, owner_type: "user"}),
       do: Accounts.get_user!(owner_id)
+  def get_owner!(%{owner_id: owner_id, owner_type: "user"}) do
+    Repo.get!(User, owner_id)
+  end
+
+  def get_owner!(%{owner_id: owner_id, owner_type: "organization"}) do
+    Repo.get!(Organizations, owner_id)
+  end
 end

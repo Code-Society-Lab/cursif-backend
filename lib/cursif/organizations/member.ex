@@ -1,6 +1,6 @@
 defmodule Cursif.Organizations.Member do
     use Ecto.Schema
-    # import Ecto.Changest
+    import Ecto.Changeset
 
     alias Cursif.Organizations.Organization
     alias Cursif.Accounts.User
