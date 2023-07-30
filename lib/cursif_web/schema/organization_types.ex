@@ -4,6 +4,7 @@ defmodule CursifWeb.Schema.OrganizationTypes do
     """
     use Absinthe.Schema.Notation
     alias CursifWeb.Resolvers.Organizations
+    alias CursifWeb.Resolvers.Accounts
 
     @desc "Represents an organization"
     # Define the :member object type
@@ -42,6 +43,12 @@ defmodule CursifWeb.Schema.OrganizationTypes do
             arg(:id, non_null(:id))
             resolve(&Organizations.get_by_id/2)
         end
+
+        @desc "Get a specific user by id"
+        field :user_id, :member do
+            arg(:id, non_null(:id))
+            resolve(&Accounts.get_user_by_id/2)
+        end
     end
 
     # Mutation objects
@@ -57,7 +64,7 @@ defmodule CursifWeb.Schema.OrganizationTypes do
         @desc "Update an organization"
         field :update_organization, :organization do
             arg(:id, non_null(:id))  
-            arg(:name, :string)
+            arg(:member, :string)
 
             resolve(&Organizations.update_organization/2)
         end
@@ -69,10 +76,18 @@ defmodule CursifWeb.Schema.OrganizationTypes do
             resolve(&Organizations.delete_organization/2)
         end
 
-        # @desc "Add a member to the organization"
-        # field :add_member, :member do
-        #     arg(:id, non_null(:id))
-        #     resolve(&Organizations.add_member/2)
-        # end
+        @desc "Create a member"
+        field :create_member, :organization do
+            arg(:id, non_null(:id))
+            arg(:user_id, non_null(:id))
+            resolve(&Organizations.create_member/2)
+        end
+
+        @desc "Add a member to the organization"
+        field :add_member, :organization do
+            arg(:organization_id, non_null(:id))
+            arg(:user_id, non_null(:id))
+            resolve(&Organizations.add_member/2)
+        end
     end
 end

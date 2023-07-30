@@ -1,8 +1,9 @@
 defmodule CursifWeb.Resolvers.Organizations do
     alias Cursif.Organizations
     alias Cursif.Organizations.Organization
-    # alias Cursif.Accounts
-    # alias Cursif.Accounts.User
+    alias Cursif.Organizations.Member
+    alias Cursif.Accounts
+    alias Cursif.Accounts.User
   
     @spec list_organizations(map(), map()) :: {:ok, list(Organization.t())}
     def list_organizations(_args, _context) do
@@ -55,13 +56,21 @@ defmodule CursifWeb.Resolvers.Organizations do
       end
     end
 
-    # @spec add_member(map(), map()) :: {:ok, User.t()} | {:error, atom()}
-    # def add_member(id, _context) do
-    #   member = Accounts.get_user!(id)
+    @spec create_member(map(), map()) :: {:ok, Organization.t()}
+    def create_member(member, _context) do
+      case Organizations.create_member(member) do
+        {:ok, member} -> {:ok, member}
+        {:error, changeset} -> {:error, changeset}
+      end
+    end
 
-    #   case Organizations.add_member(member) do
-    #     {:ok, member} -> {:ok, member}
-    #     {:error, changeset} -> {:error, changeset}
-    #   end
-    # end
+    @spec add_member(map(), map()) :: {:ok, Organization.t()} | {:error, atom()}
+    def add_member(%{user_id: user_id, organization_id: organization_id} = attrs, _context) do
+      member = Organizations.create_member(user_id, organization_id)
+
+      case Organizations.add_member(member, attrs) do
+        {:ok, member} -> {:ok, member}
+        {:error, changeset} -> {:error, changeset}
+      end
+    end
   end
