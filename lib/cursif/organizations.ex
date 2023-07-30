@@ -24,6 +24,12 @@ defmodule Cursif.Organizations do
   """
   def get_by_name(name), do: Repo.get_by(Organization, name: name) |> Repo.preload([members: [:user], notebooks: [:pages]])
 
+    @doc """
+  Gets an Organization by its id
+  """
+  def get_by_id!(id), do: Repo.get!(Organization, id) |> Repo.preload([members: [:user], notebooks: [:pages]])
+
+
   @doc """
   Creates an organization.
   """
