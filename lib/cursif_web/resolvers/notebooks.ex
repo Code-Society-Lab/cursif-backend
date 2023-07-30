@@ -12,7 +12,8 @@ defmodule CursifWeb.Resolvers.Notebooks do
   @spec get_notebook_by_id(map(), map()) :: {:ok, Notebook.t()}
   def get_notebook_by_id(%{id: id}, _context) do
     {:ok, Notebooks.get_notebook!(id)}
-  rescue _ ->
+  rescue error ->
+    Phoenix.log(error)
     {:error, :not_found}
   end
 

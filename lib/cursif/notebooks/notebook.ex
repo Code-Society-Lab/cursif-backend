@@ -54,10 +54,9 @@ defmodule Cursif.Notebooks.Notebook do
     Ecto.NoResultsError -> add_error(changeset, :owner_id, "is not a valid user")
   end
 
-  defp validate_association(%{changes: %{owner_type: owner_type}} = changeset) do
-    if owner_type not in ["user", "organization"] do
-      add_error(changeset, :owner_type, "is not a valid owner type")
-    end
+  defp validate_association(%{changes: %{owner_type: owner_type}} = changeset)
+       when owner_type not in ["user", "organization"] do
+    add_error(changeset, :owner_type, "is not a valid owner type")
   end
 
   defp validate_association(changeset),
