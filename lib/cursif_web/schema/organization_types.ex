@@ -46,5 +46,13 @@ defmodule CursifWeb.Schema.OrganizationTypes do
 
         resolve(&Organizations.create_organization/2)
         end
+
+        @desc "Update an organization"
+        field :update_organization, :organization do
+        arg(:name, :string)
+        arg(:owner_id, non_null(:id))
+
+        resolve(&Organizations.update_organization/2)
+        end
     end
 end
