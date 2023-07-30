@@ -52,6 +52,6 @@ defmodule Cursif.Organizations.Organization do
     @doc false
     @spec update_changeset(Organization.t(), %{}) :: Organization.t()
     def update_changeset(organization, attrs) do
-        organization |> cast(attrs, [:name, :owner_id])
+        organization |> cast(attrs, [:name])
     end
 end
