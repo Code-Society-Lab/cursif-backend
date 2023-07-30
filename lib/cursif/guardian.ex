@@ -20,6 +20,7 @@ defmodule Cursif.Guardian do
   """
   @spec resource_from_claims(%{sub: binary()}) ::  {:ok, User.t()} | {:error, :resource_not_found}
   def resource_from_claims(%{"sub" => id}) do
+
     {:ok,  Accounts.get_user!(id)}
   end
   def resource_from_claims(_claims), do: {:error, :resource_not_found}
