@@ -14,8 +14,6 @@ defmodule CursifWeb.Resolvers.Notebooks do
     {:ok, Notebooks.get_notebook!(id)}
   rescue error ->
     Phoenix.log(error)
-  rescue error ->
-    Phoenix.log(error)
     {:error, :not_found}
   end
 

@@ -10,8 +10,6 @@ defmodule CursifWeb.Schema.OrganizationTypes do
     object :member do
         field :id, :string
         field :user, :partial_user
-        field :id, :string
-        field :user, :partial_user
     end
 
     # Define the :name object type
@@ -23,7 +21,6 @@ defmodule CursifWeb.Schema.OrganizationTypes do
         field :id, :id
         field :name, :string
         field :members, list_of(:member)
-        field :notebooks, list_of(:notebook)
         field :notebooks, list_of(:notebook)
     end
 
@@ -64,5 +61,11 @@ defmodule CursifWeb.Schema.OrganizationTypes do
 
             resolve(&Organizations.update_organization/2)
         end
+
+        # @desc "Add a member to the organization"
+        # field :add_member, :member do
+        #     arg :id, non_null(:id)
+        #     resolve(&Organization.add_member/2)
+        # end
     end
 end
