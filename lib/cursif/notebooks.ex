@@ -50,11 +50,12 @@ defmodule Cursif.Notebooks do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_notebook(attrs \\ %{}) do
+  def create_notebook(attrs) do
     %Notebook{}
     |> Notebook.changeset(attrs)
     |> Repo.insert()
   end
+
 
   @doc """
   Updates a notebook.
