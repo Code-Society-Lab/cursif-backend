@@ -62,10 +62,17 @@ defmodule CursifWeb.Schema.OrganizationTypes do
             resolve(&Organizations.update_organization/2)
         end
 
+        @desc "Delete an organization"
+        field :delete_organization, :organization do
+            arg(:id, non_null(:id))
+
+            resolve(&Organizations.delete_organization/2)
+        end
+
         # @desc "Add a member to the organization"
         # field :add_member, :member do
-        #     arg :id, non_null(:id)
-        #     resolve(&Organization.add_member/2)
+        #     arg(:id, non_null(:id))
+        #     resolve(&Organizations.add_member/2)
         # end
     end
 end
