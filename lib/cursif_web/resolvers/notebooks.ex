@@ -23,4 +23,11 @@ defmodule CursifWeb.Resolvers.Notebooks do
       {:error, changeset} -> {:error, changeset}
     end
   end
+
+#  @spec get_owner(map(), map(), map()) :: {:ok, User.t()}
+  def get_owner(notebook, _args, _context) do
+    {:ok, Notebooks.get_owner!(notebook)}
+  rescue _ ->
+    {:error, :not_found}
+  end
 end
