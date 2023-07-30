@@ -22,7 +22,7 @@ defmodule Cursif.Organizations.Organization do
         field :name, :string
         field :owner_id, :binary_id
 
-        many_to_many :members, Member, join_through: "organization_members"
+        has_many :members, Member
 
         timestamps()
     end
