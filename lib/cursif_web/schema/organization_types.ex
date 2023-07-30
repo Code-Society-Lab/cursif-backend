@@ -8,8 +8,7 @@ defmodule CursifWeb.Schema.OrganizationTypes do
     @desc "Represents an organization"
     # Define the :member object type
     object :member do
-        field :id, :id
-        field :name, :string
+        field :id, :string
     end
 
     # Define the :name object type
