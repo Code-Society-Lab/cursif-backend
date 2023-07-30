@@ -42,7 +42,6 @@ defmodule CursifWeb.Schema.OrganizationTypes do
         field :create_organization, :organization do
         arg(:name, non_null(:string))
         arg(:owner_id, non_null(:id))
-        arg(:owner_type, non_null(:string))
 
         resolve(&Organizations.create_organization/2)
         end
