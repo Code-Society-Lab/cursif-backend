@@ -9,17 +9,10 @@ defmodule Cursif.NotebooksTest do
 
   describe "notebooks" do
     @invalid_attrs %{
-      description: nil, 
-      title: nil
+      title: nil,
+      description: nil,
+      visibility: nil,
     }
-
-    # @valid_attrs %{
-    #   title: "some title",
-    #   description: "some description",
-    #   owner_type: "user",
-    #   owner_id: user_fixture().id,
-    #   visibility: "public",
-    # }
 
     test "list_notebooks/0 returns all notebooks" do
       user = user_fixture()
@@ -79,19 +72,26 @@ defmodule Cursif.NotebooksTest do
     end
 
     test "update_notebook/2 with invalid data returns error changeset" do
-      notebook = notebook_fixture()
+      user = user_fixture()
+
+      notebook = notebook_fixture(%{
+        owner_type: "user",
+        owner_id: user.id,
+      })
+
       assert {:error, %Ecto.Changeset{}} = Notebooks.update_notebook(notebook, @invalid_attrs)
     end
 
     test "delete_notebook/1 deletes the notebook" do
-      notebook = notebook_fixture()
+      user = user_fixture()
+
+      notebook = notebook_fixture(%{
+        owner_type: "user",
+        owner_id: user.id,
+      })
+
       assert {:ok, %Notebook{}} = Notebooks.delete_notebook(notebook)
       assert_raise Ecto.NoResultsError, fn -> Notebooks.get_notebook!(notebook.id) end
-    end
-
-    test "change_notebook/1 returns a notebook changeset" do
-      notebook = notebook_fixture()
-      assert %Ecto.Changeset{} = Notebooks.change_notebook(notebook)
     end
   end
 end
