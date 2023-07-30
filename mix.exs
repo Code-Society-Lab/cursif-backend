@@ -57,6 +57,7 @@ defmodule Cursif.MixProject do
       {:absinthe, "~> 1.7.1"},
       {:absinthe_plug, "~> 1.5.8"},
       {:dotenv, "~> 3.1.0", only: [:dev, :test]},
+      {:cors_plug, "~> 3.0"},
       {:excoveralls, "~> 0.15.3", only: :test},
       {:guardian, "~> 2.0"},
       {:argon2_elixir, "~> 2.0"},
