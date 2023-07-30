@@ -4,11 +4,12 @@ defmodule Cursif.Organizations.Organization do
     alias Cursif.Repo
 
     alias Cursif.Organizations.Member
+    alias Cursif.Notebooks.Notebook
     alias Cursif.Accounts.User
 
     @type t :: %__MODULE__{
         name: String.t(),
-        members: list(Member.t()),
+        members: [Member.t()],
         owner_id: binary(),
 
         # Timestamps
@@ -23,6 +24,7 @@ defmodule Cursif.Organizations.Organization do
         field :owner_id, :binary_id
 
         has_many :members, Member
+        has_many :notebooks, Notebook, foreign_key: :owner_id, where: [owner_type: "organization"]
 
         timestamps()
     end

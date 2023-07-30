@@ -9,6 +9,7 @@ defmodule CursifWeb.Schema.OrganizationTypes do
     # Define the :member object type
     object :member do
         field :id, :string
+        field :user, :partial_user
     end
 
     # Define the :name object type
@@ -19,6 +20,7 @@ defmodule CursifWeb.Schema.OrganizationTypes do
     object :organization do
         field :name, :string
         field :members, list_of(:member)
+        field :notebooks, list_of(:notebook)
     end
 
     @desc "Organization queries"
