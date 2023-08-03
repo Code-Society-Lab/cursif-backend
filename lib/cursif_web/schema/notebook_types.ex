@@ -67,5 +67,12 @@ defmodule CursifWeb.Schema.NotebookTypes do
 
       resolve(&Notebooks.update_notebook/2)
     end
+
+    @desc "Delete an notebook"
+    field :delete_notebook, :notebook do
+        arg(:id, non_null(:id))
+
+        resolve(&Notebooks.delete_notebook/2)
+    end
   end
 end
