@@ -4,6 +4,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
   """
   use Absinthe.Schema.Notation
   alias CursifWeb.Resolvers.Notebooks
+  alias CursifWeb.Resolvers.Macros
 
   @desc "Notebook representation"
   object :notebook do
@@ -19,6 +20,14 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :owner, :owner do
       resolve(&Notebooks.get_owner/3)
     end
+  end
+
+  @desc "Macro representation"
+  object :macro do
+    field :id, :id
+    field :title, :string
+    field :pattern, :string
+    field :code, :string
   end
 
   union :owner do
@@ -41,6 +50,17 @@ defmodule CursifWeb.Schema.NotebookTypes do
       arg(:id, non_null(:id))
       resolve(&Notebooks.get_notebook_by_id/2)
     end
+
+    @desc "Get a macro by id"
+    field :macro, :macro do
+      arg(:id, non_null(:id))
+      resolve(&Macros.get_macro_by_id/2)
+    end
+
+    @desc "Get the list of macros"
+    field :macros, list_of(:macro) do
+      resolve(&Macros.list_macros/2)
+    end
   end
 
   # Mutation objects
@@ -54,6 +74,32 @@ defmodule CursifWeb.Schema.NotebookTypes do
       arg(:owner_type, non_null(:string))
 
       resolve(&Notebooks.create_notebook/2)
+    end
+
+    @desc "Create a macro"
+    field :create_macro, :macro do
+      arg(:title, non_null(:string))
+      arg(:pattern, non_null(:string))
+      arg(:code, non_null(:string))
+
+      resolve(&Macros.create_macro/2)
+    end
+
+    @desc "Update an macro"
+    field :update_macro, :macro do
+        arg(:id, non_null(:id))
+        arg(:title, :string)
+        arg(:pattern, :string)
+        arg(:code, :string)
+
+        resolve(&Macros.update_macro/2)
+    end
+
+    @desc "Delete an macro"
+    field :delete_macro, :macro do
+        arg(:id, non_null(:id))
+
+        resolve(&Macros.delete_macro/2)
     end
   end
 end
