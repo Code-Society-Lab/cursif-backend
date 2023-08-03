@@ -3,16 +3,16 @@ defmodule Cursif.Accounts.User do
   import Ecto.Changeset
 
   @type t :: %__MODULE__{
-               username: String.t(),
-               email: String.t(),
-               hashed_password: String.t(),
-               first_name: String.t() | nil,
-               last_name: String.t() | nil,
+    username: String.t(),
+    email: String.t(),
+    hashed_password: String.t(),
+    first_name: String.t() | nil,
+    last_name: String.t() | nil,
 
-               # Timestamps
-               inserted_at: any(),
-               updated_at: any()
-             }
+    # Timestamps
+    inserted_at: any(),
+    updated_at: any()
+  }
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
