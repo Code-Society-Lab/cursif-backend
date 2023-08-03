@@ -55,5 +55,17 @@ defmodule CursifWeb.Schema.NotebookTypes do
 
       resolve(&Notebooks.create_notebook/2)
     end
+
+    @desc "Update a notebook"
+    field :update_notebook, :notebook do
+      arg(:id, non_null(:id))
+      arg(:title, :string)
+      arg(:description, :string)
+      arg(:visibility, :string)
+      arg(:owner_id, :id)
+      arg(:owner_type, :string)
+
+      resolve(&Notebooks.update_notebook/2)
+    end
   end
 end

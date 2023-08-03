@@ -10,17 +10,17 @@ defmodule Cursif.Notebooks.Notebook do
   alias Cursif.Visibility
 
   @type t :: %__MODULE__{
-               title: String.t(),
-               description: String.t(),
-               visibility: Visibility,
-               owner_id: binary(),
-               owner_type: String.t(),
-               pages: [Page.t()],
+    title: String.t(),
+    description: String.t(),
+    visibility: Visibility,
+    owner_id: binary(),
+    owner_type: String.t(),
+    pages: [Page.t()],
 
-               # Timestamps
-               inserted_at: any(),
-               updated_at: any()
-             }
+    # Timestamps
+    inserted_at: any(),
+    updated_at: any()
+  }
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

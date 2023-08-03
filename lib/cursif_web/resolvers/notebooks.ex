@@ -24,6 +24,16 @@ defmodule CursifWeb.Resolvers.Notebooks do
     end
   end
 
+  @spec update_notebook(map(), map()) :: {:ok, Notebook.t()} | {:error, atom()}
+  def update_notebook(%{id: id} = args, _context) do
+    notebook = Notebooks.get_notebook!(id)
+
+    case Notebooks.update_notebook(notebook, args) do
+      {:ok, notebook} -> {:ok, notebook}
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
+
 #  @spec get_owner(map(), map(), map()) :: {:ok, User.t()}
   def get_owner(notebook, _args, _context) do
     {:ok, Notebooks.get_owner!(notebook)}
