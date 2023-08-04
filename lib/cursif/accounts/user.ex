@@ -39,14 +39,6 @@ defmodule Cursif.Accounts.User do
     |> validate_password()
   end
 
-  @doc false
-  @spec update_changeset(User.t(), %{}) :: User.t()
-  def update_changeset(user, attrs) do
-    user 
-    |> cast(attrs, [:first_name, :last_name, :username])
-    |> unique_constraint(:username)
-  end
-
   defp validate_email(changeset) do
     changeset
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
