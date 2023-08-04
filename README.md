@@ -21,7 +21,7 @@ Cursif is a collaborative, scriptable and flexible note-taking application that 
 Make sure you have installed the requirement above before continuing.
 
 #### Connect your database
-In project root directory, create and edit and file named `.env`. Add the following
+In project root directorylocalhoste and edit and file named `.env`. Add the following
 information inside.
 
 ```
