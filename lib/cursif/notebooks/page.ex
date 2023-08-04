@@ -28,7 +28,7 @@ defmodule Cursif.Notebooks.Page do
     field :parent_type, :string
 
     belongs_to :author, User, foreign_key: :author_id
-    has_many :children, Page, foreign_key: :parent_id, where: [parent_type: "page"]
+    has_many :children, __MODULE__, foreign_key: :parent_id, where: [parent_type: "page"]
 
     timestamps()
   end
