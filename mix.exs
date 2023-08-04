@@ -5,7 +5,7 @@ defmodule Cursif.MixProject do
     [
       app: :cursif,
       version: "0.1.0",
-      elixir: "~> 1.14.2",
+      elixir: "~> 1.15.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -53,7 +53,7 @@ defmodule Cursif.MixProject do
       {:gettext, "~> 0.22"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:absinthe, "~> 1.7.1"},
       {:absinthe_plug, "~> 1.5.8"},
       {:dotenv, "~> 3.1.0", only: [:dev, :test]},
