@@ -58,7 +58,7 @@ config :cursif, Cursif.Guardian,
        ttl: Application.get_env(:cursif, :ttl, {52, :weeks}),
        secret_key: Application.get_env(:cursif, :secret_key)
 
-
+config :cursif, env: Mix.env()
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

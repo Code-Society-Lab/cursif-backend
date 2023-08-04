@@ -9,9 +9,11 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-alias Cursif.{Repo, Accounts.User}
+alias Cursif.Repo
+alias Cursif.Accounts.User
+alias Cursif.Notebooks.Notebook
 
-unless Repo.exists?(User) do
+if not Repo.exists?(User) && Application.get_env(:cursif, :env) == :dev do
   user_attrs = %{
     email: "dev@example.com",
     password: "Password1234",
@@ -20,7 +22,13 @@ unless Repo.exists?(User) do
     last_name: "Elopment"
   }
 
-  %User{}
-  |> User.changeset(user_attrs)
-  |> Repo.insert!()
+  %{id: user_id} = %User{} |> User.changeset(user_attrs) |> Repo.insert!()
+
+  notebook_attrs = %{
+    title: "My First Notebook",
+    description: "This is my first notebook",
+    owner_id: user_id,
+    owner_type: "user"
+  }
+  %Notebook{} |> Notebook.changeset(notebook_attrs) |> Repo.insert!()
 end
