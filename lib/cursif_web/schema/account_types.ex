@@ -43,9 +43,8 @@ defmodule CursifWeb.Schema.AccountTypes do
     @desc "Update a user"
     field :update_user, :user do
       arg(:id, non_null(:id))
-      arg(:username, :string)
       arg(:email, :string)
-      arg(:password, non_null(:string))
+      arg(:username, :string)
       arg(:first_name, :string)
       arg(:last_name, :string)
 
