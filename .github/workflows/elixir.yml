@@ -29,6 +29,7 @@ jobs:
           elixir-version: '1.15.4'
           otp-version: '25'
       - run: mix deps.get
+      - run: mix local.rebar
       - run: mix test
         env:
           DATABASE_USERNAME: postgres
