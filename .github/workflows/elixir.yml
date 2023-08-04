@@ -16,6 +16,7 @@ jobs:
         image: postgres:13
         ports: ['5432:5432']
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         options: >-
           --health-cmd pg_isready
@@ -31,4 +32,6 @@ jobs:
       - run: mix setup && mix test
         env:
           ELIXIR_ERL_OPTIONS: "+fnu"
-          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST: postgres
