@@ -4,7 +4,7 @@ defmodule CursifWeb.Resolvers.Notebooks do
 
   @spec list_notebooks(map(), map()) :: {:ok, list(Notebook.t())}
   def list_notebooks(_args, _context) do
-    {:ok, Notebooks.list_notebooks()}
+    {:ok, Notebooks.list_notebooks(preloads: [:macros, collaborators: [:user], pages: [:author]])}
   rescue _ ->
     {:error, :not_found}
   end

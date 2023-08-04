@@ -5,7 +5,7 @@ defmodule Cursif.Notebooks.Notebook do
   alias Cursif.Repo
 
   alias Cursif.Accounts.User
-  alias Cursif.Notebooks.{Page, Collaborator}
+  alias Cursif.Notebooks.{Page, Collaborator, Macro}
 
   @type t :: %__MODULE__{
                title: String.t(),
@@ -13,6 +13,8 @@ defmodule Cursif.Notebooks.Notebook do
                owner_id: binary(),
                owner_type: String.t(),
                pages: [Page.t()],
+               collaborators: [User.t()],
+               macros: [Macro.t()],
 
                # Timestamps
                inserted_at: any(),
@@ -27,8 +29,9 @@ defmodule Cursif.Notebooks.Notebook do
     field :owner_id, :binary_id
     field :owner_type, :string
 
-    many_to_many :collaborators, User, join_through: Collaborator
     has_many :pages, Page, foreign_key: :parent_id
+    many_to_many :collaborators, User, join_through: Collaborator
+    has_many :macros, Macro
 
     timestamps()
   end

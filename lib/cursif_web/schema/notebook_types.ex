@@ -14,7 +14,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :owner_id, :id
     field :owner_type, :string
     field :pages, list_of(:page)
-    field :collaborators, list_of(:partial_user)
+    field :collaborators, list_of(:user)
     field :macros, list_of(:macro)
 
     field :owner, :owner do
@@ -98,6 +98,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
       arg(:title, non_null(:string))
       arg(:pattern, non_null(:string))
       arg(:code, non_null(:string))
+      arg(:notebook_id, non_null(:id))
 
       resolve(&Macros.create_macro/2)
     end

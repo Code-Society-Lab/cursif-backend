@@ -9,6 +9,7 @@ defmodule Cursif.Notebooks.Macro do
         title: String.t(),
         pattern: String.t(),
         code: String.t(),
+        notebook: Notebook.t(),
 
         # Timestamps
         inserted_at: any(),
@@ -31,8 +32,8 @@ defmodule Cursif.Notebooks.Macro do
     @spec changeset(Macro.t(), %{}) :: Macro.t()
     def changeset(macro, attrs) do
         macro
-        |> cast(attrs, [:title, :pattern, :code])
+        |> cast(attrs, [:title, :pattern, :code, :notebook_id])
         |> cast_assoc(:notebook)
-        |> validate_required([:title, :pattern, :code])
+        |> validate_required([:title, :pattern, :code, :notebook_id])
     end
 end

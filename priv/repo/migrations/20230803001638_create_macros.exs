@@ -7,6 +7,7 @@ defmodule Cursif.Repo.Migrations.CreateMacros do
       add :title, :string
       add :pattern, :string
       add :code, :string
+      add :notebook_id, references(:notebooks, type: :binary_id)
 
       timestamps()
     end

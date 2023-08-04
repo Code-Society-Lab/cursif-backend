@@ -18,8 +18,9 @@ defmodule Cursif.Notebooks do
       [%Notebook{}, ...]
 
   """
-  def list_notebooks do
-    Repo.all(Notebook) |> Repo.preload(:pages)
+  def list_notebooks(opts \\ []) do
+    preloads = Keyword.get(opts, :preloads, [])
+    Repo.all(Notebook) |> Repo.preload(preloads)
   end
 
   @doc """
