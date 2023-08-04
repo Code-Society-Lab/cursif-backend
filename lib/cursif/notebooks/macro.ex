@@ -6,7 +6,7 @@ defmodule Cursif.Notebooks.Macro do
     alias Cursif.Notebooks.Notebook
 
     @type t :: %__MODULE__{
-        title: String.t(),
+        name: String.t(),
         pattern: String.t(),
         code: String.t(),
         notebook: Notebook.t(),
@@ -19,7 +19,7 @@ defmodule Cursif.Notebooks.Macro do
     @primary_key {:id, :binary_id, autogenerate: true}
     @foreign_key_type :binary_id
     schema "macros" do
-        field :title, :string
+        field :name, :string
         field :pattern, :string
         field :code, :string
 
@@ -32,8 +32,8 @@ defmodule Cursif.Notebooks.Macro do
     @spec changeset(Macro.t(), %{}) :: Macro.t()
     def changeset(macro, attrs) do
         macro
-        |> cast(attrs, [:title, :pattern, :code, :notebook_id])
+        |> cast(attrs, [:name, :pattern, :code, :notebook_id])
         |> cast_assoc(:notebook)
-        |> validate_required([:title, :pattern, :code, :notebook_id])
+        |> validate_required([:name, :pattern, :code, :notebook_id])
     end
 end

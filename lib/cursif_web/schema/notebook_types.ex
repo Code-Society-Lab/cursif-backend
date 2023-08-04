@@ -33,7 +33,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
   @desc "Macro representation"
   object :macro do
     field :id, :id
-    field :title, :string
+    field :name, :string
     field :pattern, :string
     field :code, :string
   end

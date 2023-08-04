@@ -4,7 +4,7 @@ defmodule Cursif.Repo.Migrations.CreateMacros do
   def change do
     create table(:macros, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :title, :string
+      add :name, :string
       add :pattern, :string
       add :code, :string
       add :notebook_id, references(:notebooks, type: :binary_id)
