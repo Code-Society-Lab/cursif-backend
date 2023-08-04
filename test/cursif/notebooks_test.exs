@@ -20,7 +20,7 @@ defmodule Cursif.NotebooksTest do
         owner_id: user.id,
       })
 
-      assert Notebooks.list_notebooks() == [notebook |> Repo.preload([:pages])]
+      assert Notebooks.list_notebooks() == [notebook]
     end
 
     test "get_notebook!/1 returns the notebook with given id" do
