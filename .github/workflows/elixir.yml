@@ -28,7 +28,7 @@ jobs:
         with:
           elixir-version: '1.14.5'
           otp-version: '25'
-      - run: mix setup
-      - run: ELIXIR_ERL_OPTIONS="+fnu" mix test
-    env:
-        POSTGRES_HOST: postgres
+      - run: mix setup && mix test
+        env:
+          ELIXIR_ERL_OPTIONS: "+fnu"
+          POSTGRES_HOST: localhost
