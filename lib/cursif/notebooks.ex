@@ -23,9 +23,12 @@ defmodule Cursif.Notebooks do
   end
 
   @doc """
-  Gets a single notebook.
+  Gets a single notebook by its `id`.
 
   Raises `Ecto.NoResultsError` if the Notebook does not exist.
+
+  Associations can be preloaded by passing a list of associations to the
+  `:preloads` option.
 
   ## Examples
 
@@ -36,7 +39,10 @@ defmodule Cursif.Notebooks do
       ** (Ecto.NoResultsError)
 
   """
-  def get_notebook!(id), do: Repo.get!(Notebook, id) |> Repo.preload([:collaborators, pages: [:author]])
+  def get_notebook!(id, opts \\ []) do
+    preloads = Keyword.get(opts, :preloads, [])
+    Repo.get!(Notebook, id) |> Repo.preload(preloads)
+  end
 
   @doc """
   Creates a notebook.

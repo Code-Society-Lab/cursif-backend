@@ -10,8 +10,8 @@ defmodule Cursif.Accounts.User do
                last_name: String.t() | nil,
 
                # Timestamps
-               inserted_at: any(),
-               updated_at: any()
+               inserted_at: DateTime.t(),
+               updated_at: DateTime.t()
              }
 
   @primary_key {:id, :binary_id, autogenerate: true}

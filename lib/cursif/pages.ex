@@ -6,7 +6,7 @@ defmodule Cursif.Pages do
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Pages.Page
+  alias Cursif.Notebooks.Page
 
   @doc """
   Gets a single page.

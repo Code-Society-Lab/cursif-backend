@@ -81,7 +81,7 @@ defmodule Cursif.Utils.Error do
   defp metadata(:unknown),               do: {500, "Something went wrong"}
 
   defp metadata(code) do
-    if Mix.env != :test, do: Logger.warn("Unhandled error code: #{inspect(code)}")
+    if Mix.env != :test, do: Logger.warning("Unhandled error code: #{inspect(code)}")
     {422, to_string(code)}
   end
 end
