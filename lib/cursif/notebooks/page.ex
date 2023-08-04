@@ -1,9 +1,8 @@
-defmodule Cursif.Pages.Page do
+defmodule Cursif.Notebooks.Page do
   use Ecto.Schema
   import Ecto.Changeset
 
   alias Cursif.Accounts.User
-  alias Cursif.Pages.Page
   alias Cursif.Notebooks.Notebook
   alias Cursif.Repo
 

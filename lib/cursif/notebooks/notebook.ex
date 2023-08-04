@@ -4,15 +4,12 @@ defmodule Cursif.Notebooks.Notebook do
 
   alias Cursif.Repo
 
-  alias Cursif.Pages.Page
   alias Cursif.Accounts.User
-  alias Cursif.Notebooks.Collaborator
-  alias Cursif.Visibility
+  alias Cursif.Notebooks.{Page, Collaborator}
 
   @type t :: %__MODULE__{
                title: String.t(),
                description: String.t(),
-               visibility: Visibility,
                owner_id: binary(),
                owner_type: String.t(),
                pages: [Page.t()],
@@ -27,7 +24,6 @@ defmodule Cursif.Notebooks.Notebook do
   schema "notebooks" do
     field :description, :string
     field :title, :string
-    field :visibility, Visibility
     field :owner_id, :binary_id
     field :owner_type, :string
 
@@ -41,9 +37,9 @@ defmodule Cursif.Notebooks.Notebook do
   @spec changeset(Notebook.t(), %{}) :: Notebook.t()
   def changeset(notebook, attrs) do
     notebook
-    |> cast(attrs, [:title, :description, :visibility, :owner_id, :owner_type])
+    |> cast(attrs, [:title, :description, :owner_id, :owner_type])
     |> cast_assoc(:pages)
-    |> validate_required([:title, :description, :visibility, :owner_id, :owner_type])
+    |> validate_required([:title, :description, :owner_id, :owner_type])
     |> validate_association()
   end
 

@@ -11,7 +11,6 @@ defmodule Cursif.NotebooksTest do
     @invalid_attrs %{
       title: nil,
       description: nil,
-      visibility: nil,
     }
 
     test "list_notebooks/0 returns all notebooks" do
@@ -30,7 +29,7 @@ defmodule Cursif.NotebooksTest do
         owner_type: "user",
         owner_id: user.id,
       })
-      assert Notebooks.get_notebook!(notebook.id) == notebook |> Repo.preload(pages: [:children, :author])
+      assert Notebooks.get_notebook!(notebook.id) == notebook
     end
 
     test "create_notebook/1 with valid data creates a notebook" do
@@ -41,7 +40,6 @@ defmodule Cursif.NotebooksTest do
         description: "some description",
         owner_type: "user",
         owner_id: user.id,
-        visibility: "public",
       }
 
       assert {:ok, %Notebook{} = notebook} = Notebooks.create_notebook(valid_attrs)

@@ -11,7 +11,6 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :id, :id
     field :title, :string
     field :description, :string
-    field :visibility, :string
     field :owner_id, :id
     field :owner_type, :string
     field :pages, list_of(:page)
@@ -69,7 +68,6 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :create_notebook, :notebook do
       arg(:title, non_null(:string))
       arg(:description, non_null(:string))
-      arg(:visibility, non_null(:string))
       arg(:owner_id, non_null(:id))
       arg(:owner_type, non_null(:string))
 

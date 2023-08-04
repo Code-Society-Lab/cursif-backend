@@ -6,7 +6,6 @@ defmodule Cursif.Repo.Migrations.CreateNotebooks do
       add :id, :binary_id, primary_key: true
       add :title, :string
       add :description, :string
-      add :visibility, :string
 
       add :owner_id, :binary_id
       add :owner_type, :string

@@ -13,7 +13,6 @@ defmodule Cursif.NotebooksFixtures do
       |> Enum.into(%{
         title: "some title",
         description: "some description",
-        visibility: "public",
       })
       |> Cursif.Notebooks.create_notebook()
 
