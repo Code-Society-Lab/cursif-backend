@@ -15,9 +15,18 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :owner_type, :string
     field :pages, list_of(:page)
     field :collaborators, list_of(:partial_user)
+    field :macros, list_of(:macro)
 
     field :owner, :owner do
       resolve(&Notebooks.get_owner/3)
+    end
+  end
+
+  union :owner do
+    types([:partial_user])
+
+    resolve_type fn
+      %Cursif.Accounts.User{}, _ -> :partial_user
     end
   end
 
@@ -27,14 +36,6 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :title, :string
     field :pattern, :string
     field :code, :string
-  end
-
-  union :owner do
-    types([:partial_user])
-
-    resolve_type fn
-      %Cursif.Accounts.User{}, _ -> :partial_user
-    end
   end
 
   @desc "Notebook queries"
@@ -72,6 +73,24 @@ defmodule CursifWeb.Schema.NotebookTypes do
       arg(:owner_type, non_null(:string))
 
       resolve(&Notebooks.create_notebook/2)
+    end
+
+    @desc "Update a notebook"
+    field :update_notebook, :notebook do
+      arg(:id, non_null(:id))
+      arg(:title, :string)
+      arg(:description, :string)
+      arg(:owner_id, :id)
+      arg(:owner_type, :string)
+
+      resolve(&Notebooks.update_notebook/2)
+    end
+
+    @desc "Delete an notebook"
+    field :delete_notebook, :notebook do
+        arg(:id, non_null(:id))
+
+        resolve(&Notebooks.delete_notebook/2)
     end
 
     @desc "Create a macro"
