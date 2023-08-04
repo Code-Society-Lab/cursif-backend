@@ -22,9 +22,9 @@ end
 
 if config_env() == :prod do
   database_url =
-    System.get_env("DATABASE_URL") ||
+    System.get_env("POSTGRES_URL") ||
       raise """
-      environment variable DATABASE_URL is missing.
+      environment variable POSTGRES_URL is missing.
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 

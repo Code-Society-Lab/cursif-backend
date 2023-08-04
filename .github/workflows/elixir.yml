@@ -26,12 +26,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-elixir@v1
         with:
-          elixir-version: '1.15.4'
+          elixir-version: '1.14.5'
           otp-version: '25'
-      - run: mix deps.get
-      - run: mix local.rebar
-      - run: mix test
-        env:
-          DATABASE_USERNAME: postgres
-          DATABASE_PASSWORD: postgres
-          DATABASE_HOSTNAME: postgres
+      - run: mix setup
+      - run: ELIXIR_ERL_OPTIONS="+fnu" mix test

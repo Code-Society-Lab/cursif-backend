@@ -25,8 +25,8 @@ In project root directory, create and edit and file named `.env`. Add the follow
 information inside.
 
 ```
-export DATABASE_USERNAME=<your database username>
-export DATABASE_PASSWORD=<your database password>
+export POSTGRES_USER=<your database username>
+export POSTGRES_PASSWORD=<your database password>
 ```
 
 #### Setup the application
