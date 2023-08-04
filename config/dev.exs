@@ -63,5 +63,6 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
+# See Guardian setup in `config/config.exs`
 config :cursif, :secret_key, "dev_secret_key"
 

@@ -47,3 +47,6 @@ config :logger, level: :info
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
+
+# execute `mix guardian.gen.secret` and that you set it in your environment variables under `CURSIF_SECRET_KEY`.
+config :cursif, :secret_key, System.fetch_env!("CURSIF_SECRET_KEY")
