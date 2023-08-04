@@ -11,7 +11,7 @@ defmodule CursifWeb.Resolvers.Notebooks do
 
   @spec get_notebook_by_id(map(), map()) :: {:ok, Notebook.t()}
   def get_notebook_by_id(%{id: id}, _context) do
-    {:ok, Notebooks.get_notebook!(id, preloads: [collaborators: [:user], pages: [:author]])}
+    {:ok, Notebooks.get_notebook!(id, preloads: [:macros, collaborators: [:user], pages: [:author]])}
   rescue _ ->
     {:error, :not_found}
   end
