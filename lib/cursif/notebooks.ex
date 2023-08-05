@@ -46,8 +46,22 @@ defmodule Cursif.Notebooks do
 
   """
   @spec get_notebook!(binary()) :: Notebook.t()
-  def get_notebook!(id),
-      do: Repo.get!(Notebook, id) |> Repo.preload([:macros, :collaborators, pages: [:author]])
+  def get_notebook!(id, opts \\ [])
+
+  def get_notebook!(id, [user: user] = opts) do
+    query = from n in Notebook,
+                 left_join: c in assoc(n, :collaborators),
+                 where: n.id == ^id and (n.owner_id == ^user.id or c.id == ^user.id)
+
+    get_notebook!(id, Keyword.put(opts, :query, query))
+  end
+
+  def get_notebook!(id, opts) do
+    query = Keyword.get(opts, :query, Notebook)
+    preloads = Keyword.get(opts, :preloads, [:macros, :collaborators, pages: [:author]])
+
+    Repo.get!(query, id) |> Repo.preload(preloads)
+  end
 
   @doc """
   Creates a notebook.
@@ -129,26 +143,4 @@ defmodule Cursif.Notebooks do
   @spec get_owner!(Notebook.t()) :: User.t()
   def get_owner!(%Notebook{owner_id: owner_id, owner_type: "user"}),
       do: Accounts.get_user!(owner_id)
-
-  @doc """
-  Check if a user can access a notebook.
-
-  If the user is the owner of the notebook, they can access it.
-  Otherwise, we check if the user is a collaborator.
-
-  ## Examples
-
-      iex> can_access?(notebook, user)
-      true
-  """
-  def can_access?(%Notebook{owner_id: owner_id, owner_type: "user"}, %User{id: user_id})
-      when owner_id == user_id, do: owner_id == user_id
-
-  def can_access?(%Notebook{id: notebook_id}, %User{id: user_id}) do
-    Collaborator
-    |> where(notebook_id: ^notebook_id, user_id: ^user_id)
-    |> Repo.exists?
-  end
-
-  def can_access?(_, _), do: false
 end
