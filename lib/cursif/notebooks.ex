@@ -6,7 +6,7 @@ defmodule Cursif.Notebooks do
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Notebooks.Notebook
+  alias Cursif.Notebooks.{Notebook, Collaborator}
   alias Cursif.Accounts
 
   @doc """
@@ -21,6 +21,26 @@ defmodule Cursif.Notebooks do
   def list_notebooks(opts \\ []) do
     preloads = Keyword.get(opts, :preloads, [])
     Repo.all(Notebook) |> Repo.preload(preloads)
+  end
+
+  @doc """
+  Returns the list of notebooks available to a user.
+
+  ## Examples
+
+      iex> list_user_notebooks(user)
+      [%Notebook{}, ...]
+
+  """
+  def list_user_notebooks(%{id: user_id}, opts \\ []) do
+    preloads = Keyword.get(opts, :preloads, [])
+
+    query =
+      from n in Notebook,
+           left_join: c in assoc(n, :collaborators),
+           where: n.owner_id == ^user_id or c.id == ^user_id
+
+    Repo.all(query) |> Repo.preload(preloads)
   end
 
   @doc """

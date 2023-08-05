@@ -3,15 +3,15 @@ defmodule CursifWeb.Resolvers.Notebooks do
   alias Cursif.Notebooks.Notebook
 
   @spec list_notebooks(map(), map()) :: {:ok, list(Notebook.t())}
-  def list_notebooks(_args, _context) do
-    {:ok, Notebooks.list_notebooks(preloads: [:macros, collaborators: [:user], pages: [:author]])}
+  def list_notebooks(_args, %{context: %{current_user: current_user}}) do
+    {:ok, Notebooks.list_user_notebooks(current_user, preloads: [:macros, :collaborators, pages: [:author]])}
   rescue _ ->
     {:error, :not_found}
   end
 
   @spec get_notebook_by_id(map(), map()) :: {:ok, Notebook.t()}
   def get_notebook_by_id(%{id: id}, _context) do
-    {:ok, Notebooks.get_notebook!(id, preloads: [:macros, collaborators: [:user], pages: [:author]])}
+    {:ok, Notebooks.get_notebook!(id, preloads: [:macros, :collaborators, pages: [:author]])}
   rescue _ ->
     {:error, :not_found}
   end

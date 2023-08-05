@@ -14,7 +14,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :owner_id, :id
     field :owner_type, :string
     field :pages, list_of(:page)
-    field :collaborators, list_of(:user)
+    field :collaborators, list_of(:partial_user)
     field :macros, list_of(:macro)
 
     field :owner, :owner do

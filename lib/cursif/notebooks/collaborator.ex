@@ -26,6 +26,8 @@ defmodule Cursif.Notebooks.Collaborator do
   def changeset(collaborator, attrs) do
     collaborator
     |> cast(attrs, [:notebook_id, :user_id])
+    |> cast_assoc(:notebook)
+    |> cast_assoc(:user)
     |> validate_required([:notebook_id, :user_id])
   end
 end
