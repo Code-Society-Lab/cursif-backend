@@ -8,86 +8,59 @@ defmodule Cursif.NotebooksTest do
 
 
   describe "notebooks" do
-    @invalid_attrs %{
-      title: nil,
-      description: nil,
-    }
 
-    test "list_notebooks/0 returns all notebooks" do
-      user = user_fixture()
+    setup do
+      {:ok, user: user, password: _password} = create_unique_user()
       notebook = notebook_fixture(%{
         owner_type: "user",
         owner_id: user.id,
       })
 
-      assert Notebooks.list_notebooks() == [notebook]
+      {:ok, user: user, notebook: notebook}
     end
 
-    test "get_notebook!/1 returns the notebook with given id" do
-      user = user_fixture()
-      notebook = notebook_fixture(%{
-        owner_type: "user",
-        owner_id: user.id,
-      })
-      assert Notebooks.get_notebook!(notebook.id) == notebook
+    test "list_notebooks/1 returns all notebooks for a user", %{user: user, notebook: notebook} do
+      notebook_ids = Notebooks.list_notebooks(user) |> Enum.map(& &1.id)
+      assert notebook_ids == [notebook.id]
     end
 
-    test "create_notebook/1 with valid data creates a notebook" do
-      user = user_fixture()
+    test "get_notebook!/1 returns the notebook with given id", %{notebook: notebook} do
+      assert Map.take(Notebooks.get_notebook!(notebook.id), [:id, :title, :description]) ==
+               Map.take(notebook, [:id, :title, :description])
+    end
 
-      valid_attrs = %{
+    test "create_notebook/1 with valid data creates a notebook", %{user: user} do
+      attrs = %{
         title: "some title",
         description: "some description",
         owner_type: "user",
         owner_id: user.id,
       }
 
-      assert {:ok, %Notebook{} = notebook} = Notebooks.create_notebook(valid_attrs)
-
+      assert {:ok, %Notebook{} = notebook} = Notebooks.create_notebook(attrs)
       assert notebook.description == "some description"
       assert notebook.title == "some title"
     end
 
     test "create_notebook/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Notebooks.create_notebook(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Notebooks.create_notebook(%{})
     end
 
     # Something might be wrong with the update_notebook function 
-    test "update_notebook/2 with valid data updates the notebook" do
-      user = user_fixture()
+    test "update_notebook/2 with valid data updates the notebook", %{notebook: notebook} do
+      update_attrs = %{title: "some updated title", description: "some updated description"}
 
-      notebook = notebook_fixture(%{
-        owner_type: "user",
-        owner_id: user.id,
-      })
-
-      title = "some updated title"
-      description = "some updated description"
-
-      assert {:ok, %Notebook{} = notebook} = Notebooks.update_notebook(notebook, %{title: title, description: description})
-      assert notebook.description == description
-      assert notebook.title == title
+      assert {:ok, %Notebook{} = notebook} = Notebooks.update_notebook(notebook, update_attrs)
+      assert notebook.description == update_attrs.description
+      assert notebook.title == update_attrs.title
     end
 
-    test "update_notebook/2 with invalid data returns error changeset" do
-      user = user_fixture()
-
-      notebook = notebook_fixture(%{
-        owner_type: "user",
-        owner_id: user.id,
-      })
-
-      assert {:error, %Ecto.Changeset{}} = Notebooks.update_notebook(notebook, @invalid_attrs)
+    test "update_notebook/2 with invalid data returns error changeset", %{notebook: notebook} do
+      update_attrs = %{title: nil, description: nil}
+      assert {:error, %Ecto.Changeset{}} = Notebooks.update_notebook(notebook, update_attrs)
     end
 
-    test "delete_notebook/1 deletes the notebook" do
-      user = user_fixture()
-
-      notebook = notebook_fixture(%{
-        owner_type: "user",
-        owner_id: user.id,
-      })
-
+    test "delete_notebook/1 deletes the notebook", %{notebook: notebook} do
       assert {:ok, %Notebook{}} = Notebooks.delete_notebook(notebook)
       assert_raise Ecto.NoResultsError, fn -> Notebooks.get_notebook!(notebook.id) end
     end

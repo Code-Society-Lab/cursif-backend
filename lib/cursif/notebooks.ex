@@ -7,10 +7,11 @@ defmodule Cursif.Notebooks do
   alias Cursif.Repo
 
   alias Cursif.Notebooks.{Notebook, Collaborator}
+  alias Cursif.Accounts.{User}
   alias Cursif.Accounts
 
   @doc """
-  Returns the list of notebooks.
+  Returns the list of notebooks available to a user.
 
   ## Examples
 
@@ -18,29 +19,13 @@ defmodule Cursif.Notebooks do
       [%Notebook{}, ...]
 
   """
-  def list_notebooks(opts \\ []) do
-    preloads = Keyword.get(opts, :preloads, [])
-    Repo.all(Notebook) |> Repo.preload(preloads)
-  end
+  @spec list_notebooks(User.t()) :: list(Notebook.t())
+  def list_notebooks(%User{id: user_id}) do
+    query = from n in Notebook,
+                 left_join: c in assoc(n, :collaborators),
+                 where: n.owner_id == ^user_id or c.id == ^user_id
 
-  @doc """
-  Returns the list of notebooks available to a user.
-
-  ## Examples
-
-      iex> list_user_notebooks(user)
-      [%Notebook{}, ...]
-
-  """
-  def list_user_notebooks(%{id: user_id}, opts \\ []) do
-    preloads = Keyword.get(opts, :preloads, [])
-
-    query =
-      from n in Notebook,
-           left_join: c in assoc(n, :collaborators),
-           where: n.owner_id == ^user_id or c.id == ^user_id
-
-    Repo.all(query) |> Repo.preload(preloads)
+    Repo.all(query) |> Repo.preload([:macros, :collaborators, pages: [:author]])
   end
 
   @doc """
@@ -60,10 +45,8 @@ defmodule Cursif.Notebooks do
       ** (Ecto.NoResultsError)
 
   """
-  def get_notebook!(id, opts \\ []) do
-    preloads = Keyword.get(opts, :preloads, [])
-    Repo.get!(Notebook, id) |> Repo.preload(preloads)
-  end
+  def get_notebook!(id),
+      do: Repo.get!(Notebook, id) |> Repo.preload([:macros, :collaborators, pages: [:author]])
 
   @doc """
   Creates a notebook.

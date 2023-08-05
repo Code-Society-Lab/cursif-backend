@@ -45,7 +45,7 @@ defmodule Cursif.AccountsFixtures do
   @doc """
   Callback to creates a unique user before a test is executed.
   """
-  def create_unique_user(_) do
+  def create_unique_user(_ \\ %{}) do
     user_attrs = unique_user_attributes()
     {:ok, user} = Accounts.create_user(user_attrs)
     {:ok, user: user, password: user_attrs.password}
