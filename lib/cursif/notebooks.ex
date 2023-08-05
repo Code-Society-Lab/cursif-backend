@@ -45,6 +45,7 @@ defmodule Cursif.Notebooks do
       ** (Ecto.NoResultsError)
 
   """
+  @spec get_notebook!(binary()) :: Notebook.t()
   def get_notebook!(id),
       do: Repo.get!(Notebook, id) |> Repo.preload([:macros, :collaborators, pages: [:author]])
 
@@ -60,6 +61,7 @@ defmodule Cursif.Notebooks do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_notebook(map()) :: {:ok, Notebook.t()} | {:error, %Ecto.Changeset{}}
   def create_notebook(attrs \\ %{}) do
     %Notebook{}
     |> Notebook.changeset(attrs)
@@ -97,6 +99,7 @@ defmodule Cursif.Notebooks do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec delete_notebook(Notebook.t()) :: {:ok, Notebook.t()} | {:error, %Ecto.Changeset{}}
   def delete_notebook(%Notebook{} = notebook) do
     Repo.delete(notebook)
   end
@@ -110,6 +113,7 @@ defmodule Cursif.Notebooks do
       %Ecto.Changeset{data: %Notebook{}}
 
   """
+  @spec change_notebook(Notebook.t(), map()) :: %Ecto.Changeset{}
   def change_notebook(%Notebook{} = notebook, attrs \\ %{}) do
     Notebook.changeset(notebook, attrs)
   end
@@ -122,6 +126,29 @@ defmodule Cursif.Notebooks do
       iex> get_owner!(%{owner_id: owner_id, owner_type: "user"})
       %User{}
   """
+  @spec get_owner!(Notebook.t()) :: User.t()
   def get_owner!(%Notebook{owner_id: owner_id, owner_type: "user"}),
       do: Accounts.get_user!(owner_id)
+
+  @doc """
+  Check if a user can access a notebook.
+
+  If the user is the owner of the notebook, they can access it.
+  Otherwise, we check if the user is a collaborator.
+
+  ## Examples
+
+      iex> can_access?(notebook, user)
+      true
+  """
+  def can_access?(%Notebook{owner_id: owner_id, owner_type: "user"}, %User{id: user_id})
+      when owner_id == user_id, do: owner_id == user_id
+
+  def can_access?(%Notebook{id: notebook_id}, %User{id: user_id}) do
+    Collaborator
+    |> where(notebook_id: ^notebook_id, user_id: ^user_id)
+    |> Repo.exists?
+  end
+
+  def can_access?(_, _), do: false
 end

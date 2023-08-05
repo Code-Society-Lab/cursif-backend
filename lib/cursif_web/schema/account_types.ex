@@ -23,8 +23,8 @@ defmodule CursifWeb.Schema.AccountTypes do
 
   @desc "Represents a session"
   object :session do
-    field(:token, :string)
-    field(:user, :user)
+    field :token, :string
+    field :user, :user
   end
 
   @desc "Session mutations"

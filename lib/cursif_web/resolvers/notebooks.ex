@@ -5,15 +5,19 @@ defmodule CursifWeb.Resolvers.Notebooks do
   @spec list_notebooks(map(), map()) :: {:ok, list(Notebook.t())}
   def list_notebooks(_args, %{context: %{current_user: current_user}}) do
     {:ok, Notebooks.list_notebooks(current_user)}
-  rescue _ ->
-    {:error, :not_found}
   end
 
   @spec get_notebook_by_id(map(), map()) :: {:ok, Notebook.t()}
-  def get_notebook_by_id(%{id: id}, _context) do
-    {:ok, Notebooks.get_notebook!(id)}
-  rescue _ ->
-    {:error, :not_found}
+  def get_notebook_by_id(%{id: id}, %{context: %{current_user: current_user}}) do
+    notebook = Notebooks.get_notebook!(id)
+
+    if Notebooks.can_access?(notebook, current_user) do
+      {:ok, notebook}
+    else
+      {:error, :not_found}
+    end
+  rescue
+    Ecto.NoResultsError -> {:error, :not_found}
   end
 
   @spec create_notebook(map(), map()) :: {:ok, Notebook.t()}
@@ -32,6 +36,8 @@ defmodule CursifWeb.Resolvers.Notebooks do
       {:ok, notebook} -> {:ok, notebook}
       {:error, changeset} -> {:error, changeset}
     end
+  rescue
+    Ecto.NoResultsError -> {:error, :not_found}
   end
 
   @spec delete_notebook(map(), map()) :: {:ok, Notebook.t()} | {:error, atom()}
@@ -42,12 +48,14 @@ defmodule CursifWeb.Resolvers.Notebooks do
       {:ok, notebook} -> {:ok, notebook}
       {:error, changeset} -> {:error, changeset}
     end
+  rescue
+    Ecto.NoResultsError -> {:error, :not_found}
   end
 
   @spec get_owner(map(), map(), map()) :: {:ok, User.t()}
   def get_owner(notebook, _args, _context) do
     {:ok, Notebooks.get_owner!(notebook)}
-  rescue _ ->
-    {:error, :not_found}
+  rescue
+    Ecto.NoResultsError -> {:error, :not_found}
   end
 end

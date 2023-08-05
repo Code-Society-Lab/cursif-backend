@@ -14,6 +14,8 @@ defmodule Cursif.Notebooks.Collaborator do
                updated_at: any()
              }
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "collaborators" do
     belongs_to :notebook, Notebook
     belongs_to :user, User
