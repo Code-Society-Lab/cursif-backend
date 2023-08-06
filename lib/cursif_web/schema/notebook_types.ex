@@ -5,6 +5,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
   use Absinthe.Schema.Notation
   alias CursifWeb.Resolvers.Notebooks
   alias CursifWeb.Resolvers.Macros
+  alias CursifWeb.Resolvers.Collaborators
 
   @desc "Notebook representation"
   object :notebook do
@@ -38,6 +39,14 @@ defmodule CursifWeb.Schema.NotebookTypes do
     field :code, :string
   end
 
+
+  @desc "Collaborator representation"
+  object :collaborator do
+    field :id, :id
+    field :notebooks, list_of(:notebook)
+    field :users, list_of(:user)
+  end
+
   @desc "Notebook queries"
   object :notebook_queries do
     @desc "Get the list of notebooks"
@@ -60,6 +69,17 @@ defmodule CursifWeb.Schema.NotebookTypes do
     @desc "Get the list of macros"
     field :macros, list_of(:macro) do
       resolve(&Macros.list_macros/2)
+    end
+
+    @desc "Get a collaborator by id"
+    field :collaborator, :collaborator do
+      arg(:id, non_null(:id))
+      resolve(&Collaborators.get_collaborator_by_id/2)
+    end
+
+    @desc "Get the list of collaborators"
+    field :collaborators, list_of(:collaborator) do
+      resolve(&Collaborators.list_collaborators/2)
     end
   end
 
@@ -95,7 +115,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
 
     @desc "Create a macro"
     field :create_macro, :macro do
-      arg(:title, non_null(:string))
+      arg(:name, non_null(:string))
       arg(:pattern, non_null(:string))
       arg(:code, non_null(:string))
       arg(:notebook_id, non_null(:id))
@@ -106,7 +126,7 @@ defmodule CursifWeb.Schema.NotebookTypes do
     @desc "Update an macro"
     field :update_macro, :macro do
         arg(:id, non_null(:id))
-        arg(:title, :string)
+        arg(:name, :string)
         arg(:pattern, :string)
         arg(:code, :string)
 
@@ -118,6 +138,30 @@ defmodule CursifWeb.Schema.NotebookTypes do
         arg(:id, non_null(:id))
 
         resolve(&Macros.delete_macro/2)
+    end
+
+    @desc "Create a collaborator"
+    field :create_collaborator, :collaborator do
+      arg(:notebook_id, non_null(:id))
+      arg(:user_id, non_null(:id))
+
+      resolve(&Collaborators.create_collaborator/2)
+    end
+
+    @desc "Update an collaborator"
+    field :update_collaborator, :collaborator do
+        arg(:id, non_null(:id))
+        arg(:notebook_id, :id)
+        arg(:user_id, :id)
+
+        resolve(&Collaborators.update_collaborator/2)
+    end
+
+    @desc "Delete an collaborator"
+    field :delete_collaborator, :collaborator do
+        arg(:id, non_null(:id))
+
+        resolve(&Collaborators.delete_collaborator/2)
     end
   end
 end
