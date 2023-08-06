@@ -6,13 +6,13 @@ defmodule Cursif.Notebooks.Collaborator do
   alias Cursif.Accounts.User
 
   @type t :: %__MODULE__{
-               notebook: Notebook.t(),
-               user: User.t(),
+    notebook: Notebook.t(),
+    user: User.t(),
 
-               # Timestamps
-               inserted_at: any(),
-               updated_at: any()
-             }
+    # Timestamps
+    inserted_at: any(),
+    updated_at: any()
+  }
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
