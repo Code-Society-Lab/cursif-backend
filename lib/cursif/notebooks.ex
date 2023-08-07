@@ -142,5 +142,30 @@ defmodule Cursif.Notebooks do
   """
   @spec get_owner!(Notebook.t()) :: User.t()
   def get_owner!(%Notebook{owner_id: owner_id, owner_type: "user"}),
-      do: Accounts.get_user!(owner_id)
+    do: Accounts.get_user!(owner_id)
+
+
+  @doc """
+  Gets a collaborator
+  """
+  def get_collaborator!(id), do: Repo.get!(Collaborator, id)
+
+  @doc """
+  Creates a collaborator.
+
+  """
+  @spec create_collaborator(map()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
+  def create_collaborator(attrs) do
+    %Collaborator{}
+    |> Collaborator.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Deletes a collaborator.
+
+  """
+  def delete_collaborator(%Collaborator{} = collaborator) do
+    Repo.delete(collaborator)
+  end
 end
