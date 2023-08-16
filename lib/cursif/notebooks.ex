@@ -149,6 +149,20 @@ defmodule Cursif.Notebooks do
   Gets a collaborator
   """
   def get_collaborator!(id), do: Repo.get!(Collaborator, id)
+  
+  def get_collaborator!(id, [user: user] = opts) do
+    query = from n in Collaborator,
+      left_join: c in assoc(n, :notebook),
+      where: n.id == ^id and (n.user_id == ^user.id or c.id == ^user.id)
+
+    get_collaborator!(id, Keyword.put(opts, :query, query))
+  end
+
+  def get_collaborator!(id, opts) do
+    query = Keyword.get(opts, :query, Collaborator)
+
+    Repo.get!(query, id)
+  end
 
   @doc """
   Creates a collaborator.
@@ -165,6 +179,7 @@ defmodule Cursif.Notebooks do
   Deletes a collaborator.
 
   """
+  @spec delete_collaborator(Collaborator.t()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
   def delete_collaborator(%Collaborator{} = collaborator) do
     Repo.delete(collaborator)
   end

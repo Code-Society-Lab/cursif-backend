@@ -76,11 +76,6 @@ defmodule CursifWeb.Schema.NotebookTypes do
       arg(:id, non_null(:id))
       resolve(&Collaborators.get_collaborator_by_id/2)
     end
-
-    @desc "Get the list of collaborators"
-    field :collaborators, list_of(:collaborator) do
-      resolve(&Collaborators.list_collaborators/2)
-    end
   end
 
   # Mutation objects
