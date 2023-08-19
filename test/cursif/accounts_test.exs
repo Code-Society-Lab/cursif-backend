@@ -13,7 +13,7 @@ defmodule Cursif.AccountsTest do
       hashed_password: nil,
       password: "123abc",
       last_name: nil,
-      username: nil
+      username: "jdoe"
     }
 
     test "list_users/0 returns all accounts" do

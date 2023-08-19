@@ -8,16 +8,11 @@ defmodule Cursif.Accounts.User do
     hashed_password: String.t(),
     first_name: String.t() | nil,
     last_name: String.t() | nil,
-    username: String.t(),
-    email: String.t(),
-    hashed_password: String.t(),
-    first_name: String.t() | nil,
-    last_name: String.t() | nil,
 
-               # Timestamps
-               inserted_at: DateTime.t(),
-               updated_at: DateTime.t()
-             }
+    # Timestamps
+    inserted_at: DateTime.t(),
+    updated_at: DateTime.t()
+  }
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
