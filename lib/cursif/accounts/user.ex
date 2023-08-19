@@ -3,16 +3,16 @@ defmodule Cursif.Accounts.User do
   import Ecto.Changeset
 
   @type t :: %__MODULE__{
-               username: String.t(),
-               email: String.t(),
-               hashed_password: String.t(),
-               first_name: String.t() | nil,
-               last_name: String.t() | nil,
+    username: String.t(),
+    email: String.t(),
+    hashed_password: String.t(),
+    first_name: String.t() | nil,
+    last_name: String.t() | nil,
 
-               # Timestamps
-               inserted_at: DateTime.t(),
-               updated_at: DateTime.t()
-             }
+    # Timestamps
+    inserted_at: DateTime.t(),
+    updated_at: DateTime.t()
+  }
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -37,6 +37,16 @@ defmodule Cursif.Accounts.User do
     |> unique_constraint(:username)
     |> validate_email()
     |> validate_password()
+  end
+
+  @doc false
+  @spec update_changeset(User.t(), %{}) :: User.t()
+  def update_changeset(user, attrs) do
+    user 
+    |> cast(attrs, [:first_name, :last_name, :username, :email])
+    |> unique_constraint(:email)
+    |> unique_constraint(:username)
+    |> validate_email()
   end
 
   defp validate_email(changeset) do
