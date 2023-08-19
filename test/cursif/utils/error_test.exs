@@ -69,19 +69,20 @@ defmodule Cursif.Utils.ErrorTest do
     test "changeset error" do
       changeset = User.changeset(%User{}, %{})
       assert Error.normalize(changeset) == [
+
+              %Cursif.Utils.Error{
+                code: :validation,
+                message: ["Username can't be blank."],
+                status_code: 422
+              },
+              %Cursif.Utils.Error{
+                code: :validation,
+                message: ["Password can't be blank."],
+                status_code: 422
+              },
                %Error{
                  code: :validation,
                  message: ["Email can't be blank."],
-                 status_code: 422
-               },
-               %Cursif.Utils.Error{
-                 code: :validation,
-                 message: ["Password can't be blank."],
-                 status_code: 422
-               },
-               %Cursif.Utils.Error{
-                 code: :validation,
-                 message: ["Username can't be blank."],
                  status_code: 422
                }
              ]
