@@ -31,11 +31,24 @@ defmodule CursifWeb.Schema.AccountTypes do
   object :session_mutations do
     @desc "Create a user"
     field :register, :user do
+      arg(:first_name, :string)
+      arg(:last_name, :string)
       arg(:username, non_null(:string))
       arg(:email, non_null(:string))
       arg(:password, non_null(:string))
 
       resolve(&Accounts.register/2)
+    end
+
+    @desc "Update a user"
+    field :update_user, :user do
+      arg(:id, non_null(:id))
+      arg(:email, :string)
+      arg(:username, :string)
+      arg(:first_name, :string)
+      arg(:last_name, :string)
+
+      resolve(&Accounts.update_user/2)
     end
 
     @desc "Login with the params"

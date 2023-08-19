@@ -8,12 +8,12 @@ defmodule Cursif.AccountsTest do
 
   describe "accounts" do
     @invalid_attrs %{
-      email: nil,
+      email: "helloError",
       first_name: nil,
       hashed_password: nil,
       password: "123abc",
       last_name: nil,
-      username: nil
+      username: "jdoe"
     }
 
     test "list_users/0 returns all accounts" do
@@ -53,7 +53,6 @@ defmodule Cursif.AccountsTest do
         email: "jdoe@email.com",
         first_name: "John",
         last_name: "Doe",
-        password: "HelloWorld!",
       }
 
       assert {:ok, %User{} = user} = Accounts.update_user(user, update_attrs)
@@ -61,7 +60,6 @@ defmodule Cursif.AccountsTest do
       assert user.first_name == "John"
       assert user.last_name == "Doe"
       assert user.username == "jdoe"
-      assert {:ok, user} == Argon2.check_pass(user, "HelloWorld!", hash_key: :hashed_password)
     end
 
     test "update_user/2 with invalid data returns error changeset" do
