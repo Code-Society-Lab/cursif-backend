@@ -8,7 +8,7 @@ defmodule Cursif.AccountsTest do
 
   describe "accounts" do
     @invalid_attrs %{
-      email: nil,
+      email: "helloError",
       first_name: nil,
       hashed_password: nil,
       password: "123abc",
