@@ -43,8 +43,10 @@ defmodule Cursif.Accounts.User do
   @spec update_changeset(User.t(), %{}) :: User.t()
   def update_changeset(user, attrs) do
     user 
-    |> cast(attrs, [:first_name, :last_name, :username])
+    |> cast(attrs, [:first_name, :last_name, :username, :email])
+    |> unique_constraint(:email)
     |> unique_constraint(:username)
+    |> validate_email()
   end
 
   defp validate_email(changeset) do
