@@ -48,6 +48,11 @@ defmodule Cursif.Notebooks do
   @spec get_notebook!(binary()) :: Notebook.t()
   def get_notebook!(id, opts \\ [])
 
+  def get_notebook!(id, [owner: owner] = opts) do
+    query = from n in Notebook, where: n.owner_id == ^owner.id
+    get_collaborator!(id, Keyword.put(opts, :query, query))
+  end
+
   def get_notebook!(id, [user: user] = opts) do
     query = from n in Notebook,
                  left_join: c in assoc(n, :collaborators),
@@ -143,26 +148,6 @@ defmodule Cursif.Notebooks do
   @spec get_owner!(Notebook.t()) :: User.t()
   def get_owner!(%Notebook{owner_id: owner_id, owner_type: "user"}),
     do: Accounts.get_user!(owner_id)
-
-
-  @doc """
-  Gets a collaborator
-  """
-  def get_collaborator!(id), do: Repo.get!(Collaborator, id)
-  
-  def get_collaborator!(id, [user: user] = opts) do
-    query = from n in Collaborator,
-      left_join: c in assoc(n, :notebook),
-      where: n.id == ^id and (n.user_id == ^user.id or c.id == ^user.id)
-
-    get_collaborator!(id, Keyword.put(opts, :query, query))
-  end
-
-  def get_collaborator!(id, opts) do
-    query = Keyword.get(opts, :query, Collaborator)
-
-    Repo.get!(query, id)
-  end
 
   @doc """
   Creates a collaborator.
