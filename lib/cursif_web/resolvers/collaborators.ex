@@ -1,7 +1,7 @@
 defmodule CursifWeb.Resolvers.Collaborators do
     alias Cursif.Notebooks
-    alias Cursif.Notebooks.Notebook
     alias Cursif.Notebooks.Collaborator
+
 
     @spec get_collaborator_by_id(map(), map()) :: {:ok, Collaborator.t()}
     def get_collaborator_by_id(%{id: id}, %{context: %{current_user: current_user}}) do
@@ -11,9 +11,12 @@ defmodule CursifWeb.Resolvers.Collaborators do
     end
 
     @spec create_collaborator(map(), map()) :: {:ok, Collaborator.t()}
-    def create_collaborator(collaborator) do
-        query = from n in Notebook, where: n.owner_id = ^user.id
-        notebook = Notebooks.get_notebook!(id, query: query)
+    def create_collaborator(collaborator, %{current_user: current_user}) do
+        notebook = Notebooks.get_notebook!(
+            collaborator.notebook_id, 
+            owner: current_user, 
+            preloads: []
+        )
 
         if notebook do
             case Notebooks.create_collaborator(collaborator) do
