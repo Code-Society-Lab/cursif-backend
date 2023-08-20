@@ -10,8 +10,6 @@ config :cursif, Cursif.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-IO.inspect(System.get_env("POSTGRES_HOST", "localhost"))
-
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
