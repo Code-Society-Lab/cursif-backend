@@ -1,13 +1,17 @@
-FROM elixir:1.14.5-alpine
+FROM elixir:1.14.5
 
-WORKDIR /app/
+# Install debian packages
+RUN apt update \
+    && apt install build-essential inotify-tools postgresql-client git make gcc \
+    && apt clean
 
-RUN apk add make gcc alpine-sdk
+ADD . /app
 
-COPY . /app/
-
+# Install Phoenix packages
 RUN mix local.hex --force && \
-    mix local.rebar --force
-RUN mix setup
+    mix local.rebar --force && \
+    mix archive.install --force hex phx_new 1.5.1
 
-ENTRYPOINT [ "mix", "phx.server" ]
+WORKDIR /app
+
+CMD mix setup && mix phx.server
