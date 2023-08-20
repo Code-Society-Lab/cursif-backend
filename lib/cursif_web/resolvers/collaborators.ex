@@ -1,5 +1,6 @@
 defmodule CursifWeb.Resolvers.Collaborators do
     alias Cursif.Notebooks
+    alias Cursif.Notebooks.Notebook
     alias Cursif.Notebooks.Collaborator
 
     @spec get_collaborator_by_id(map(), map()) :: {:ok, Collaborator.t()}
@@ -10,16 +11,22 @@ defmodule CursifWeb.Resolvers.Collaborators do
     end
 
     @spec create_collaborator(map(), map()) :: {:ok, Collaborator.t()}
-    def create_collaborator(args, %{context: %{current_user: current_user}}) do
-        case Notebooks.create_collaborator(Map.merge(args, %{author_id: current_user.id})) do
-            {:ok, collaborator} -> {:ok, collaborator}
-            {:error, changeset} -> {:error, changeset}
+    def create_collaborator(collaborator) do
+        query = from n in Notebook, where: n.owner_id = ^user.id
+        notebook = Notebooks.get_notebook!(id, query: query)
+
+        if notebook do
+            case Notebooks.create_collaborator(collaborator) do
+                {:ok, collaborator} -> {:ok, collaborator}
+                {:error, changeset} -> {:error, changeset}
+            end
         end
+        {:error, :unauthorized}
     end
 
     @spec delete_collaborator(map(), map()) :: {:ok, Collaborator.t()} | {:error, atom()}
-    def delete_collaborator(%{id: id}, %{context: %{current_user: current_user}}) do
-        collaborator = Notebooks.get_collaborator!(id, user: current_user)
+    def delete_collaborator(%{id: id}, _context) do
+        collaborator = Notebooks.get_collaborator!(id)
 
         case Notebooks.delete_collaborator(collaborator) do
             {:ok, collaborator} -> {:ok, collaborator}
