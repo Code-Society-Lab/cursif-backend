@@ -10,6 +10,22 @@ defmodule CursifWeb.Resolvers.AccountsTest do
 
   setup [:create_unique_user]
 
+  describe "list_users/2" do
+    test "list_users/2 successfully list accounts", %{user: user, conn: conn} do
+      assert Accounts.list_users(%{}, conn) == {:ok, [user]}
+    end
+  end
+
+  describe "get_user/2" do
+    test "successfully fetch specific user id", %{user: user, conn: conn} do
+      assert Accounts.get_user_by_id(%{id: user.id}, conn) == {:ok, user}
+    end
+
+    test "fetch user with invalid id", %{conn: conn} do
+      assert Accounts.get_user_by_id(%{id: "1a2b34c5-6def-78gh-ijkl-m9101112n131"}, conn) == {:error, :user_not_found}
+    end
+  end
+
   describe "get_current_user/2" do
     test "successfully fetch current user", %{user: user} do
       assert Accounts.get_current_user(%{}, %{context: %{current_user: user}}) == {:ok, user}

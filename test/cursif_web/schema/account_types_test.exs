@@ -6,6 +6,60 @@ defmodule CursifWeb.Schema.AccountTypesTest do
   setup [:create_unique_user, :authenticate]
 
   describe "queries" do
+    test "list of accounts", %{conn: conn, user: user, current_user: current_user, token: token} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer " <> token)
+      |> post("/api", %{
+        "query" => """
+          query {
+            users {
+              id
+              username
+            }
+          }
+        """
+      })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{
+                 "users" => [
+                 %{
+                   "id" => user.id,
+                   "username" => user.username,
+                 },
+                 %{
+                   "id" => current_user.id,
+                   "username" => current_user.username,
+                 }]
+               }
+             }
+    end
+
+    test "query a specific user", %{conn: conn, user: user, token: token} do
+      conn = conn
+      |> put_req_header("authorization", "Bearer " <> token)
+      |> post("/api", %{
+          "query" => """
+            query getUser($id: ID!) {
+              user(id: $id) {
+                id
+                username
+              }
+            }
+          """,
+          "variables" => %{id: user.id}
+      })
+
+      assert json_response(conn, 200) == %{
+               "data" => %{
+                 "user" => %{
+                   "id" => user.id,
+                   "username" => user.username,
+                 }
+               }
+             }
+    end
+
     test "current user", %{conn: conn, current_user: current_user, token: token} do
       conn = conn
       |> put_req_header("authorization", "Bearer " <> token)

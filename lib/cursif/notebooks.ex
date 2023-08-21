@@ -6,7 +6,7 @@ defmodule Cursif.Notebooks do
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Notebooks.{Notebook, Collaborator}
+  alias Cursif.Notebooks.Notebook
   alias Cursif.Accounts.{User}
   alias Cursif.Accounts
 
