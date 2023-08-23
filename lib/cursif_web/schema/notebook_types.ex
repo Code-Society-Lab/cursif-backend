@@ -135,17 +135,18 @@ defmodule CursifWeb.Schema.NotebookTypes do
         resolve(&Macros.delete_macro/2)
     end
 
-    @desc "Create a collaborator"
-    field :create_collaborator, :collaborator do
+    @desc "Add a collaborator"
+    field :add_collaborator, :collaborator do
       arg(:notebook_id, non_null(:id))
       arg(:user_id, non_null(:id))
 
-      resolve(&Collaborators.create_collaborator/2)
+      resolve(&Collaborators.add_collaborator/2)
     end
 
     @desc "Delete an collaborator"
     field :delete_collaborator, :collaborator do
-        arg(:id, non_null(:id))
+      arg(:notebook_id, non_null(:id))
+      arg(:user_id, non_null(:id))
 
         resolve(&Collaborators.delete_collaborator/2)
     end
