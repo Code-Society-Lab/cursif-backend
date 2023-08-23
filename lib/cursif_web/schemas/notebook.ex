@@ -6,6 +6,7 @@ defmodule CursifWeb.Schemas.Notebook do
     
     alias CursifWeb.Resolvers.Notebooks
     alias CursifWeb.Resolvers.Macros
+    alias CursifWeb.Resolvers.Collaborators
   
     object :notebook_queries do
       @desc "Get the list of notebooks"
@@ -85,6 +86,22 @@ defmodule CursifWeb.Schemas.Notebook do
           arg(:id, non_null(:id))
   
           resolve(&Macros.delete_macro/2)
+      end
+
+      @desc "Add a collaborator"
+      field :add_collaborator, :collaborator do
+        arg(:notebook_id, non_null(:id))
+        arg(:user_id, non_null(:id))
+  
+        resolve(&Collaborators.add_collaborator/2)
+      end
+
+      @desc "Delete an collaborator"
+      field :delete_collaborator, :collaborator do
+        arg(:notebook_id, non_null(:id))
+        arg(:user_id, non_null(:id))
+  
+          resolve(&Collaborators.delete_collaborator/2)
       end
     end
   end
