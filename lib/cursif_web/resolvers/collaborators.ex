@@ -4,30 +4,26 @@ defmodule CursifWeb.Resolvers.Collaborators do
 
 	@spec add_collaborator(map(), map()) :: {:ok, Collaborator.t()}  | {:error, atom()}
 	def add_collaborator(collaborator, %{context: %{current_user: current_user}}) do
-    Notebooks.get_notebook!(
-      collaborator.notebook_id, 
-      owner: current_user
-    )
+		Notebooks.get_notebook!(
+			collaborator.notebook_id,
+			owner: current_user
+		)
 			
-    case Notebooks.add_collaborator(collaborator) do
-        {:ok, collaborator} -> {:ok, collaborator}
-        {:error, changeset} -> {:error, changeset}
-    end
-	rescue
-    Ecto.NoResultsError -> {:error, :not_found}
+		case Notebooks.add_collaborator(collaborator) do
+			{:ok, collaborator} -> {:ok, collaborator}
+			{:error, changeset} -> {:error, changeset}
+		end
 	end
 
 	@spec delete_collaborator(map(), map()) :: {:ok, Collaborator.t()} | {:error, atom()}
 	def delete_collaborator(collaborator, %{context: %{current_user: current_user}}) do
-    Notebooks.get_notebook!(
-        collaborator.notebook_id, 
-        owner: current_user
-    )
-    case Notebooks.delete_collaborator_by_user_id(collaborator.notebook_id, collaborator.user_id) do
-        {1, nil} -> {:ok, %{message: "collaborator removed successfully"}}
-        {0, nil} -> {:error, :not_found}
-    end
-	rescue
-    Ecto.NoResultsError -> {:error, :not_found}
+		Notebooks.get_notebook!(
+			collaborator.notebook_id, 
+			owner: current_user
+		)
+		case Notebooks.delete_collaborator_by_user_id(collaborator.notebook_id, collaborator.user_id) do
+			{1, nil} -> {:ok, %{message: "collaborator removed successfully"}}
+			{0, nil} -> {:error, :not_found}
+		end
 	end
 end
