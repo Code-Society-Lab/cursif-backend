@@ -13,19 +13,16 @@ defmodule Cursif.Utils.Error do
   # ------------
 
   # Regular errors
-  def normalize({:error, reason}) do
-    handle(reason)
-  end
+  def normalize({:error, reason}),
+    do: handle(reason)
 
   # Ecto transaction errors
-  def normalize({:error, _operation, reason, _changes}) do
-    handle(reason)
-  end
+  def normalize({:error, _operation, reason, _changes}),
+    do: handle(reason)
 
   # Unhandled errors
-  def normalize(other) do
-    handle(other)
-  end
+  def normalize(other),
+    do: handle(other)
 
   # Handle Different Errors
   # -----------------------
@@ -40,9 +37,8 @@ defmodule Cursif.Utils.Error do
     }
   end
 
-  defp handle(errors) when is_list(errors) do
-    Enum.map(errors, &handle/1)
-  end
+  defp handle(errors) when is_list(errors),
+    do: Enum.map(errors, &handle/1)
 
   defp handle(%Ecto.Changeset{} = changeset) do
     changeset
@@ -57,7 +53,9 @@ defmodule Cursif.Utils.Error do
   end
 
   defp handle(other) do
-    if Mix.env != :test, do: Logger.error("Unhandled error term:\n#{inspect(other)}")
+    if Mix.env != :test,
+      do: Logger.error("Unhandled error term:\n#{inspect(other)}")
+
     handle(:unknown)
   end
 
@@ -81,7 +79,9 @@ defmodule Cursif.Utils.Error do
   defp metadata(:unknown),               do: {500, "Something went wrong"}
 
   defp metadata(code) do
-    if Mix.env != :test, do: Logger.warning("Unhandled error code: #{inspect(code)}")
+    if Mix.env != :test,
+      do: Logger.warning("Unhandled error code: #{inspect(code)}")
+
     {422, to_string(code)}
   end
 end
