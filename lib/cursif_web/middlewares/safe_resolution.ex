@@ -3,9 +3,13 @@ defmodule CursifWeb.Middlewares.SafeResolution do
   This module is a wrapper for `Absinthe.Resolution` middleware to gracefully handle
   exceptions raised during the execution.
 
-  This solution is from https://shyr.io/blog/absinthe-exception-error-handling
+  Additionnaly, this middleware automatically adds `CursifWeb.Middlewares.ErrorHandler`.
+
+  Based on https://shyr.io/blog/absinthe-exception-error-handling
   """
   alias Absinthe.Resolution
+  alias CursifWeb.Middlewares.ErrorHandler
+
   require Logger
 
   @behaviour Absinthe.Middleware
@@ -21,7 +25,7 @@ defmodule CursifWeb.Middlewares.SafeResolution do
   """
   @spec apply(list()) :: list()
   def apply(middleware) when is_list(middleware) do
-    Enum.map(middleware, fn
+    Enum.map((middleware ++ [ErrorHandler]), fn
       {{Resolution, :call}, resolver} -> {__MODULE__, resolver}
       other -> other
     end)
@@ -34,10 +38,14 @@ defmodule CursifWeb.Middlewares.SafeResolution do
   @impl true
   def call(resolution, resolver) do
     Resolution.call(resolution, resolver)
-  rescue
-    exception ->
-      error = Exception.format(:error, exception, __STACKTRACE__)
-      Logger.error(error)
-      Resolution.put_result(resolution, @default_error)
+  rescue exception ->
+    Logger.error(Exception.format(:error, exception, __STACKTRACE__))
+    handle_exception(resolution, exception)
   end
+
+  defp handle_exception(resolution, %Ecto.NoResultsError{}),
+    do: Resolution.put_result(resolution, {:error, :not_found})
+
+  defp handle_exception(resolution, _exception),
+    do: Resolution.put_result(resolution, @default_error)
 end
