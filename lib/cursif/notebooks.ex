@@ -48,11 +48,15 @@ defmodule Cursif.Notebooks do
   @spec get_notebook!(binary()) :: Notebook.t()
   def get_notebook!(id, opts \\ [])
 
-  def get_notebook!(id, [owner: owner] = opts) do
-    query = from n in Notebook, where: n.owner_id == ^owner.id
-    get_collaborator!(id, Keyword.put(opts, :query, query))
+  def get_notebook!(id, [owner: owner]) do
+    case Repo.get_by(Notebook, [id: id, owner_id: owner.id]) do
+      nil ->
+        false
+      _ ->
+        true
+    end
   end
-
+  
   def get_notebook!(id, [user: user] = opts) do
     query = from n in Notebook,
                  left_join: c in assoc(n, :collaborators),
@@ -66,6 +70,12 @@ defmodule Cursif.Notebooks do
     preloads = Keyword.get(opts, :preloads, [:macros, :collaborators, pages: [:author]])
 
     Repo.get!(query, id) |> Repo.preload(preloads)
+  end
+
+  
+  def get_collaborator!(id, opts) do
+    query = Keyword.get(opts, :query, Collaborator)
+    Repo.get!(query, id)
   end
 
   @doc """
@@ -153,8 +163,8 @@ defmodule Cursif.Notebooks do
   Creates a collaborator.
 
   """
-  @spec create_collaborator(map()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
-  def create_collaborator(attrs) do
+  @spec add_collaborator(map()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
+  def add_collaborator(attrs) do
     %Collaborator{}
     |> Collaborator.changeset(attrs)
     |> Repo.insert()
@@ -164,8 +174,13 @@ defmodule Cursif.Notebooks do
   Deletes a collaborator.
 
   """
-  @spec delete_collaborator(Collaborator.t()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
-  def delete_collaborator(%Collaborator{} = collaborator) do
-    Repo.delete(collaborator)
+  # @spec delete_collaborator(Collaborator.t()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
+  # def delete_collaborator(%Collaborator{} = collaborator) do
+  #   Repo.delete(collaborator)
+  # end
+
+  
+  def delete_collaborator_by_user_id(notebook_id, user_id) do
+    Repo.delete_all(from n in Collaborator, where: n.user_id == ^user_id and n.notebook_id == ^notebook_id)
   end
 end
