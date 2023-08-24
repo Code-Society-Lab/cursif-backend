@@ -55,13 +55,14 @@ defmodule Cursif.MixProject do
       {:gettext, "~> 0.22"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:absinthe, "~> 1.7.5"},
       {:absinthe_plug, "~> 1.5.8"},
-      {:dotenv, "~> 3.1.0", only: [:dev, :test]},
       {:cors_plug, "~> 3.0"},
-      {:excoveralls, "~> 0.15.3", only: :test},
       {:guardian, "~> 2.0"},
+      {:speakeasy, "~> 0.3.2"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dotenv, "~> 3.1.0", only: [:dev, :test]},
+      {:excoveralls, "~> 0.15.3", only: :test},
       {:argon2_elixir, "~> 3.0"},
     ]
   end
