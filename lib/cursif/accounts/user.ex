@@ -9,7 +9,6 @@ defmodule Cursif.Accounts.User do
     first_name: String.t() | nil,
     last_name: String.t() | nil,
 
-    # Timestamps
     inserted_at: DateTime.t(),
     updated_at: DateTime.t()
   }

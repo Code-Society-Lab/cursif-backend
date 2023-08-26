@@ -8,18 +8,17 @@ defmodule Cursif.Notebooks.Notebook do
   alias Cursif.Notebooks.{Page, Collaborator, Macro}
 
   @type t :: %__MODULE__{
-               title: String.t(),
-               description: String.t(),
-               owner_id: binary(),
-               owner_type: String.t(),
-               pages: [Page.t()],
-               collaborators: [User.t()],
-               macros: [Macro.t()],
+    title: String.t(),
+    description: String.t(),
+    owner_id: binary(),
+    owner_type: String.t(),
+    pages: [Page.t()],
+    collaborators: [User.t()],
+    macros: [Macro.t()],
 
-               # Timestamps
-               inserted_at: any(),
-               updated_at: any()
-             }
+    inserted_at: DateTime.t(),
+    updated_at: DateTime.t()
+  }
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -60,5 +59,4 @@ defmodule Cursif.Notebooks.Notebook do
 
   defp validate_association(changeset),
     do: changeset
-
 end

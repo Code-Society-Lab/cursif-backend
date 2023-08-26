@@ -7,17 +7,16 @@ defmodule Cursif.Notebooks.Page do
   alias Cursif.Repo
 
   @type t :: %__MODULE__{
-               title: String.t(),
-               content: String.t(),
-               parent_id: binary(),
-               parent_type: String.t(),
-               author: User.t(),
-               children: [Page.t()],
+    title: String.t(),
+    content: String.t(),
+    parent_id: binary(),
+    parent_type: String.t(),
+    author: User.t(),
+    children: [Page.t()],
 
-               # Timestamps
-               inserted_at: any(),
-               updated_at: any()
-             }
+    inserted_at: DateTime.t(),
+    updated_at: DateTime.t()
+  }
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
