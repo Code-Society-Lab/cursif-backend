@@ -34,4 +34,11 @@ defmodule CursifWeb.Schemas.NotebookTypes do
     field :pattern, :string
     field :code, :string
   end
+
+	@desc "Collaborator representation"
+  object :collaborator do
+    field :id, :id
+    field :notebook_id, :string
+    field :user_id, :string
+  end
 end
