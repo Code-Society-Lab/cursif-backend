@@ -77,6 +77,7 @@ defmodule Cursif.Utils.Error do
   defp metadata(:not_found),             do: {404, "Resource not found"}
   defp metadata(:user_not_found),        do: {404, "User not found"}
   defp metadata(:unknown),               do: {500, "Something went wrong"}
+  defp metadata(:too_many_requests),     do: {429, "Too many requests"}
 
   defp metadata(code) do
     if Mix.env != :test,
