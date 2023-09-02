@@ -36,8 +36,9 @@ defmodule CursifWeb.RateLimit do
   end
 
   # Get the client's IP address
-  defp get_client_ip(conn) do
-    {ip1, ip2, ip3, ip4} = conn.remote_ip
-    "#{ip1}.#{ip2}.#{ip3}.#{ip4}"
+  defp get_client_ip(%{remote_ip: remote_ip}) do
+    remote_ip
+    |> :inet.ntoa()
+    |> to_string()
   end
 end
