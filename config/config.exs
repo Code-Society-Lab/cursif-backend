@@ -18,6 +18,15 @@ config :cursif, CursifWeb.Endpoint,
   pubsub_server: Cursif.PubSub,
   live_view: [signing_salt: "Et7vBlOR"]
 
+# Configures the ETS backend for Hammer
+config :hammer,
+  backend: {
+    Hammer.Backend.ETS, [
+      expiry_ms: 60_000 * 60 * 4,
+      cleanup_interval_ms: 60_000 * 10
+    ]
+  }
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
