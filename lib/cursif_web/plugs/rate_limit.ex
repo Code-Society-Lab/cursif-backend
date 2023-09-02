@@ -14,6 +14,9 @@ defmodule CursifWeb.RateLimit do
     rate_limit(conn)
   end
 
+  @doc """
+  Rate limit requests based on the client's IP address.
+  """
   defp rate_limit(conn) do
     client_ip = get_client_ip(conn)
     case Hammer.check_rate(client_ip, 60_000, 60) do
