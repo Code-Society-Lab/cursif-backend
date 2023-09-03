@@ -1,3 +1,3 @@
 defmodule Cursif.Mailer do
-  use Swoosh.Mailer, otp_app: :cursif
+  use Bamboo.Mailer, otp_app: :cursif
 end

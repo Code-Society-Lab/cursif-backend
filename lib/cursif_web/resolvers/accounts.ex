@@ -1,6 +1,6 @@
 defmodule CursifWeb.Resolvers.Accounts do
   alias Cursif.Accounts
-  alias Cursif.Accounts.User
+  alias Cursif.Accounts.{User, UserNotifier}
 
   @spec list_users(map(), map()) :: {:ok, list(User.t())}
   def list_users(_args, _context) do
@@ -24,7 +24,8 @@ defmodule CursifWeb.Resolvers.Accounts do
   @spec register(map(), map()) :: {:ok, User.t()} | {:error, list(map())}
   def register(args, _context) do
     case Accounts.create_user(args) do
-      {:ok, user} -> {:ok, user}
+      {:ok, user} -> {:ok, UserNotifier.welcome_email(args)}
+
       {:error, changeset} -> {:error, changeset}
     end
   end
