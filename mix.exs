@@ -50,6 +50,8 @@ defmodule Cursif.MixProject do
       {:ecto_psql_extras, "~> 0.6"},
       {:esbuild, "~> 0.7.1", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.3"},
+      {:finch, "~> 0.8"},
+      {:bamboo, "~> 2.3.0"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.22"},
