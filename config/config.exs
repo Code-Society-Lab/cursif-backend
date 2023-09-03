@@ -34,7 +34,7 @@ config :hammer,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :cursif, Cursif.Mailer, adapter: Swoosh.Adapters.Local
+config :cursif, Cursif.Mailer, adapter: Bamboo.LocalAdapter
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
