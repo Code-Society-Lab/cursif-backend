@@ -69,18 +69,13 @@ if config_env() == :prod do
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
   
-  config :cursif, Cursif.Mailer,
-    adapter: Bamboo.SMTPAdapter,
-    server: "smtp.example.com",
-    username: "username_email",
-    password: "email_password_SMTP",
-    port: 587, # Adjust the port as needed
-    tls: :always
+  # config :cursif, Cursif.Mailer,
+  #   adapter: Swoosh.Adapters.Gmail
   
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:
   
-  # config :swoosh, :api_client, Swoosh.ApiClient.Hackney
+  # config :swoosh, :api_client, Swoosh.ApiClient.Gmail
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end

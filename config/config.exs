@@ -34,10 +34,48 @@ config :hammer,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :cursif, Cursif.Mailer, adapter: Bamboo.LocalAdapter
+# This file is responsible for configuring your application
+# and its dependencies with the aid of the Config module.
+#
+# This configuration file is loaded before any dependency and
+# is restricted to this project.
+
+# General application configuration
+import Config
+
+config :cursif,
+  ecto_repos: [Cursif.Repo],
+  generators: [binary_id: true]
+
+# Configures the endpoint
+config :cursif, CursifWeb.Endpoint,
+  url: [host: "localhost"],
+  render_errors: [view: CursifWeb.ErrorView, accepts: ~w(json), layout: false],
+  pubsub_server: Cursif.PubSub,
+  live_view: [signing_salt: "Et7vBlOR"]
+
+# Configures the ETS backend for Hammer
+config :hammer,
+  backend: {
+    Hammer.Backend.ETS, [
+      expiry_ms: 60_000 * 60 * 4,
+      cleanup_interval_ms: 60_000 * 10
+    ]
+  }
+
+# Configures the mailer
+#
+# By default it uses the "Local" adapter which stores the emails
+# locally. You can see the emails in your browser, at "/dev/mailbox".
+#
+# For production it's recommended to configure a different adapter
+# at the `config/runtime.exs`.
+config :cursif, Cursif.Mailer,
+  adapter: Swoosh.Adapters.Gmail,
+  access_token: System.get_env("GMAIL_API_ACCESS_TOKEN")
 
 # Swoosh API client is needed for adapters other than SMTP.
-config :swoosh, :api_client, false
+# config :swoosh, :api_client, Swoosh.ApiClient.Gmail
 
 # Configure esbuild (the version is required)
 config :esbuild,
