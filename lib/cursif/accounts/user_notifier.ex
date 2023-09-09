@@ -1,16 +1,16 @@
 defmodule Cursif.Accounts.UserNotifier do
-  import Bamboo.Email
+  import Swoosh.Email
   alias Cursif.Mailer
 
-  def welcome_email(user) do
+  def welcome_email() do
     email =
-    new_email()
-    |> from("cursif@example.edu")
-    |> to(user.email)
+    new()
+    |> from("test@gmail.com")
+    |> to("test@gmail.com")
     |> subject("Welcome to Cursif!")
-    |> text_body("Welcome, #{user.username}!")
+    |> text_body("Welcome!")
     
-    with {:ok, _metadata} <- Mailer.deliver_now(email) do
+    with {:ok, _metadata} <- Mailer.deliver(email) do
       {:ok, email}
     end
   end
