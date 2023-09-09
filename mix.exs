@@ -67,6 +67,7 @@ defmodule Cursif.MixProject do
       {:excoveralls, "~> 0.15.3", only: :test},
       {:argon2_elixir, "~> 3.0"},
       {:hammer, "~> 6.1"},
+      {:mail, ">= 0.0.0"},
     ]
   end
 
