@@ -24,8 +24,9 @@ defmodule CursifWeb.Resolvers.Accounts do
   @spec register(map(), map()) :: {:ok, User.t()} | {:error, list(map())}
   def register(args, _context) do
     case Accounts.create_user(args) do
-      {:ok, user} -> {:ok, UserNotifier.welcome_email(args)}
+      # {:ok, user} -> {:ok, UserNotifier.welcome_email(user)}
 
+      {:ok, user} -> {:ok, user}
       {:error, changeset} -> {:error, changeset}
     end
   end
@@ -42,7 +43,9 @@ defmodule CursifWeb.Resolvers.Accounts do
   @spec login(%{email: String.t(), password: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
   def login(%{email: email, password: password}, _context) do
     case Accounts.authenticate_user(email, password) do
-      {:ok, user, token} -> {:ok, %{user: user, token: token}}
+      {:ok, user, token} -> 
+        UserNotifier.welcome_email(user)
+        {:ok, %{user: user, token: token}}
       {:error, _} -> {:error, :invalid_credentials}
     end
   end
