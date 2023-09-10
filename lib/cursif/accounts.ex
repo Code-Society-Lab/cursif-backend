@@ -121,16 +121,20 @@ defmodule Cursif.Accounts do
   """
   @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t(), String.t()} | {:error, :invalid_credentials}
   def authenticate_user(email, plain_text_password) do
-    case Repo.get_by(User, email: email) do
-      nil ->
-        Argon2.no_user_verify()
-        {:error, :invalid_credentials}
-      user ->
-        if Argon2.verify_pass(plain_text_password, user.hashed_password) do
-          {:ok, user, create_token(user)}
-        else
+    if Repo.get_by(User, confirmed_at: nil) do
+      {:error, :not_confirmed}
+    else
+      case Repo.get_by(User, email: email) do
+        nil ->
+          Argon2.no_user_verify()
           {:error, :invalid_credentials}
-        end
+        user ->
+          if Argon2.verify_pass(plain_text_password, user.hashed_password) do
+            {:ok, user, create_token(user)}
+          else
+            {:error, :invalid_credentials}
+          end
+      end
     end
   end
 
@@ -143,16 +147,31 @@ defmodule Cursif.Accounts do
   
   @doc """
   Generates a confirmation token.
+
+  ## Examples
+
+      iex> generate_confirmation_token(user)
+      {:ok, %User{}}
+
+      iex> generate_confirmation_token(user)
+      {:error, :already_confirmed}
   """
   def deliver_user_confirmation_instructions(%User{} = user) do
-    # if user.confirmed_at do
-    #   {:error, :already_confirmed}
-    # else
-      token = create_token(user)
-      User.changeset_token(user, token)
+    if user.confirmed_at do
+      {:error, :already_confirmed}
+    else
+      {:ok, token} = Cursif.Guardian.encode_and_sign(user, %{})
+
+      IO.inspect(token)
+      
+      user
+      |> User.changeset_token(token) 
+      |> Repo.update()
+          
       url = build_url_to_deliver(token)
+      IO.inspect(user)
       UserNotifier.deliver_confirmation_instructions(user, url)
-    # end
+    end
   end
 
   def build_url_to_deliver(token) do
@@ -162,9 +181,20 @@ defmodule Cursif.Accounts do
     "#{base_url}#{query_params}"
   end
 
+  @doc """
+  Confirms a user by its confirmation token
+
+  ## Examples
+
+      iex> confirm_user("token")
+      {:ok, %User{}}
+
+      iex> confirm_user("bad_token")
+      {:error, :invalid_token}
+  """
   @spec get_user_by_confirmation_token(String.t()) :: {:ok, User.t()} | {:error, atom()}
   def get_user_by_confirmation_token(token) do
-    case Repo.get_by!(User, confirmation_token: token) do
+    case Repo.get_by(User, confirmation_token: token) do
       nil -> {:error, :user_not_found}
       user -> {:ok, user}
     end
