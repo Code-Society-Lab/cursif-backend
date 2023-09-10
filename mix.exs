@@ -68,6 +68,7 @@ defmodule Cursif.MixProject do
       {:argon2_elixir, "~> 3.0"},
       {:hammer, "~> 6.1"},
       {:mail, ">= 0.0.0"},
+      {:gen_smtp, "~> 1.1"},
     ]
   end
 

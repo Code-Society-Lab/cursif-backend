@@ -70,12 +70,12 @@ config :hammer,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :cursif, Cursif.Mailer,
-  adapter: Swoosh.Adapters.Gmail,
-  access_token: System.get_env("GMAIL_API_ACCESS_TOKEN")
+# config :cursif, Cursif.Mailer,
+#   adapter: Swoosh.Adapters.Gmail,
+#   access_token: System.get_env("GMAIL_API_ACCESS_TOKEN")
 
 # Swoosh API client is needed for adapters other than SMTP.
-# config :swoosh, :api_client, Swoosh.ApiClient.Gmail
+# config :swoosh, :api_client, false
 
 # Configure esbuild (the version is required)
 config :esbuild,
