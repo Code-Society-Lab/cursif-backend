@@ -49,10 +49,10 @@ defmodule CursifWeb.Router do
 
       live_dashboard "/dashboard", metrics: CursifWeb.Telemetry
 
-      get "/users/confirm", CursifWeb.Resolvers.UserConfirm, :confirm
-      post "/users/confirm", CursifWeb.Resolvers.UserConfirm, :confirm
-      get "/users/confirm/:token", CursifWeb.Resolvers.UserConfirm, :confirm
-      post "/users/confirm/:token", CursifWeb.Resolvers.UserConfirm, :confirm
+      get "/users/confirm", CursifWeb.Controllers.UserConfirmation, :confirm
+      post "/users/confirm", CursifWeb.Controllers.UserConfirmation, :confirm
+      get "/users/confirm/:token", CursifWeb.Controllers.UserConfirmation, :confirm
+      post "/users/confirm/:token", CursifWeb.Controllers.UserConfirmation, :confirm
     end
   end
 
