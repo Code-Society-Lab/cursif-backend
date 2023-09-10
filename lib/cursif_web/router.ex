@@ -48,6 +48,11 @@ defmodule CursifWeb.Router do
       pipe_through [:fetch_session, :protect_from_forgery]
 
       live_dashboard "/dashboard", metrics: CursifWeb.Telemetry
+
+      get "/users/confirm", CursifWeb.Resolvers.UserConfirm, :confirm
+      post "/users/confirm", CursifWeb.Resolvers.UserConfirm, :confirm
+      get "/users/confirm/:token", CursifWeb.Resolvers.UserConfirm, :confirm
+      post "/users/confirm/:token", CursifWeb.Resolvers.UserConfirm, :confirm
     end
   end
 
