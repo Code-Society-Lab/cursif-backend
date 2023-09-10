@@ -101,9 +101,15 @@ config :phoenix, :json_library, Jason
 # case one will be temporarily generate one at startup, but in production you will need to generate one via
 # `mix guardian.gen.secret` and that you set it in your environment variables under `CURSIF_SECRET_KEY`.
 config :cursif, Cursif.Guardian,
-       issuer: "cursif",
-       ttl: Application.get_env(:cursif, :ttl, {52, :weeks}),
-       secret_key: Application.get_env(:cursif, :secret_key)
+  issuer: "cursif",
+  ttl: Application.get_env(:cursif, :ttl, {52, :weeks}),
+  secret_key: Application.get_env(:cursif, :secret_key)
+
+config :cursif, Cursif.Guardian.DB,
+  repo: Cursif.Accounts,
+  schema_name: "guardian_tokens", # default
+  token_types: ["refresh_token"], # store all token types if not set
+  sweep_interval: 60 # default: 60 minutes
 
 config :cursif, env: Mix.env()
 # Import environment specific config. This must remain at the bottom
