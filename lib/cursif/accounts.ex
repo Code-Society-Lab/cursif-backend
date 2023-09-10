@@ -6,7 +6,7 @@ defmodule Cursif.Accounts do
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Accounts.User
+  alias Cursif.Accounts.{User, UserNotifier}
   alias Argon2
 
   @doc """
@@ -138,6 +138,35 @@ defmodule Cursif.Accounts do
   defp create_token(user) do
     case Cursif.Guardian.encode_and_sign(user, %{}) do
       {:ok, token, _full_claims} -> token
+    end
+  end
+  
+  @doc """
+  Generates a confirmation token.
+  """
+  def deliver_user_confirmation_instructions(%User{} = user) do
+    # if user.confirmed_at do
+    #   {:error, :already_confirmed}
+    # else
+      token = create_token(user)
+      User.changeset_token(user, token)
+      url = build_url_to_deliver(token)
+      UserNotifier.deliver_confirmation_instructions(user, url)
+    # end
+  end
+
+  def build_url_to_deliver(token) do
+    # need to update this for production env to use the correct base_url
+    base_url = "http://0.0.0.0:4000/users/confirm"
+    query_params = "?token=" <> token
+    "#{base_url}#{query_params}"
+  end
+
+  @spec get_user_by_confirmation_token(String.t()) :: {:ok, User.t()} | {:error, atom()}
+  def get_user_by_confirmation_token(token) do
+    case Repo.get_by!(User, confirmation_token: token) do
+      nil -> {:error, :user_not_found}
+      user -> {:ok, user}
     end
   end
 end
