@@ -5,7 +5,7 @@ defmodule Cursif.Macros do
 
   import Ecto.Query, warn: false
   alias Cursif.Repo
-  alias Cursif.Notebooks.Macro
+  alias Cursif.Notebooks.{Notebook, Macro}
 
   @doc """
   Returns the list of macros
@@ -44,8 +44,15 @@ defmodule Cursif.Macros do
   Deletes a macro.
 
   """
-  def delete_macro(%Macro{} = macro) do
-    Repo.delete(macro)
+  def delete_macro(%Macro{} = macro),
+    do: Repo.delete(macro)
+
+  def get_notebook!(%{id: macro_id}) do
+    query = from n in Notebook,
+      left_join: m in Macro, on: n.id == m.notebook_id,
+      where: m.id == ^macro_id,
+      select: n
+
+    Repo.one(query)
   end
 end
-  

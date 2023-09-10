@@ -42,6 +42,6 @@ defmodule CursifWeb.Resolvers.Notebooks do
 
   @spec get_owner(map(), map(), map()) :: {:ok, User.t()}
   def get_owner(notebook, _args, _context) do
-    {:ok, Notebooks.get_owner!(notebook)}
+    {:ok, Notebooks.owner(notebook)}
   end
 end

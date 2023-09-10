@@ -103,7 +103,7 @@ defmodule CursifWeb.Schema do
     if field.identifier in @skip_authentication do
       default_middleware(middleware)
     else
-      default_middleware([Authentication | middleware])
+      default_middleware([Authentication, Speakeasy.Authn | middleware])
     end
   end
 

@@ -4,6 +4,7 @@ defmodule Cursif.Notebooks.Notebook do
 
   alias Cursif.Repo
 
+  alias Cursif.Accounts
   alias Cursif.Accounts.User
   alias Cursif.Notebooks.{Page, Collaborator, Macro}
 
@@ -28,9 +29,9 @@ defmodule Cursif.Notebooks.Notebook do
     field :owner_id, :binary_id
     field :owner_type, :string
 
+    has_many :macros, Macro
     has_many :pages, Page, foreign_key: :parent_id
     many_to_many :collaborators, User, join_through: Collaborator
-    has_many :macros, Macro
 
     timestamps()
   end
@@ -59,4 +60,17 @@ defmodule Cursif.Notebooks.Notebook do
 
   defp validate_association(changeset),
     do: changeset
+
+
+  @spec owner(Notebook.t()) :: User.t()
+  def owner(%{owner_id: owner_id}),
+    do: Accounts.get_user!(owner_id)
+
+  @spec owner?(Notebook.t(), User.t()) :: boolean()
+  def owner?(%{owner_id: owner_id}, %{id: user_id}),
+    do: owner_id == user_id
+
+  @spec collaborator?(Notebook.t(), User.t()) :: boolean()
+  def collaborator?(%{owner_id: owner_id}, %{id: user_id}),
+    do: Repo.exists?(Collaborator, owner_id: owner_id, user_id: user_id)
 end

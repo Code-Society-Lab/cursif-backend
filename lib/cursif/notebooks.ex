@@ -2,13 +2,13 @@ defmodule Cursif.Notebooks do
   @moduledoc """
   The Notebooks context.
   """
-
   import Ecto.Query, warn: false
-  alias Cursif.Repo
 
-  alias Cursif.Notebooks.{Notebook, Collaborator}
-  alias Cursif.Accounts.{User}
-  alias Cursif.Accounts
+  alias Cursif.{Repo, Accounts}
+  alias Cursif.Notebooks.{Notebook, Collaborator, Policy}
+  alias Cursif.Accounts.User
+
+  defdelegate authorize(action, user, params), to: Policy
 
   @doc """
   Returns the list of notebooks available to a user.
@@ -134,18 +134,6 @@ defmodule Cursif.Notebooks do
   def change_notebook(%Notebook{} = notebook, attrs \\ %{}) do
     Notebook.changeset(notebook, attrs)
   end
-
-  @doc """
-  Returns the owner of a notebook.
-
-  ## Examples
-
-      iex> get_owner!(%{owner_id: owner_id, owner_type: "user"})
-      %User{}
-  """
-  @spec get_owner!(Notebook.t()) :: User.t()
-  def get_owner!(%Notebook{owner_id: owner_id, owner_type: "user"}),
-    do: Accounts.get_user!(owner_id)
 
   @doc """
   Creates a collaborator.
