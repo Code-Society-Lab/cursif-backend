@@ -2,9 +2,6 @@ defmodule Cursif.Accounts.UserNotifier do
   import Swoosh.Email
   alias Cursif.Mailer
 
-  @doc """
-  Deliver a welcome email.
-  """
   defp welcome_email(recipient, subject, body) do
     email =
       new()
@@ -18,7 +15,7 @@ defmodule Cursif.Accounts.UserNotifier do
     end
   end
 
-   @doc """
+  @doc """
   Deliver instructions to confirm account.
   """
   def deliver_confirmation_instructions(user, url) do

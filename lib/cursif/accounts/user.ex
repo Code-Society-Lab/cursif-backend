@@ -82,11 +82,12 @@ defmodule Cursif.Accounts.User do
   def confirm_changeset(user) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     change(user, confirmed_at: now)
-    IO.inspect(user)
   end
 
+  @doc """
+  Sets the confirmation token.
+  """
   def changeset_token(user, token) do
     change(user, confirmation_token: token)
-    IO.inspect(user)
   end
 end
