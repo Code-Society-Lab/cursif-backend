@@ -61,6 +61,7 @@ defmodule Cursif.MixProject do
       {:absinthe_plug, "~> 1.5.8"},
       {:cors_plug, "~> 3.0"},
       {:guardian, "~> 2.0"},
+      {:guardian_db, "~> 2.0"},
       {:speakeasy, "~> 0.3.2"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dotenv, "~> 3.1.0", only: [:dev, :test]},
