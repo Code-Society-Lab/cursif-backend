@@ -9,6 +9,8 @@ defmodule Cursif.Repo.Migrations.CreateUsers do
       add :last_name, :string
       add :email, :string, null: false
       add :hashed_password, :string, null: false
+      add :confirmation_token, :string
+      add :confirmed_at, :naive_datetime
 
       timestamps()
     end
