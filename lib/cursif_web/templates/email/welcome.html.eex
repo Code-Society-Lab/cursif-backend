@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Montez" />
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #E9E9E9;
+      }
+      .email-container {
+        background-color: #ffffff;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+      }
+      .header {
+        background-color: #E83151;
+        color: #ffffff;
+        padding: 10px 0;
+        text-align: center;
+        font-size: 2em;
+        font-weight: normal;
+      }
+      .content {
+        padding: 20px;
+      }
+      .button-container {
+        text-align: center;
+      }
+      .button {
+        background-color: #E83151;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 20px 20px;
+        border-radius: 4px;
+        display: inline-block;
+      }
+      .signature {
+        font-size: 0.8em;
+        color: #888888;
+      }
+      .space {
+        padding: 50px 0px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <span>Welcome to <span style="font-family: Montez">Cursif</span></span>
+      </div>
+        <div class="content">
+          <div class="space"></div>
+          <p>Welcome <strong><%= @username %></strong>,</p>
+          <p>Thank you for joining Cursif, complete your inscription by clicking the button below and start collaborating with your team today.</p>
+          <div class="space"></div>
+          <div class="button-container">
+            <a class="button" href="<%= @base_url %>">Verify your account</a>
+            <br>
+            <div class="signature">
+              <p>If you didn't sign up for Cursif, please disregard this email.</p>
+            </div>
+          </div>
+        </div>
+        <div class="signature">
+          <p>Best regards,<br>
+              The Cursif Team</p>
+        </div>
+      </div>
+  </body>
+</html>
