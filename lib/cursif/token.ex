@@ -10,24 +10,24 @@ defmodule Cursif.Token do
     do: Phoenix.Token.encrypt(CursifWeb.Endpoint, @session_salt, id)
 
   def generate(%{id: id}, :verification),
-    do: Phoenix.Token.encrypt(CursifWeb.Endpoint, @user_confirmation_salt, id)
+    do: Phoenix.Token.encrypt(CursifWeb.Endpoint, @confirmation_salt, id)
 
   def generate(_data, _action),
     do: nil
 
-  @spec verify(String.t(), atom()) :: {:ok, map()} | {:error, String.t()}
-  def verify(token, :session),
-    do: resource_from_token(token, @session_salt, 30 * 60 * 60, &Accounts.get_user!/1)
+  @spec resource_from_token(String.t(), atom()) :: {:ok, map()} | {:error, String.t()}
+  def resource_from_token(token, :session),
+    do: user_from_token(token, @session_salt, 30 * 60 * 60)
 
-  def verify(token, :confirmation),
-    do: resource_from_token(token, @confirmation_salt, 15 * 60, &Accounts.get_user!/1)
+  def resource_from_token(token, :confirmation),
+    do: user_from_token(token, @confirmation_salt, 15 * 60)
 
-  defp resource_from_token(token, salt, max_age, resource_function) do
+  defp user_from_token(token, salt, max_age) do
     case Phoenix.Token.decrypt(CursifWeb.Endpoint, salt, token, max_age: max_age) do
-      {:ok, id} when is_binary(id) -> {:ok, resource_function.(id)}
-      _ -> {:error, :resource_not_found}
+      {:ok, id} when is_binary(id) -> {:ok, Accounts.get_user!(id)}
+      _ -> {:error, :user_not_found}
     end
   rescue
-    Ecto.NoResultsError -> {:error, :resource_not_found}
+    Ecto.NoResultsError -> {:error, :user_not_found}
   end
 end

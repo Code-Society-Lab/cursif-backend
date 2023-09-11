@@ -33,7 +33,7 @@ defmodule CursifWeb.Context do
   end
 
   def authorize(token) do
-    case verify(token, :session) do
+    case resource_from_token(token, :session) do
       {:ok, user} -> {:ok, user}
       {:error, _} -> {:error, :unauthenticated}
     end
