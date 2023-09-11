@@ -78,6 +78,8 @@ defmodule Cursif.Utils.Error do
   defp metadata(:user_not_found),        do: {404, "User not found"}
   defp metadata(:unknown),               do: {500, "Something went wrong"}
   defp metadata(:too_many_requests),     do: {429, "Too many requests"}
+  defp metadata(:not_confirmed),         do: {429, "You need to confirm your email address"}
+  defp metadata(:already_confirmed),     do: {429, "You have already confirmed your email address"}
 
   defp metadata(code) do
     if Mix.env != :test,
