@@ -80,6 +80,7 @@ defmodule Cursif.Utils.Error do
   defp metadata(:too_many_requests),     do: {429, "Too many requests"}
   defp metadata(:not_confirmed),         do: {429, "You need to confirm your email address"}
   defp metadata(:already_confirmed),     do: {429, "You have already confirmed your email address"}
+  defp metadata(:expired),               do: {429, "Your session token has expired"}
 
   defp metadata(code) do
     if Mix.env != :test,

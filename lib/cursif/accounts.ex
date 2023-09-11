@@ -196,7 +196,7 @@ defmodule Cursif.Accounts do
   def get_user_by_confirmation_token(token) do
     case Phoenix.Token.verify(CursifWeb.Endpoint, "user confirm", token, max_age: 300) do
       {:ok, id} -> {:ok, get_user!(id)}
-      {:error, :invalid} -> {:error, :user_not_found}
+      {:error, :expired} -> {:error, :expired}
     end
   end
 end
