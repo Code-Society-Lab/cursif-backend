@@ -41,6 +41,7 @@ defmodule CursifWeb.Endpoint do
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 
+  plug CursifWeb.RateLimit
   plug CORSPlug
 
   plug Plug.MethodOverride

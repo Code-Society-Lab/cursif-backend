@@ -12,14 +12,22 @@ defmodule CursifWeb.Context do
   end
 
   @doc """
-  Return the current user context based on the authorization header
+  Builds the context for the Absinthe schema.
   """
   def build_context(conn) do
+    %{
+      client: get_client(conn), 
+      current_user: get_current_user(conn)
+    }
+  end
+  
+  def get_client(conn),
+    do: %{ip: conn.remote_ip}
+  
+  def get_current_user(conn) do
     with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
       {:ok, current_user} <- authorize(token) do
-        %{current_user: current_user}
-      else
-        _ -> %{}
+        current_user
       end
   end
 
