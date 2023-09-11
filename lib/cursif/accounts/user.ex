@@ -8,7 +8,6 @@ defmodule Cursif.Accounts.User do
     hashed_password: String.t(),
     first_name: String.t() | nil,
     last_name: String.t() | nil,
-    confirmation_token: String.t() | nil,
 
     confirmed_at: NaiveDateTime.t(),
     inserted_at: DateTime.t(),
@@ -24,7 +23,6 @@ defmodule Cursif.Accounts.User do
     field :last_name, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
-    field :confirmation_token, :string
     field :confirmed_at, :naive_datetime
 
     timestamps()
@@ -79,15 +77,8 @@ defmodule Cursif.Accounts.User do
   @doc """
   Confirms the account by setting `confirmed_at`.
   """
-  def confirm_changeset(user) do
+  def confirm_user_email(user) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     change(user, confirmed_at: now)
-  end
-
-  @doc """
-  Sets the confirmation token.
-  """
-  def changeset_token(user, token) do
-    change(user, confirmation_token: token)
   end
 end
