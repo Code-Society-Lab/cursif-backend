@@ -15,7 +15,7 @@ defmodule CursifWeb.Controllers.UserConfirmation do
       {:ok, user} ->
         case user.confirmed_at do
           nil ->
-            changeset = User.confirm_changeset(user)
+            changeset = User.confirm_user_email(user)
 
             case Repo.update(changeset) do
               {:ok, _updated_user} ->
