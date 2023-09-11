@@ -127,17 +127,10 @@ defmodule Cursif.Accounts do
         {:error, :invalid_credentials}
       user ->
         if Argon2.verify_pass(plain_text_password, user.hashed_password) do
-          {:ok, user, create_token(user)}
+          {:ok, user, Cursif.Token.generate(user, :session)}
         else
           {:error, :invalid_credentials}
         end
-    end
-  end
-
-  @spec create_token(User.t()) :: {:ok, String.t(), map()} | {:error, String.t()}
-  defp create_token(user) do
-    case Cursif.Guardian.encode_and_sign(user, %{}) do
-      {:ok, token, _full_claims} -> token
     end
   end
 end

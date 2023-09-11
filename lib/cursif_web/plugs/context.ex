@@ -2,7 +2,8 @@ defmodule CursifWeb.Context do
   @behaviour Plug
 
   import Plug.Conn
-  import Cursif.Guardian
+  # import Cursif.Guardian
+  import Cursif.Token
 
   def init(opts), do: opts
 
@@ -32,9 +33,9 @@ defmodule CursifWeb.Context do
   end
 
   def authorize(token) do
-    case decode_and_verify(token) do
-      {:ok, claims} -> resource_from_claims(claims)
-      {:error, reason} -> {:error, reason}
+    case verify(token, :session) do
+      {:ok, user} -> {:ok, user}
+      {:error, _} -> {:error, :unauthenticated}
     end
   end
 end
