@@ -55,6 +55,7 @@ defmodule Cursif.MixProject do
       {:gettext, "~> 0.22"},
       {:guardian, "~> 2.0"},
       {:hammer, "~> 6.1"},
+      {:hackney, "~> 1.18"},
       {:jason, "~> 1.2"},
       {:phoenix, "~> 1.7.7"},
       {:phoenix_ecto, "~> 4.4"},
