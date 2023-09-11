@@ -1,7 +1,6 @@
 defmodule CursifWeb.Controllers.UserConfirmation do
   use CursifWeb, :controller
 
-  alias Cursif.Repo
   alias Cursif.Accounts
   alias Cursif.Accounts.User
 
@@ -15,9 +14,7 @@ defmodule CursifWeb.Controllers.UserConfirmation do
       {:ok, user} ->
         case user.confirmed_at do
           nil ->
-            changeset = User.confirm_user_email(user)
-
-            case Repo.update(changeset) do
+            case User.confirm_user_email(user) do
               {:ok, _updated_user} ->
                 json(conn, %{status: "success", message: "Account confirmed successfully"})
 

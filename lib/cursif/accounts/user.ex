@@ -2,6 +2,8 @@ defmodule Cursif.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Cursif.Repo
+
   @type t :: %__MODULE__{
     username: String.t(),
     email: String.t(),
@@ -79,6 +81,6 @@ defmodule Cursif.Accounts.User do
   """
   def confirm_user_email(user) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-    change(user, confirmed_at: now)
+    change(user, confirmed_at: now) |> Repo.update()
   end
 end
