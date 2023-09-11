@@ -25,7 +25,7 @@ defmodule CursifWeb.Resolvers.Accounts do
   def register(args, _context) do
     case Accounts.create_user(args) do
       {:ok, user} ->
-        {:ok, _} = Accounts.deliver_user_confirmation_instructions(user)
+        {:ok, _} = Accounts.generate_confirmation_token(user)
         {:ok, user}
 
       {:error, changeset} -> {:error, changeset}

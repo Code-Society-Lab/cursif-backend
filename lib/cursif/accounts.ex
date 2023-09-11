@@ -6,7 +6,8 @@ defmodule Cursif.Accounts do
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Accounts.{User, UserNotifier}
+  alias Cursif.Accounts.User
+  alias CursifWeb.Emails.UserEmail
   alias Argon2
 
   @doc """
@@ -121,23 +122,26 @@ defmodule Cursif.Accounts do
   """
   @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t(), String.t()} | {:error, :invalid_credentials}
   def authenticate_user(email, plain_text_password) do
-    if Repo.get_by(User, confirmed_at: nil) do
-      {:error, :not_confirmed}
-    else
-      case Repo.get_by(User, email: email) do
-        nil ->
-          Argon2.no_user_verify()
-          {:error, :invalid_credentials}
-        user ->
-          if Argon2.verify_pass(plain_text_password, user.hashed_password) do
-            {:ok, user, create_token(user)}
-          else
-            {:error, :invalid_credentials}
+    case Repo.get_by(User, email: email) do
+      nil ->
+        {:error, :invalid_credentials}
+      user ->
+        if user.confirmed_at == nil do
+          {:error, :not_confirmed}
+        else
+          case Argon2.verify_pass(plain_text_password, user.hashed_password) do
+            true ->
+              {:ok, user, create_token(user)}
+            false ->
+              {:error, :invalid_credentials}
           end
-      end
+        end
     end
   end
 
+  @doc """
+  Creates a token for a user with Guardian and Phoenix.Token
+  """
   @spec create_token(User.t()) :: {:ok, String.t(), map()} | {:error, String.t()}
   def create_token(user, stategy \\ :guardian)
 
@@ -153,9 +157,7 @@ defmodule Cursif.Accounts do
 
   def generate_validation_token(user) do
     token = Phoenix.Token.sign(CursifWeb.Endpoint, "user confirm", user.id)
-    user = User.put_confirmation_token(user, %{confirmation_token: token}) |> Repo.update()
-
-    {:ok, user}
+    {:ok, token}
   end
 
   @doc """
@@ -169,22 +171,14 @@ defmodule Cursif.Accounts do
       iex> generate_confirmation_token(user)
       {:error, :already_confirmed}
   """
-  def deliver_user_confirmation_instructions(%User{} = user) do
+  def generate_confirmation_token(%User{} = user) do
     if user.confirmed_at do
       {:error, :already_confirmed}
     else
-      {:ok, user} = generate_validation_token(user)
+      {:ok, token} = generate_validation_token(user)
       
-      url = build_url_to_deliver(user.confirmation_token)
-      UserNotifier.deliver_confirmation_instructions(user, url)
+      UserEmail.send_confirmation_email(user, token)
     end
-  end
-
-  def build_url_to_deliver(token) do
-    # need to update this for production env to use the correct base_url
-    base_url = "http://0.0.0.0:4000/users/confirm"
-    query_params = "?token=" <> token
-    "#{base_url}#{query_params}"
   end
 
   @doc """
@@ -196,13 +190,13 @@ defmodule Cursif.Accounts do
       {:ok, %User{}}
 
       iex> confirm_user("bad_token")
-      {:error, :invalid_token}
+      {:error, :user_not_found}
   """
   @spec get_user_by_confirmation_token(String.t()) :: {:ok, User.t()} | {:error, atom()}
   def get_user_by_confirmation_token(token) do
-    case Repo.get_by(User, confirmation_token: token) do
-      nil -> {:error, :user_not_found}
-      user -> {:ok, user}
+    case Phoenix.Token.verify(CursifWeb.Endpoint, "user confirm", token, max_age: 300) do
+      {:ok, id} -> {:ok, get_user!(id)}
+      {:error, :invalid} -> {:error, :user_not_found}
     end
   end
 end
