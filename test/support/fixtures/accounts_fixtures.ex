@@ -48,10 +48,10 @@ defmodule Cursif.AccountsFixtures do
   """
   def create_unique_user(_ \\ %{}) do
     user_attrs = unique_user_attributes()
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-    
+
     {:ok, user} = Accounts.create_user(user_attrs)
-    {:ok, user: Map.put(user, :confirmed_at, now), password: user_attrs.password}
+    {:ok, user} = User.confirm_user_email(user)
+    {:ok, user: user, password: user_attrs.password}
   end
 
   @doc """
