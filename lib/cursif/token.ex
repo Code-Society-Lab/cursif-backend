@@ -7,10 +7,10 @@ defmodule Cursif.Token do
 
   @spec generate(map(), atom()) :: String.t()
   def generate(%{id: id}, :session),
-    do: Phoenix.Token.sign(CursifWeb.Endpoint, @session_salt, id)
+    do: Phoenix.Token.encrypt(CursifWeb.Endpoint, @session_salt, id)
 
   def generate(%{id: id}, :verification),
-    do: Phoenix.Token.sign(CursifWeb.Endpoint, @user_confirmation_salt, id)
+    do: Phoenix.Token.encrypt(CursifWeb.Endpoint, @user_confirmation_salt, id)
 
   def generate(_data, _action),
     do: nil
@@ -23,7 +23,7 @@ defmodule Cursif.Token do
     do: resource_from_token(token, @confirmation_salt, 15 * 60, &Accounts.get_user!/1)
 
   defp resource_from_token(token, salt, max_age, resource_function) do
-    case Phoenix.Token.verify(CursifWeb.Endpoint, salt, token, max_age: max_age) do
+    case Phoenix.Token.decrypt(CursifWeb.Endpoint, salt, token, max_age: max_age) do
       {:ok, id} when is_binary(id) -> {:ok, resource_function.(id)}
       _ -> {:error, :resource_not_found}
     end
