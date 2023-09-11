@@ -35,3 +35,6 @@ npm-debug.log
 .env
 
 .idea/
+
+# Ignore mix lock file
+mix.lock
