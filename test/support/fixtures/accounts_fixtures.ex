@@ -5,6 +5,7 @@ defmodule Cursif.AccountsFixtures do
   """
 
   alias Cursif.Accounts
+  alias Cursif.Accounts.User
 
   @valid_user_attributes %{
       email: "grace.hopper@example.com",
@@ -47,8 +48,10 @@ defmodule Cursif.AccountsFixtures do
   """
   def create_unique_user(_ \\ %{}) do
     user_attrs = unique_user_attributes()
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    
     {:ok, user} = Accounts.create_user(user_attrs)
-    {:ok, user: user, password: user_attrs.password}
+    {:ok, user: Map.put(user, :confirmed_at, now), password: user_attrs.password}
   end
 
   @doc """
