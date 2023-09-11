@@ -120,7 +120,7 @@ defmodule Cursif.Accounts do
       iex> authenticate_user("ghopper@example.com", "BadPassword")
       {:error, :invalid_credentials}
   """
-  @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t(), String.t()} | {:error, :invalid_credentials}
+  @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t(), String.t()} | {:error, :invalid_credentials | :not_confirmed}
   def authenticate_user(email, plain_text_password) do
     case Repo.get_by(User, email: email) do
       nil ->

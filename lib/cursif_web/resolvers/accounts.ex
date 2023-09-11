@@ -45,7 +45,8 @@ defmodule CursifWeb.Resolvers.Accounts do
   def login(%{email: email, password: password}, _context) do
     case Accounts.authenticate_user(email, password) do
       {:ok, user, token} -> {:ok, %{user: user, token: token}}
-      {:error, _} -> {:error, :invalid_credentials}
+      {:error, :invalid_credentials} -> {:error, :invalid_credentials}
+      {:error, :not_confirmed} -> {:error, :not_confirmed}
     end
   end
 end
