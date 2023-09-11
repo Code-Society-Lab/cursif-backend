@@ -139,12 +139,25 @@ defmodule Cursif.Accounts do
   end
 
   @spec create_token(User.t()) :: {:ok, String.t(), map()} | {:error, String.t()}
-  defp create_token(user) do
+  def create_token(user, stategy \\ :guardian)
+
+  def create_token(user, :guardian) do
     case Cursif.Guardian.encode_and_sign(user, %{}) do
       {:ok, token, _full_claims} -> token
     end
   end
-  
+
+  def create_token(user, :phoenix_token) do
+    {:ok, Phoenix.Token.sign(CursifWeb.Endpoint, "user id", user.id)}
+  end
+
+  def generate_validation_token(user) do
+    token = Phoenix.Token.sign(CursifWeb.Endpoint, "user confirm", user.id)
+    user = User.put_confirmation_token(user, %{confirmation_token: token}) |> Repo.update()
+
+    {:ok, user}
+  end
+
   @doc """
   Generates a confirmation token.
 
@@ -160,16 +173,9 @@ defmodule Cursif.Accounts do
     if user.confirmed_at do
       {:error, :already_confirmed}
     else
-      {:ok, token} = Cursif.Guardian.encode_and_sign(user, %{})
-
-      IO.inspect(token)
+      {:ok, user} = generate_validation_token(user)
       
-      user
-      |> User.changeset_token(token) 
-      |> Repo.update()
-          
-      url = build_url_to_deliver(token)
-      IO.inspect(user)
+      url = build_url_to_deliver(user.confirmation_token)
       UserNotifier.deliver_confirmation_instructions(user, url)
     end
   end

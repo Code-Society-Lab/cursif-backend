@@ -21,7 +21,6 @@ defmodule Cursif.Application do
       {Phoenix.PubSub, name: Cursif.PubSub},
       # Start the Endpoint (http/https)
       CursifWeb.Endpoint,
-      {Guardian.DB.Token.SweeperServer, []},
       # Start a worker by calling: Cursif.Worker.start_link(arg)
       # {Cursif.Worker, arg}
     ]
