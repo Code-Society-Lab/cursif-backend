@@ -11,24 +11,47 @@
 # and so on) as they will fail if something goes wrong.
 alias Cursif.Repo
 alias Cursif.Accounts.User
-alias Cursif.Notebooks.Notebook
+alias Cursif.{Accounts, Notebooks}
+
+defmodule Utils do
+  def create_user(args \\ []) do
+    username   = Keyword.get(args, :username, Faker.Internet.user_name())
+    first_name = Keyword.get(args, :first_name, Faker.Person.first_name())
+    last_name  = Keyword.get(args, :last_name, Faker.Person.last_name())
+    email      = String.downcase("#{username}@example.com")
+
+    {:ok, user} = Accounts.create_user(%{
+      email: email,
+      username: username,
+      password: "Password1234",
+      first_name: first_name,
+      last_name: last_name
+    })
+
+    {:ok, notebook} = Notebooks.create_notebook(%{
+      title: "#{user.username}'s First Notebook",
+      description: "This is #{user.username}'s first notebook",
+      owner_id: user.id,
+      owner_type: "user"
+    })
+
+    %{user: user, notebook: notebook}
+  end
+end
 
 if not Repo.exists?(User) && Application.get_env(:cursif, :env) == :dev do
-  user_attrs = %{
-    email: "dev@example.com",
-    password: "Password1234",
-    username: "dev",
-    first_name: "Dev",
-    last_name: "Elopment"
-  }
+  %{user: %{id: user_id}, notebook: %{id: notebook_id}} = 
+    Utils.create_user(
+      username: "dev",
+      first_name: "Dev",
+      last_name: "Elopment"
+    )
 
-  %{id: user_id} = %User{} |> User.changeset(user_attrs) |> Repo.insert!()
+  Enum.map 0..10, fn i -> 
+    %{user: %{id: user_id}} = Utils.create_user() 
 
-  notebook_attrs = %{
-    title: "My First Notebook",
-    description: "This is my first notebook",
-    owner_id: user_id,
-    owner_type: "user"
-  }
-  %Notebook{} |> Notebook.changeset(notebook_attrs) |> Repo.insert!()
+    if i < 3 do
+      Notebooks.add_collaborator(%{notebook_id: notebook_id, user_id: user_id})
+    end
+  end
 end

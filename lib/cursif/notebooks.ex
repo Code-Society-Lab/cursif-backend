@@ -21,9 +21,11 @@ defmodule Cursif.Notebooks do
   """
   @spec list_notebooks(User.t()) :: list(Notebook.t())
   def list_notebooks(%User{id: user_id}) do
+    # TODO : Use exists instead of left_join and distinct
     query = from n in Notebook,
                  left_join: c in assoc(n, :collaborators),
-                 where: n.owner_id == ^user_id or c.id == ^user_id
+                 where: n.owner_id == ^user_id or c.id == ^user_id,
+                 distinct: true
 
     Repo.all(query) |> Repo.preload([:macros, :collaborators, pages: [:author]])
   end

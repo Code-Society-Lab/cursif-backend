@@ -51,6 +51,7 @@ defmodule Cursif.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:esbuild, "~> 0.7.1", runtime: Mix.env() == :dev},
       {:excoveralls, "~> 0.15.3", only: :test},
+      {:faker, "~> 0.17", only: [:dev, :test]},
       {:gettext, "~> 0.22"},
       {:guardian, "~> 2.0"},
       {:hammer, "~> 6.1"},
