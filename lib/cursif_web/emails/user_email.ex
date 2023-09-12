@@ -20,7 +20,7 @@ defmodule CursifWeb.Emails.UserEmail do
   end
 
   @doc """
-  Deliver instructions to confirm account.
+  Sends a confirmation email to a user.
   """
   def send_confirmation_email(user, token) do
     base_url = "#{CursifWeb.Endpoint.url()}/users/confirm?token=#{token}"
