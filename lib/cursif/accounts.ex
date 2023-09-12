@@ -126,7 +126,7 @@ defmodule Cursif.Accounts do
       nil ->
         {:error, :invalid_credentials}
       user ->
-        if user.confirmed_at == nil do
+        if is_nil(user.confirmed_at) do
           {:error, :not_confirmed}
         else
           case Argon2.verify_pass(plain_text_password, user.hashed_password) do
@@ -155,27 +155,22 @@ defmodule Cursif.Accounts do
     {:ok, Phoenix.Token.sign(CursifWeb.Endpoint, "user id", user.id)}
   end
 
-  def generate_validation_token(user) do
-    token = Phoenix.Token.sign(CursifWeb.Endpoint, "user confirm", user.id)
-    {:ok, token}
-  end
-
   @doc """
   Generates a confirmation token.
 
   ## Examples
 
-      iex> generate_confirmation_token(user)
+      iex> send_confirmation_email(user)
       {:ok, %User{}}
 
-      iex> generate_confirmation_token(user)
+      iex> send_confirmation_email(user)
       {:error, :already_confirmed}
   """
-  def generate_confirmation_token(%User{} = user) do
+  def send_confirmation_email(%User{} = user) do
     if user.confirmed_at do
       {:error, :already_confirmed}
     else
-      {:ok, token} = generate_validation_token(user)
+      {:ok, token} = create_token(user, :phoenix_token)
       
       UserEmail.send_confirmation_email(user, token)
     end
@@ -194,7 +189,7 @@ defmodule Cursif.Accounts do
   """
   @spec get_user_by_confirmation_token(String.t()) :: {:ok, User.t()} | {:error, atom()}
   def get_user_by_confirmation_token(token) do
-    case Phoenix.Token.verify(CursifWeb.Endpoint, "user confirm", token, max_age: 300) do
+    case Phoenix.Token.verify(CursifWeb.Endpoint, "user id", token, max_age: 300) do
       {:ok, id} -> {:ok, get_user!(id)}
       {:error, :expired} -> {:error, :expired}
     end
