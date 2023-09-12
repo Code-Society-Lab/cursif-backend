@@ -37,12 +37,6 @@ defmodule CursifWeb do
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
-      # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
-
-      import CursifWeb.ErrorHelpers
-      import CursifWeb.Gettext
-
       # Include shared imports and aliases for views
       unquote(view_helpers())
     end
@@ -68,6 +62,9 @@ defmodule CursifWeb do
     quote do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
+
+      # Use all HTML functionality (forms, tags, etc)
+      use Phoenix.HTML
 
       import CursifWeb.ErrorHelpers
       import CursifWeb.Gettext
