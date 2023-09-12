@@ -50,7 +50,7 @@ defmodule Cursif.AccountsFixtures do
     user_attrs = unique_user_attributes()
 
     {:ok, user} = Accounts.create_user(user_attrs)
-    {:ok, user} = User.confirm_user_email(user)
+    {:ok, user} = User.confirm_email(user)
     {:ok, user: user, password: user_attrs.password}
   end
 

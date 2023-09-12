@@ -14,7 +14,7 @@ defmodule CursifWeb.Controllers.UserConfirmation do
       {:ok, user} ->
         case user.confirmed_at do
           nil ->
-            case User.confirm_user_email(user) do
+            case User.confirm_email(user) do
               {:ok, _updated_user} ->
                 json(conn, %{status: "success", message: "Account confirmed successfully"})
 

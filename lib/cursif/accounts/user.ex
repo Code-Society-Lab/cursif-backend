@@ -79,7 +79,7 @@ defmodule Cursif.Accounts.User do
   @doc """
   Confirms the account by setting `confirmed_at`.
   """
-  def confirm_user_email(user) do
+  def confirm_email(user) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     change(user, confirmed_at: now) |> Repo.update()
   end
