@@ -160,13 +160,13 @@ defmodule Cursif.Accounts do
 
   ## Examples
 
-      iex> send_confirmation_email(user)
+      iex> verify_user(user)
       {:ok, %User{}}
 
-      iex> send_confirmation_email(user)
+      iex> verify_user(user)
       {:error, :already_confirmed}
   """
-  def send_confirmation_email(%User{} = user) do
+  def verify_user(%User{} = user) do
     if user.confirmed_at do
       {:error, :already_confirmed}
     else
