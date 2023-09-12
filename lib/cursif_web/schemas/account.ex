@@ -53,5 +53,12 @@ defmodule CursifWeb.Schemas.Account do
 
       resolve(&Accounts.login/2)
     end
+
+    @desc "Confirm a user's account"
+    field :confirm, :user do
+      arg(:token, non_null(:string))
+      
+      resolve(&Accounts.confirm/1)
+    end
   end
 end

@@ -25,7 +25,7 @@ defmodule CursifWeb.Resolvers.Accounts do
   def register(args, _context) do
     case Accounts.create_user(args) do
       {:ok, user} ->
-        {:ok, _} = Accounts.send_confirmation_email(user)
+        {:ok, _} = Accounts.verify_user(user)
         {:ok, user}
 
       {:error, changeset} -> {:error, changeset}
@@ -47,6 +47,30 @@ defmodule CursifWeb.Resolvers.Accounts do
       {:ok, user, token} -> {:ok, %{user: user, token: token}}
       {:error, :invalid_credentials} -> {:error, :invalid_credentials}
       {:error, :not_confirmed} -> {:error, :not_confirmed}
+    end
+  end
+
+  @doc """
+  Confirm a user's account.
+  """
+  @spec confirm(map()) :: {:ok, User.t()} | {:error, atom()}
+  def confirm(%{"token" => token}) do
+    user = Accounts.get_user_by_confirmation_token(token)
+
+    case user do
+      {:ok, user} ->
+        case user.confirmed_at do
+          nil ->
+            case User.confirm_email(user) do
+              {:ok, _user} -> {:ok, %{message: "Account confirmed successfully"}}
+
+              {:error, _changeset} -> {:error, %{message: "Failed to confirm account"}}
+            end
+
+          _ ->  {:errpr, :already_confirmed}
+        end
+
+      {:error, _} -> {:error, :invalid_token}
     end
   end
 end
