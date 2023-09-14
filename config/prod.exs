@@ -50,3 +50,7 @@ config :logger, level: :info
 
 # execute `mix guardian.gen.secret` and that you set it in your environment variables under `CURSIF_SECRET_KEY`.
 config :cursif, :secret_key, System.fetch_env!("CURSIF_SECRET_KEY")
+
+# Get the client URL from the environment or use a default
+config :cursif, 
+  client_url: System.get_env("CLIENT_URL_PROD") || "http://localhost:3000"

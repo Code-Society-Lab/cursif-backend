@@ -33,3 +33,7 @@ config :logger, level: :warning
 config :phoenix, :plug_init_mode, :runtime
 
 config :cursif, :secret_key, "test_secret_key"
+
+# Get the client URL from the environment or use a default
+config :cursif, 
+  client_url: System.get_env("CLIENT_URL_TEST") || "http://localhost:3000"
