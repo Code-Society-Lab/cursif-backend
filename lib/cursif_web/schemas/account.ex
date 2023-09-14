@@ -62,10 +62,10 @@ defmodule CursifWeb.Schemas.Account do
     end
 
     @desc "Resend a confirmation email"
-    field :resend_confirmation, :user do
+    field :resend_confirmation_email, :user do
       arg(:email, non_null(:string))
 
-      resolve(&Accounts.resend_confirmation/1)
+      resolve(&Accounts.resend_confirmation_email/1)
     end
   end
 end
