@@ -45,4 +45,13 @@ defmodule CursifWeb.Resolvers.Accounts do
       {:error, _} -> {:error, :invalid_credentials}
     end
   end
+
+  @spec reset_password(%{email: String.t(), password: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
+  def reset_password(%{email: email, password: password} = args, _context) do
+    user = Accounts.get_user_by_email!(email)
+      case Accounts.reset_password(user, args) do
+        {:ok, user} -> {:ok, user}
+        {:error, changeset} -> {:error, changeset}
+      end
+  end
 end
