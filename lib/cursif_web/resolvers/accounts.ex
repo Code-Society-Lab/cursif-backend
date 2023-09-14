@@ -102,14 +102,14 @@ defmodule CursifWeb.Resolvers.Accounts do
   Reset a user's password.
   """
   @spec reset_password(%{email: String.t(), password: String.t()}, map()) :: {:ok, User.t()} | {:error, atom()}
-  def reset_password(%{email: email, password: password, token: token} = args, _context) do
+  def reset_password(%{password: password, token: token} = args, _context) do
     user = Accounts.get_user_by_confirmation_token(token)
 
     case user do
       {:ok, user} ->
         case Accounts.reset_password(user, args) do
-          {:ok, user} -> {:ok, user}
-          {:error, changeset} -> {:error, changeset}
+          {:ok, _user} -> {:ok, %{message: "Password reset successfully"}}
+          {:error, _changeset} -> {:error, %{message: "Failed to reset password!"}}
         end
 
       {:error, _} -> {:error, :invalid_token}

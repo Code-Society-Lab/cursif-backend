@@ -86,8 +86,7 @@ defmodule Cursif.Accounts.User do
 
   def update_password(user, attrs) do
     user
-    |> cast(attrs, [:email, :password])
-    |> unique_constraint(:email)
+    |> cast(attrs, [:password])
     |> validate_password()
   end
 end
