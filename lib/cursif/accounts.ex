@@ -140,4 +140,14 @@ defmodule Cursif.Accounts do
       {:ok, token, _full_claims} -> token
     end
   end
+
+  @doc """
+  Reset a user's password.
+  """
+  @spec reset_password(User.t(), map()) :: {:ok, User.t()} | {:error, %Ecto.Changeset{}}
+  def reset_password(%User{} = user, attrs) do
+    user
+    |> User.update_password(attrs)
+    |> Repo.update()
+  end
 end
