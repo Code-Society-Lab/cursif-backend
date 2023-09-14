@@ -6,8 +6,8 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :cursif, Cursif.Repo,
-  username: System.get_env("POSTGRES_USER"),
-  password: System.get_env("POSTGRES_PASSWORD"),
+  username: System.get_env("POSTGRES_USER", "postgres"),
+  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
   database: System.get_env(
     "POSTGRES_DB",
@@ -33,3 +33,7 @@ config :logger, level: :warning
 config :phoenix, :plug_init_mode, :runtime
 
 config :cursif, :secret_key, "test_secret_key"
+
+# Get the client URL from the environment or use a default
+config :cursif, 
+  client_url: System.get_env("CLIENT_URL_TEST") || "http://localhost:3000"

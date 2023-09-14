@@ -65,3 +65,11 @@ config :phoenix, :plug_init_mode, :runtime
 
 # See Guardian setup in `config/config.exs`
 config :cursif, :secret_key, "dev_secret_key"
+
+# Configure the mailer
+config :cursif, Cursif.Mailer,
+  adapter: Swoosh.Adapters.Local
+
+# Get the client URL from the environment or use a default
+config :cursif, 
+  client_url: System.get_env("CLIENT_URL_DEV") || "http://localhost:3000"

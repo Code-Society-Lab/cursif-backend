@@ -28,6 +28,8 @@ defmodule Utils do
       last_name: last_name
     })
 
+    {:ok, user} = User.confirm_email(user)
+
     {:ok, notebook} = Notebooks.create_notebook(%{
       title: "#{user.username}'s First Notebook",
       description: "This is #{user.username}'s first notebook",

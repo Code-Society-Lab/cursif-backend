@@ -54,6 +54,20 @@ defmodule CursifWeb.Schemas.Account do
       resolve(&Accounts.login/2)
     end
 
+    @desc "Confirm a user's account"
+    field :confirm, :user do
+      arg(:token, non_null(:string))
+      
+      resolve(&Accounts.confirm/1)
+    end
+
+    @desc "Resend a confirmation email"
+    field :resend_confirmation_email, :user do
+      arg(:email, non_null(:string))
+
+      resolve(&Accounts.resend_confirmation_email/1)
+    end
+
     @desc "Reset password"
     field :reset_password, :user do
       arg(:email, non_null(:string))
