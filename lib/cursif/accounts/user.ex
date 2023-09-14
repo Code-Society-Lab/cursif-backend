@@ -71,4 +71,11 @@ defmodule Cursif.Accounts.User do
   end
 
   defp put_password_hash(changeset), do: changeset
+
+  def update_password(user, attrs) do
+    user
+    |> cast(attrs, [:email, :password])
+    |> unique_constraint(:email)
+    |> validate_password()
+  end
 end
