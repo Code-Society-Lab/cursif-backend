@@ -53,8 +53,8 @@ defmodule CursifWeb.Resolvers.Accounts do
   @doc """
   Confirm a user's account.
   """
-  @spec confirm(map()) :: {:ok, User.t()} | {:error, atom()}
-  def confirm(%{"token" => token}) do
+  @spec confirm(String.t()) :: {:ok, User.t()} | {:error, atom()}
+  def confirm(token) do
     user = Accounts.get_user_by_confirmation_token(token)
 
     case user do
@@ -67,10 +67,26 @@ defmodule CursifWeb.Resolvers.Accounts do
               {:error, _changeset} -> {:error, %{message: "Failed to confirm account"}}
             end
 
-          _ ->  {:errpr, :already_confirmed}
+          _ ->  {:error, :already_confirmed}
         end
 
       {:error, _} -> {:error, :invalid_token}
+    end
+  end
+
+  @doc """
+  Resend a confirmation email to a user.
+  """
+  @spec resend_confirmation_email(String.t()) :: {:ok, User.t()} | {:error, atom()}
+  def resend_confirmation_email(email) do
+    case Accounts.get_user_by_email!(email) do
+      {:ok, user} ->
+        case Accounts.verify_user(user) do
+          {:ok, _} -> {:ok, %{message: "Confirmation email sent!"}}
+          {:error, _} -> {:error, %{message: "Failed to send confirmation email"}}
+        end
+
+      {:error, _} -> {:error, :invalid_email}
     end
   end
 end
