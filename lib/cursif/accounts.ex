@@ -49,8 +49,8 @@ defmodule Cursif.Accounts do
       iex> get_user_by_email!("email@email.com")
       {:ok, %User{}}
   """
-  @spec get_user_by_email!(String.t()) :: User.t() | nil
-  def get_user_by_email!(email), do: Repo.get_by(User, email)
+  @spec get_user_by_email!(String.t()) :: User.t()
+  def get_user_by_email!(email), do: Repo.get_by!(User, email: email)
 
   @doc """
   Creates a user.
