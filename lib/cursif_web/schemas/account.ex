@@ -72,8 +72,16 @@ defmodule CursifWeb.Schemas.Account do
     field :reset_password, :user do
       arg(:email, non_null(:string))
       arg(:password, non_null(:string))
+      arg(:token, non_null(:string))
 
       resolve(&Accounts.reset_password/2)
+    end
+
+    @desc "Send a new password"
+    field :send_reset_password_token, :user do
+      arg(:email, non_null(:string))
+
+      resolve(&Accounts.send_reset_password_token/2)
     end
   end
 end
