@@ -80,14 +80,14 @@ defmodule CursifWeb.Resolvers.Accounts do
   @spec resend_confirmation_email(String.t()) :: {:ok, User.t()} | {:error, atom()}
   def resend_confirmation_email(email) do
     case Accounts.get_user_by_email!(email) do
-    %User{} = user ->
-      case Accounts.verify_user(user) do
-        {:ok, _} -> {:ok, %{message: "Confirmation email sent!"}}
-        {:error, _} -> {:error, %{message: "Failed to send confirmation email"}}
-      end
+      %User{} = user ->
+        case Accounts.verify_user(user) do
+          {:ok, _} -> {:ok, %{message: "Confirmation email sent!"}}
+          {:error, _} -> {:error, %{message: "Failed to send confirmation email"}}
+        end
 
-    nil ->
-      {:error, :invalid_email}
-  end
+      nil ->
+        {:error, :invalid_email}
+    end
   end
 end
