@@ -25,7 +25,6 @@ defmodule CursifWeb.Emails.UserEmail do
   def send_confirmation_email(user, token) do
     client_url = Application.get_env(:cursif, :client_url)
     base_url = "#{client_url}/confirm?token=#{token}"
-    IO.inspect(base_url)
     send_email(user, "Welcome to Cursif ~ Email Verification", base_url)
   end
 end
