@@ -72,4 +72,4 @@ config :cursif, Cursif.Mailer,
 
 # Get the client URL from the environment or use a default
 config :cursif, 
-  client_url: System.get_env("CLIENT_URL_DEV") || "http://localhost:3000"
+  client_url: System.get_env("CLIENT_URL", "http://localhost:3000")
