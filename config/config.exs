@@ -9,7 +9,8 @@ import Config
 
 config :cursif,
   ecto_repos: [Cursif.Repo],
-  generators: [binary_id: true]
+  generators: [binary_id: true],
+  client_url: System.get_env("CLIENT_URL")
 
 # Configures the endpoint
 config :cursif, CursifWeb.Endpoint,
@@ -73,7 +74,3 @@ config :cursif, env: Mix.env()
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
-
-# Get the client URL from the environment or use a default
-config :cursif, 
-  client_url: System.get_env("CLIENT_URL") || "http://localhost:3000"
