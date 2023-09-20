@@ -84,8 +84,4 @@ if config_env() == :prod do
   config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
-
-  # Get the client URL from the environment or use a default
-  config :cursif, 
-    client_url: System.get_env("CLIENT_URL") || "http://localhost:3000"
 end
