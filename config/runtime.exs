@@ -71,12 +71,12 @@ if config_env() == :prod do
   
   config :cursif, Cursif.Mailer,
     adapter: Swoosh.Adapters.SMTP,
-    relay: System.get_env("SMTP_RELAY"),
-    username: System.get_env("SMTP_USERNAME"),
-    password: System.get_env("SMTP_PASSWORD"),
-    ssl: System.get_env("SMTP_SSL", false),
+    relay: System.fetch_env!("SMTP_RELAY"),
+    username: System.fetch_env!("SMTP_USERNAME"),
+    password: System.fetch_env!("SMTP_PASSWORD"),
+    ssl: System.fetch_env!("SMTP_SSL", false),
     tls: :always,
-    port: System.get_env("SMTP_PORT")
+    port: System.fetch_env!("SMTP_PORT")
   
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:
@@ -84,4 +84,8 @@ if config_env() == :prod do
   config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
+  config :cursif,
+    client_url: System.fetch_env!("CLIENT_URL"),
+    email_from: System.fetch_env!("EMAIL_FROM")
 end
