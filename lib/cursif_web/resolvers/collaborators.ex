@@ -3,7 +3,7 @@ defmodule CursifWeb.Resolvers.Collaborators do
 	alias Cursif.Notebooks.Collaborator
 
 	@spec add_collaborator(map(), map()) :: {:ok, Collaborator.t()}  | {:error, atom()}
-	def add_collaborator(collaborator, %{context: %{current_user: current_user}}) do
+	def add_collaborator(collaborator, _context) do
 		Notebooks.get_notebook!(collaborator.notebook_id)
 			
 		case Notebooks.add_collaborator(collaborator) do
@@ -13,7 +13,7 @@ defmodule CursifWeb.Resolvers.Collaborators do
 	end
 
 	@spec delete_collaborator(map(), map()) :: {:ok, Collaborator.t()} | {:error, atom()}
-	def delete_collaborator(collaborator, %{context: %{current_user: current_user}}) do
+	def delete_collaborator(collaborator, _context) do
 		Notebooks.get_notebook!(collaborator.notebook_id)
 
 		case Notebooks.delete_collaborator_by_user_id(collaborator.notebook_id, collaborator.user_id) do
