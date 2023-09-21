@@ -7,6 +7,7 @@ defmodule Cursif.Accounts do
   alias Cursif.Repo
 
   alias Cursif.Accounts.User
+  alias CursifWeb.Emails.UserEmail
   alias Argon2
 
   @doc """
@@ -39,6 +40,17 @@ defmodule Cursif.Accounts do
   """
   @spec get_user!(binary()) :: User.t()
   def get_user!(id), do: Repo.get!(User, id)
+
+  @doc """
+  Get user by email
+
+  ### Examples
+
+      iex> get_user_by_email!("email@email.com")
+      {:ok, %User{}}
+  """
+  @spec get_user_by_email!(String.t()) :: User.t()
+  def get_user_by_email!(email), do: Repo.get_by!(User, email: email)
 
   @doc """
   Creates a user.
@@ -119,25 +131,78 @@ defmodule Cursif.Accounts do
       iex> authenticate_user("ghopper@example.com", "BadPassword")
       {:error, :invalid_credentials}
   """
-  @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t(), String.t()} | {:error, :invalid_credentials}
+  @spec authenticate_user(String.t(), String.t()) :: {:ok, User.t(), String.t()} | {:error, :invalid_credentials | :not_confirmed}
   def authenticate_user(email, plain_text_password) do
     case Repo.get_by(User, email: email) do
       nil ->
-        Argon2.no_user_verify()
         {:error, :invalid_credentials}
       user ->
-        if Argon2.verify_pass(plain_text_password, user.hashed_password) do
-          {:ok, user, create_token(user)}
+        if is_nil(user.confirmed_at) do
+          {:error, :not_confirmed}
         else
-          {:error, :invalid_credentials}
+          case Argon2.verify_pass(plain_text_password, user.hashed_password) do
+            true ->
+              {:ok, user, create_token(user)}
+            false ->
+              {:error, :invalid_credentials}
+          end
         end
     end
   end
 
+  @doc """
+  Creates a token for a user with Guardian and Phoenix.Token
+  """
   @spec create_token(User.t()) :: {:ok, String.t(), map()} | {:error, String.t()}
-  defp create_token(user) do
+  def create_token(user, stategy \\ :guardian)
+
+  def create_token(user, :guardian) do
     case Cursif.Guardian.encode_and_sign(user, %{}) do
       {:ok, token, _full_claims} -> token
+    end
+  end
+
+  def create_token(user, :phoenix_token) do
+    {:ok, Phoenix.Token.sign(CursifWeb.Endpoint, "user id", user.id)}
+  end
+
+  @doc """
+  Generates a confirmation token.
+
+  ## Examples
+
+      iex> verify_user(user)
+      {:ok, %User{}}
+
+      iex> verify_user(user)
+      {:error, :already_confirmed}
+  """
+  def verify_user(%User{} = user) do
+    if user.confirmed_at do
+      {:error, :already_confirmed}
+    else
+      {:ok, token} = create_token(user, :phoenix_token)
+      
+      UserEmail.send_confirmation_email(user, token)
+    end
+  end
+
+  @doc """
+  Confirms a user by its confirmation token
+
+  ## Examples
+
+      iex> confirm_user("token")
+      {:ok, %User{}}
+
+      iex> confirm_user("bad_token")
+      {:error, :user_not_found}
+  """
+  @spec get_user_by_confirmation_token(String.t()) :: {:ok, User.t()} | {:error, atom()}
+  def get_user_by_confirmation_token(token) do
+    case Phoenix.Token.verify(CursifWeb.Endpoint, "user id", token, max_age: 300) do
+      {:ok, id} -> {:ok, get_user!(id)}
+      {:error, :expired} -> {:error, :expired}
     end
   end
 end

@@ -8,7 +8,6 @@ defmodule Cursif.Application do
   @impl true
   def start(_type, _args) do
     unless Mix.env == :prod do
-      Dotenv.load
       Mix.Task.run("loadconfig")
     end
 
@@ -20,7 +19,7 @@ defmodule Cursif.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Cursif.PubSub},
       # Start the Endpoint (http/https)
-      CursifWeb.Endpoint
+      CursifWeb.Endpoint,
       # Start a worker by calling: Cursif.Worker.start_link(arg)
       # {Cursif.Worker, arg}
     ]

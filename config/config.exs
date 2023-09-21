@@ -9,7 +9,9 @@ import Config
 
 config :cursif,
   ecto_repos: [Cursif.Repo],
-  generators: [binary_id: true]
+  generators: [binary_id: true],
+  client_url: System.get_env("CLIENT_URL", "http://localhost:3000"),
+  email_from: System.get_env("EMAIL_FROM", "cursif@example.com")
 
 # Configures the endpoint
 config :cursif, CursifWeb.Endpoint,
@@ -34,10 +36,12 @@ config :hammer,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :cursif, Cursif.Mailer, adapter: Swoosh.Adapters.Local
+# config :cursif, Cursif.Mailer,
+#   adapter: Swoosh.Adapters.Gmail,
+#   access_token: System.get_env("GMAIL_API_ACCESS_TOKEN")
 
 # Swoosh API client is needed for adapters other than SMTP.
-config :swoosh, :api_client, false
+# config :swoosh, :api_client, false
 
 # Configure esbuild (the version is required)
 config :esbuild,
@@ -63,9 +67,9 @@ config :phoenix, :json_library, Jason
 # case one will be temporarily generate one at startup, but in production you will need to generate one via
 # `mix guardian.gen.secret` and that you set it in your environment variables under `CURSIF_SECRET_KEY`.
 config :cursif, Cursif.Guardian,
-       issuer: "cursif",
-       ttl: Application.get_env(:cursif, :ttl, {52, :weeks}),
-       secret_key: Application.get_env(:cursif, :secret_key)
+  issuer: "cursif",
+  ttl: Application.get_env(:cursif, :ttl, {52, :weeks}),
+  secret_key: Application.get_env(:cursif, :secret_key)
 
 config :cursif, env: Mix.env()
 # Import environment specific config. This must remain at the bottom
