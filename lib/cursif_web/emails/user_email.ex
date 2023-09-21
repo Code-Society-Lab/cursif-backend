@@ -9,7 +9,7 @@ defmodule CursifWeb.Emails.UserEmail do
   defp send_email(user, subject, base_url) do
     email =
       new()
-      |> from({"Cursif", "cursif@codesociety.xyz"})
+      |> from({"Cursif", Application.get_env(:cursif, :email_address)})
       |> to(user.email)
       |> subject(subject)
       |> render_body("welcome.html", %{username: user.username, base_url: base_url})

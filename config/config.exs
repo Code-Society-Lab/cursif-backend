@@ -10,7 +10,8 @@ import Config
 config :cursif,
   ecto_repos: [Cursif.Repo],
   generators: [binary_id: true],
-  client_url: System.get_env("CLIENT_URL")
+  client_url: System.get_env("CLIENT_URL"),
+  email_address: "cursif@codesociety.xyz"
 
 # Configures the endpoint
 config :cursif, CursifWeb.Endpoint,
