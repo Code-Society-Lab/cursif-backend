@@ -84,6 +84,9 @@ defmodule Cursif.Accounts.User do
     change(user, confirmed_at: now) |> Repo.update()
   end
 
+  @doc """
+  Updates the user's password.
+  """
   def update_password(user, attrs) do
     user
     |> cast(attrs, [:password])
