@@ -36,4 +36,5 @@ config :cursif, :secret_key, "test_secret_key"
 
 # Get the client URL from the environment or use a default
 config :cursif, 
-  client_url: System.get_env("CLIENT_URL_TEST") || "http://localhost:3000"
+  client_url: "http://localhost:3000",
+  email_from: "cursif@example.com"
