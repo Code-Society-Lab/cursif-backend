@@ -80,9 +80,10 @@ defmodule CursifWeb.Resolvers.Accounts do
   @spec resend_confirmation_email(%{email: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
   def resend_confirmation_email(%{email: email}, _context) do
     user = Accounts.get_user_by_email!(email)
+
     case Accounts.verify_user(user) do
       {:ok, _} -> {:ok, %{message: "Confirmation email sent!"}}
-      {:error, _} -> {:error, %{message: "Failed to send confirmation email"}}
+      {:error, _} -> {:error, %{message: "Failed to send confirmation email!"}}
     end
   end
 
@@ -92,6 +93,7 @@ defmodule CursifWeb.Resolvers.Accounts do
   @spec send_reset_password_token(%{email: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
   def send_reset_password_token(%{email: email}, _context) do
     user = Accounts.get_user_by_email!(email)
+
     case Accounts.send_new_password(user) do
       {:ok, _} -> {:ok, %{message: "Reset password email sent!"}}
       {:error, _} -> {:error, %{message: "Failed to send password email!"}}
@@ -108,7 +110,7 @@ defmodule CursifWeb.Resolvers.Accounts do
     case user do
       {:ok, user} ->
         case Accounts.reset_password(user, args) do
-          {:ok, _user} -> {:ok, %{message: "Password reset successfully"}}
+          {:ok, _user} -> {:ok, %{message: "Password reset successfully!"}}
           {:error, _changeset} -> {:error, %{message: "Failed to reset password!"}}
         end
 
