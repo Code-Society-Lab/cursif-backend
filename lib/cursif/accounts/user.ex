@@ -83,4 +83,13 @@ defmodule Cursif.Accounts.User do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     change(user, confirmed_at: now) |> Repo.update()
   end
+
+  @doc """
+  Updates the user's password.
+  """
+  def update_password(user, attrs) do
+    user
+    |> cast(attrs, [:password])
+    |> validate_password()
+  end
 end

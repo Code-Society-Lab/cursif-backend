@@ -188,6 +188,14 @@ defmodule Cursif.Accounts do
   end
 
   @doc """
+  Sends a password reset email to a user.
+  """
+  def send_new_password(%User{} = user) do
+    {:ok, token} = create_token(user, :phoenix_token)
+    UserEmail.send_password_reset_email(user, token)
+  end
+
+  @doc """
   Confirms a user by its confirmation token
 
   ## Examples
@@ -204,5 +212,15 @@ defmodule Cursif.Accounts do
       {:ok, id} -> {:ok, get_user!(id)}
       {:error, :expired} -> {:error, :expired}
     end
+  end
+
+  @doc """
+  Reset a user's password.
+  """
+  @spec reset_password(User.t(), map()) :: {:ok, User.t()} | {:error, %Ecto.Changeset{}}
+  def reset_password(%User{} = user, attrs) do
+    user
+    |> User.update_password(attrs)
+    |> Repo.update()
   end
 end

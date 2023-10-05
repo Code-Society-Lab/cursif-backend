@@ -3,20 +3,20 @@
   <body>
     <div class="email-container">
       <div class="header">
-        <span>Welcome to <span style="font-family: Montez; font-size: 1.2em;">Cursif</span></span>
+        <span style="font-family: Montez; font-size: 1.2em;">Cursif</span>
       </div>
       <div class="content">
         <div class="email-body">
-          <p>Welcome <strong><%= @username %></strong>,</p>
+          <p>Hi <strong><%= @username %></strong>,</p>
           <p>
-            Thank you for joining Cursif, complete your inscription by clicking the
-            button below and start collaborating with your team today.
+            We have received a request to reset your password for your Cursif account. 
+            Complete the process with the password reset by clicking the button below
           </p>
         </div>
         <div class="button-container">
-          <a class="button" href="<%= @base_url %>">Verify your account</a>
+          <a class="button" href="<%= @base_url %>">Reset your password</a>
           <div class="message signature">
-            <p>If you didn't sign up for Cursif, please disregard this email.</p>
+            <p>If you didn't request a new password, please disregard this email.</p>
           </div>
         </div>
       </div>

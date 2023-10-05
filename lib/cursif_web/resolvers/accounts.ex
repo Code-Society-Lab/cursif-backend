@@ -77,17 +77,44 @@ defmodule CursifWeb.Resolvers.Accounts do
   @doc """
   Resend a confirmation email to a user.
   """
-  @spec resend_confirmation_email(String.t()) :: {:ok, User.t()} | {:error, atom()}
-  def resend_confirmation_email(email) do
-    case Accounts.get_user_by_email!(email) do
-      %User{} = user ->
-        case Accounts.verify_user(user) do
-          {:ok, _} -> {:ok, %{message: "Confirmation email sent!"}}
-          {:error, _} -> {:error, %{message: "Failed to send confirmation email"}}
+  @spec resend_confirmation_email(%{email: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
+  def resend_confirmation_email(%{email: email}, _context) do
+    user = Accounts.get_user_by_email!(email)
+
+    case Accounts.verify_user(user) do
+      {:ok, _} -> {:ok, %{message: "Confirmation email sent!"}}
+      {:error, _} -> {:error, %{message: "Failed to send confirmation email!"}}
+    end
+  end
+
+  @doc """
+  Send a password reset email to a user.
+  """
+  @spec send_reset_password_token(%{email: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
+  def send_reset_password_token(%{email: email}, _context) do
+    user = Accounts.get_user_by_email!(email)
+
+    case Accounts.send_new_password(user) do
+      {:ok, _} -> {:ok, %{message: "Reset password email sent!"}}
+      {:error, _} -> {:error, %{message: "Failed to send password email!"}}
+    end
+  end
+
+  @doc """
+  Reset a user's password.
+  """
+  @spec reset_password(%{email: String.t(), password: String.t()}, map()) :: {:ok, User.t()} | {:error, atom()}
+  def reset_password(%{password: password, token: token} = args, _context) do
+    user = Accounts.get_user_by_confirmation_token(token)
+
+    case user do
+      {:ok, user} ->
+        case Accounts.reset_password(user, args) do
+          {:ok, _user} -> {:ok, %{message: "Password reset successfully!"}}
+          {:error, _changeset} -> {:error, %{message: "Failed to reset password!"}}
         end
 
-      nil ->
-        {:error, :invalid_email}
+      {:error, _} -> {:error, :invalid_token}
     end
   end
 end
