@@ -80,7 +80,9 @@ defmodule CursifWeb.Schema do
 
   @skip_authentication [
     :login,
-    :register
+    :register,
+    :confirm,
+    :resend_confirmation_email
   ]
 
   query do
