@@ -53,8 +53,8 @@ defmodule CursifWeb.Resolvers.Accounts do
   @doc """
   Confirm a user's account.
   """
-  @spec confirm(String.t()) :: {:ok, User.t()} | {:error, atom()}
-  def confirm(token) do
+  @spec confirm(map(), map()) :: {:ok, User.t()} | {:error, atom()}
+  def confirm(%{token: token}, _context) do
     user = Accounts.get_user_by_confirmation_token(token)
 
     case user do
@@ -103,8 +103,8 @@ defmodule CursifWeb.Resolvers.Accounts do
   @doc """
   Reset a user's password.
   """
-  @spec reset_password(%{email: String.t(), password: String.t()}, map()) :: {:ok, User.t()} | {:error, atom()}
-  def reset_password(%{password: password, token: token} = args, _context) do
+  @spec reset_password(%{password: String.t(), token: String.t()}, map()) :: {:ok, User.t()} | {:error, atom()}
+  def reset_password(%{password: _password, token: token} = args, _context) do
     user = Accounts.get_user_by_confirmation_token(token)
 
     case user do
