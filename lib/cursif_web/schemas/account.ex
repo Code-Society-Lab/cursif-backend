@@ -58,7 +58,7 @@ defmodule CursifWeb.Schemas.Account do
     field :confirm, :user do
       arg(:token, non_null(:string))
       
-      resolve(&Accounts.confirm/1)
+      resolve(&Accounts.confirm/2)
     end
 
     @desc "Resend a confirmation email"
