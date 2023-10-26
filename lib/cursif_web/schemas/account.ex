@@ -55,7 +55,7 @@ defmodule CursifWeb.Schemas.Account do
     end
 
     @desc "Confirm a user's account"
-    field :confirm, :user do
+    field :confirm, :string do
       arg(:token, non_null(:string))
       
       resolve(&Accounts.confirm/2)
@@ -77,7 +77,7 @@ defmodule CursifWeb.Schemas.Account do
     end
 
     @desc "Send a token to reset user's password"
-    field :send_reset_password_token, :user do
+    field :send_reset_password_token, :boolean do
       arg(:email, non_null(:string))
 
       resolve(&Accounts.send_reset_password_token/2)

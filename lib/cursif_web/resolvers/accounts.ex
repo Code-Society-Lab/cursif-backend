@@ -62,9 +62,9 @@ defmodule CursifWeb.Resolvers.Accounts do
         case user.confirmed_at do
           nil ->
             case User.confirm_email(user) do
-              {:ok, _user} -> {:ok, %{message: "Account confirmed successfully"}}
+              {:ok, _user} -> {:ok, "Account confirmed successfully"}
 
-              {:error, _changeset} -> {:error, %{message: "Failed to confirm account"}}
+              {:error, _changeset} -> {:error, "Failed to confirm account"}
             end
 
           _ ->  {:error, :already_confirmed}
