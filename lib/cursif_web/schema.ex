@@ -82,7 +82,8 @@ defmodule CursifWeb.Schema do
     :login,
     :register,
     :confirm,
-    :resend_confirmation_email
+    :resend_confirmation_email,
+    :reset_password,
   ]
 
   query do
