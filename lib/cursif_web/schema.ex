@@ -83,6 +83,7 @@ defmodule CursifWeb.Schema do
     :register,
     :confirm,
     :resend_confirmation_email,
+    :send_reset_password_token,
     :reset_password,
   ]
 
