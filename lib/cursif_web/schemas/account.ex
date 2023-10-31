@@ -55,21 +55,21 @@ defmodule CursifWeb.Schemas.Account do
     end
 
     @desc "Confirm a user's account"
-    field :confirm, :user do
+    field :confirm, :string do
       arg(:token, non_null(:string))
       
-      resolve(&Accounts.confirm/1)
+      resolve(&Accounts.confirm/2)
     end
 
     @desc "Resend a confirmation email"
-    field :resend_confirmation_email, :user do
+    field :resend_confirmation_email, :string do
       arg(:email, non_null(:string))
 
       resolve(&Accounts.resend_confirmation_email/2)
     end
 
     @desc "Reset user's password"
-    field :reset_password, :user do
+    field :reset_password, :string do
       arg(:password, non_null(:string))
       arg(:token, non_null(:string))
 
@@ -77,7 +77,7 @@ defmodule CursifWeb.Schemas.Account do
     end
 
     @desc "Send a token to reset user's password"
-    field :send_reset_password_token, :user do
+    field :send_reset_password_token, :string do
       arg(:email, non_null(:string))
 
       resolve(&Accounts.send_reset_password_token/2)

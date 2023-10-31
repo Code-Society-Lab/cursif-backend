@@ -53,8 +53,8 @@ defmodule CursifWeb.Resolvers.Accounts do
   @doc """
   Confirm a user's account.
   """
-  @spec confirm(String.t()) :: {:ok, User.t()} | {:error, atom()}
-  def confirm(token) do
+  @spec confirm(map(), map()) :: {:ok, User.t()} | {:error, atom()}
+  def confirm(%{token: token}, _context) do
     user = Accounts.get_user_by_confirmation_token(token)
 
     case user do
@@ -62,9 +62,9 @@ defmodule CursifWeb.Resolvers.Accounts do
         case user.confirmed_at do
           nil ->
             case User.confirm_email(user) do
-              {:ok, _user} -> {:ok, %{message: "Account confirmed successfully"}}
+              {:ok, _user} -> {:ok, "Account confirmed successfully"}
 
-              {:error, _changeset} -> {:error, %{message: "Failed to confirm account"}}
+              {:error, _changeset} -> {:error, "Failed to confirm account"}
             end
 
           _ ->  {:error, :already_confirmed}
@@ -77,41 +77,41 @@ defmodule CursifWeb.Resolvers.Accounts do
   @doc """
   Resend a confirmation email to a user.
   """
-  @spec resend_confirmation_email(%{email: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
+  @spec resend_confirmation_email(map(), map()) :: {:ok, User.t()} | {:error, atom()}
   def resend_confirmation_email(%{email: email}, _context) do
     user = Accounts.get_user_by_email!(email)
 
     case Accounts.verify_user(user) do
-      {:ok, _} -> {:ok, %{message: "Confirmation email sent!"}}
-      {:error, _} -> {:error, %{message: "Failed to send confirmation email!"}}
+      {:ok, _user} -> {:ok, "Confirmation email sent!"}
+      {:error, _} -> {:error, "Failed to send confirmation email!"}
     end
   end
 
   @doc """
   Send a password reset email to a user.
   """
-  @spec send_reset_password_token(%{email: String.t()}, map()) :: {:ok, User.t()} | {:error, list(map())}
+  @spec send_reset_password_token(map(), map()) :: {:ok, User.t()} | {:error, atom()}
   def send_reset_password_token(%{email: email}, _context) do
     user = Accounts.get_user_by_email!(email)
 
     case Accounts.send_new_password(user) do
-      {:ok, _} -> {:ok, %{message: "Reset password email sent!"}}
-      {:error, _} -> {:error, %{message: "Failed to send password email!"}}
+      {:ok, _} -> {:ok, "Reset password email sent!"}
+      {:error, _} -> {:error, "Failed to send password email!"}
     end
   end
 
   @doc """
   Reset a user's password.
   """
-  @spec reset_password(%{email: String.t(), password: String.t()}, map()) :: {:ok, User.t()} | {:error, atom()}
-  def reset_password(%{password: password, token: token} = args, _context) do
+  @spec reset_password(map(), map()) :: {:ok, User.t()} | {:error, atom()}
+  def reset_password(%{password: _password, token: token} = args, _context) do
     user = Accounts.get_user_by_confirmation_token(token)
 
     case user do
       {:ok, user} ->
         case Accounts.reset_password(user, args) do
-          {:ok, _user} -> {:ok, %{message: "Password reset successfully!"}}
-          {:error, _changeset} -> {:error, %{message: "Failed to reset password!"}}
+          {:ok, _user} -> {:ok, "Password reset successfully!"}
+          {:error, _changeset} -> {:error, "Failed to reset password!"}
         end
 
       {:error, _} -> {:error, :invalid_token}
