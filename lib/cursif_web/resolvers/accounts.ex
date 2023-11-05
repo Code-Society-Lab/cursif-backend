@@ -82,9 +82,11 @@ defmodule CursifWeb.Resolvers.Accounts do
     user = Accounts.get_user_by_email!(email)
 
     case Accounts.verify_user(user) do
-      {:ok, _user} -> {:ok, "Confirmation email sent!"}
-      {:error, _} -> {:error, "Failed to send confirmation email!"}
+      {:ok, _user} -> {:ok, "Confirmation email sent successfully"}
+      {:error, error} -> {:error, error}
     end
+  rescue Ecto.NoResultsError ->
+    {:error, "No users registered with this email"}
   end
 
   @doc """
@@ -95,9 +97,11 @@ defmodule CursifWeb.Resolvers.Accounts do
     user = Accounts.get_user_by_email!(email)
 
     case Accounts.send_new_password(user) do
-      {:ok, _} -> {:ok, "Reset password email sent!"}
-      {:error, _} -> {:error, "Failed to send password email!"}
+      {:ok, _} -> {:ok, "Password reset email sent successfully"}
+      {:error, error} -> {:error, error}
     end
+  rescue Ecto.NoResultsError ->
+    {:error, "This email is not associated with any account"}
   end
 
   @doc """
@@ -111,7 +115,7 @@ defmodule CursifWeb.Resolvers.Accounts do
       {:ok, user} ->
         case Accounts.reset_password(user, args) do
           {:ok, _user} -> {:ok, "Password reset successfully!"}
-          {:error, _changeset} -> {:error, "Failed to reset password!"}
+          {:error, changeset} -> {:error, changeset}
         end
 
       {:error, _} -> {:error, :invalid_token}
