@@ -40,6 +40,9 @@ defmodule Cursif.Utils.Error do
   defp handle(errors) when is_list(errors),
     do: Enum.map(errors, &handle/1)
 
+  defp handle(error) when is_binary(error),
+    do: error
+
   defp handle(%Ecto.Changeset{} = changeset) do
     changeset
     |> Ecto.Changeset.traverse_errors(fn {err, _opts} -> err end)
@@ -65,24 +68,26 @@ defmodule Cursif.Utils.Error do
     end
   end
 
-  # Build Error Metadata
+  # Common Error Metadata
   # --------------------
 
+  # 4XX
   defp metadata(:unknown_resource),      do: {400, "Unknown Resource"}
   defp metadata(:invalid_argument),      do: {400, "Invalid arguments passed"}
   defp metadata(:unauthenticated),       do: {401, "You need to be logged in"}
   defp metadata(:password_hash_missing), do: {401, "Reset your password to login"}
   defp metadata(:invalid_credentials),   do: {401, "Invalid credentials"}
+  defp metadata(:invalid_token),         do: {401, "Invalid confirmation token"}
   defp metadata(:unauthorized),          do: {403, "You don't have permission to do this"}
   defp metadata(:not_found),             do: {404, "Resource not found"}
   defp metadata(:user_not_found),        do: {404, "User not found"}
-  defp metadata(:unknown),               do: {500, "Something went wrong"}
-  defp metadata(:too_many_requests),     do: {429, "Too many requests"}
-  defp metadata(:not_confirmed),         do: {401, "You need to confirm your email address"}
-  defp metadata(:already_confirmed),     do: {410, "You have already confirmed your email address"}
   defp metadata(:expired),               do: {410, "Your session token has expired"}
-  defp metadata(:invalid_token),         do: {401, "Invalid confirmation token"}
+  defp metadata(:too_many_requests),     do: {429, "Too many requests"}
 
+  # 5XX
+  defp metadata(:unknown),               do: {500, "Something went wrong"}
+
+  # Needs to be at the end
   defp metadata(code) do
     if Mix.env != :test,
       do: Logger.warning("Unhandled error code: #{inspect(code)}")
