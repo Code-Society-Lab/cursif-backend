@@ -5,7 +5,7 @@ defmodule Cursif.Repo.Migrations.CreatePages do
     create table(:pages, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :title, :string
-      add :content, :string
+      add :content, :text
       add :author_id, references(:users, type: :binary_id)
 
       # Add the polymorphic association to the parent model
