@@ -12,7 +12,7 @@ defmodule CursifWeb.Schemas.PageTypes do
   object :page do
     field :id, :id
     field :title, :string
-    field :content, :string
+    field :content, :text
     field :author, :user
     field :parent_id, :id
     field :parent_type, :string
