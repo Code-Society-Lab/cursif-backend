@@ -18,7 +18,7 @@ defmodule CursifWeb.Schemas.Page do
   object :page_mutations do
     field :create_page, :page do
       arg(:title, non_null(:string))
-      arg(:content, :text)
+      arg(:content, :string)
       arg(:parent_id, non_null(:id))
       arg(:parent_type, non_null(:string))
 
@@ -28,7 +28,7 @@ defmodule CursifWeb.Schemas.Page do
     field :update_page, :page do
       arg(:id, non_null(:id))
       arg(:title, :string)
-      arg(:content, :text)
+      arg(:content, :string)
       arg(:parent_id, :id)
       arg(:parent_type, :string)
 
