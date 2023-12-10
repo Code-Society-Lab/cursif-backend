@@ -5,6 +5,7 @@ defmodule Cursif.AccountsFixtures do
   """
 
   alias Cursif.Accounts
+  alias Cursif.Accounts.User
 
   @valid_user_attributes %{
       email: "grace.hopper@example.com",
@@ -47,7 +48,9 @@ defmodule Cursif.AccountsFixtures do
   """
   def create_unique_user(_ \\ %{}) do
     user_attrs = unique_user_attributes()
+
     {:ok, user} = Accounts.create_user(user_attrs)
+    {:ok, user} = User.confirm_email(user)
     {:ok, user: user, password: user_attrs.password}
   end
 

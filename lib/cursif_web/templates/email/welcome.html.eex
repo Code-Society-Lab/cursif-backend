@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <span>Welcome to <span style="font-family: Montez; font-size: 1.2em;">Cursif</span></span>
+      </div>
+      <div class="content">
+        <div class="email-body">
+          <p>Welcome <strong><%= @username %></strong>,</p>
+          <p>
+            Thank you for joining Cursif, complete your inscription by clicking the
+            button below and start collaborating with your team today.
+          </p>
+        </div>
+        <div class="button-container">
+          <a class="button" href="<%= @base_url %>">Verify your account</a>
+          <div class="message signature">
+            <p>If you didn't sign up for Cursif, please disregard this email.</p>
+          </div>
+        </div>
+      </div>
+      <div style="margin-left: 20px" class="email-signature signature">
+        <p>
+          Best regards,<br />
+          The Cursif Team
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -2,6 +2,8 @@ defmodule Cursif.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Cursif.Repo
+
   @type t :: %__MODULE__{
     username: String.t(),
     email: String.t(),
@@ -9,6 +11,7 @@ defmodule Cursif.Accounts.User do
     first_name: String.t() | nil,
     last_name: String.t() | nil,
 
+    confirmed_at: NaiveDateTime.t(),
     inserted_at: DateTime.t(),
     updated_at: DateTime.t()
   }
@@ -22,6 +25,7 @@ defmodule Cursif.Accounts.User do
     field :last_name, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+    field :confirmed_at, :naive_datetime
 
     timestamps()
   end
@@ -71,4 +75,21 @@ defmodule Cursif.Accounts.User do
   end
 
   defp put_password_hash(changeset), do: changeset
+
+  @doc """
+  Confirms the account by setting `confirmed_at`.
+  """
+  def confirm_email(user) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    change(user, confirmed_at: now) |> Repo.update()
+  end
+
+  @doc """
+  Updates the user's password.
+  """
+  def update_password(user, attrs) do
+    user
+    |> cast(attrs, [:password])
+    |> validate_password()
+  end
 end

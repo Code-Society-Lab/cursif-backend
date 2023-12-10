@@ -24,7 +24,10 @@ defmodule CursifWeb.Resolvers.Accounts do
   @spec register(map(), map()) :: {:ok, User.t()} | {:error, list(map())}
   def register(args, _context) do
     case Accounts.create_user(args) do
-      {:ok, user} -> {:ok, user}
+      {:ok, user} ->
+        {:ok, _} = Accounts.verify_user(user)
+        {:ok, user}
+
       {:error, changeset} -> {:error, changeset}
     end
   end
@@ -42,7 +45,80 @@ defmodule CursifWeb.Resolvers.Accounts do
   def login(%{email: email, password: password}, _context) do
     case Accounts.authenticate_user(email, password) do
       {:ok, user, token} -> {:ok, %{user: user, token: token}}
-      {:error, _} -> {:error, :invalid_credentials}
+      {:error, :invalid_credentials} -> {:error, :invalid_credentials}
+      {:error, :not_confirmed} -> {:error, :not_confirmed}
+    end
+  end
+
+  @doc """
+  Confirm a user's account.
+  """
+  @spec confirm(map(), map()) :: {:ok, User.t()} | {:error, atom()}
+  def confirm(%{token: token}, _context) do
+    user = Accounts.get_user_by_confirmation_token(token)
+
+    case user do
+      {:ok, user} ->
+        case user.confirmed_at do
+          nil ->
+            case User.confirm_email(user) do
+              {:ok, _user} -> {:ok, "Account confirmed successfully"}
+
+              {:error, _changeset} -> {:error, "Failed to confirm account"}
+            end
+
+          _ ->  {:error, :already_confirmed}
+        end
+
+      {:error, _} -> {:error, :invalid_token}
+    end
+  end
+
+  @doc """
+  Resend a confirmation email to a user.
+  """
+  @spec resend_confirmation_email(map(), map()) :: {:ok, User.t()} | {:error, atom()}
+  def resend_confirmation_email(%{email: email}, _context) do
+    user = Accounts.get_user_by_email!(email)
+
+    case Accounts.verify_user(user) do
+      {:ok, _user} -> {:ok, "Confirmation email sent successfully"}
+      {:error, error} -> {:error, error}
+    end
+  rescue Ecto.NoResultsError ->
+    {:error, "No users registered with this email"}
+  end
+
+  @doc """
+  Send a password reset email to a user.
+  """
+  @spec send_reset_password_token(map(), map()) :: {:ok, User.t()} | {:error, atom()}
+  def send_reset_password_token(%{email: email}, _context) do
+    user = Accounts.get_user_by_email!(email)
+
+    case Accounts.send_new_password(user) do
+      {:ok, _} -> {:ok, "Password reset email sent successfully"}
+      {:error, error} -> {:error, error}
+    end
+  rescue Ecto.NoResultsError ->
+    {:error, "This email is not associated with any account"}
+  end
+
+  @doc """
+  Reset a user's password.
+  """
+  @spec reset_password(map(), map()) :: {:ok, User.t()} | {:error, atom()}
+  def reset_password(%{password: _password, token: token} = args, _context) do
+    user = Accounts.get_user_by_confirmation_token(token)
+
+    case user do
+      {:ok, user} ->
+        case Accounts.reset_password(user, args) do
+          {:ok, _user} -> {:ok, "Password reset successfully!"}
+          {:error, changeset} -> {:error, changeset}
+        end
+
+      {:error, _} -> {:error, :invalid_token}
     end
   end
 end
