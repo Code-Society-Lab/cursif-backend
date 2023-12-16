@@ -41,7 +41,7 @@ defmodule Cursif.Notebooks.Notebook do
     notebook
     |> cast(attrs, [:title, :description, :owner_id, :owner_type])
     |> cast_assoc(:pages)
-    |> validate_required([:title, :description, :owner_id, :owner_type])
+    |> validate_required([:title, :owner_id, :owner_type])
     |> validate_association()
   end
 

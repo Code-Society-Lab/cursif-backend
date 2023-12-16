@@ -36,7 +36,7 @@ defmodule CursifWeb.Schemas.Notebook do
       @desc "Create a notebook"
       field :create_notebook, :notebook do
         arg(:title, non_null(:string))
-        arg(:description, non_null(:string))
+        arg(:description, :string)
         arg(:owner_id, non_null(:id))
         arg(:owner_type, non_null(:string))
   
