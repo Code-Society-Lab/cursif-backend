@@ -8,11 +8,15 @@ defmodule CursifWeb.Schemas.NotebookTypes do
     field :id, :id
     field :title, :string
     field :description, :string
-    field :owner_id, :id
-    field :owner_type, :string
+    field :inserted_at, :naive_datetime
+    field :updated_at, :naive_datetime
+
     field :pages, list_of(:page)
     field :collaborators, list_of(:partial_user)
     field :macros, list_of(:macro)
+
+    field :owner_id, :id
+    field :owner_type, :string
 
     field :owner, :owner do
       resolve(&Notebooks.get_owner/3)
