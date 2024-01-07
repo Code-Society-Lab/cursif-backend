@@ -38,7 +38,7 @@ defmodule CursifWeb.Schemas.Notebook do
         arg(:title, non_null(:string))
         arg(:description, :string)
         arg(:owner_id, non_null(:id))
-        arg(:owner_type, non_null(:string))
+        arg(:owner_type, :string, default_value: "User")
   
         resolve(&Notebooks.create_notebook/2)
       end

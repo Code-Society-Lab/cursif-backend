@@ -15,9 +15,6 @@ defmodule CursifWeb.Schemas.NotebookTypes do
     field :collaborators, list_of(:partial_user)
     field :macros, list_of(:macro)
 
-    field :owner_id, :id
-    field :owner_type, :string
-
     field :owner, :owner do
       resolve(&Notebooks.get_owner/3)
     end
