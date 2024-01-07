@@ -61,6 +61,8 @@ defmodule CursifWeb.Schema do
   use Absinthe.Schema
   alias CursifWeb.Middlewares.{SafeResolution, Authentication}
   
+  import_types(Absinthe.Type.Custom)
+
   # Add types here
   import_types(CursifWeb.Schemas.{
     AccountTypes, 

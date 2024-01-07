@@ -13,6 +13,7 @@ defmodule Cursif.Notebooks.Notebook do
     description: String.t(),
     owner_id: binary(),
     owner_type: String.t(),
+
     pages: [Page.t()],
     collaborators: [User.t()],
     macros: [Macro.t()],
@@ -24,8 +25,8 @@ defmodule Cursif.Notebooks.Notebook do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "notebooks" do
-    field :description, :string
     field :title, :string
+    field :description, :string
     field :owner_id, :binary_id
     field :owner_type, :string
 
@@ -42,7 +43,7 @@ defmodule Cursif.Notebooks.Notebook do
     notebook
     |> cast(attrs, [:title, :description, :owner_id, :owner_type])
     |> cast_assoc(:pages)
-    |> validate_required([:title, :description, :owner_id, :owner_type])
+    |> validate_required([:title, :owner_id, :owner_type])
     |> validate_association()
   end
 
