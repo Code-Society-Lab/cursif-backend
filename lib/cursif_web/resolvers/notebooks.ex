@@ -8,8 +8,8 @@ defmodule CursifWeb.Resolvers.Notebooks do
   end
 
   @spec get_notebook_by_id(map(), map()) :: {:ok, Notebook.t()}
-  def get_notebook_by_id(%{id: id}, %{context: %{current_user: current_user}}) do
-    {:ok, Notebooks.get_notebook!(id, user: current_user)}
+  def get_notebook_by_id(%{id: id}, _context) do
+    {:ok, Notebooks.get_notebook!(id)}
   end
 
   @spec create_notebook(map(), map()) :: {:ok, Notebook.t()}
@@ -21,8 +21,8 @@ defmodule CursifWeb.Resolvers.Notebooks do
   end
 
   @spec update_notebook(map(), map()) :: {:ok, Notebook.t()} | {:error, atom()}
-  def update_notebook(%{id: id} = args, %{context: %{current_user: current_user}}) do
-    notebook = Notebooks.get_notebook!(id, user: current_user)
+  def update_notebook(%{id: id} = args, _context) do
+    notebook = Notebooks.get_notebook!(id)
 
     case Notebooks.update_notebook(notebook, args) do
       {:ok, notebook} -> {:ok, notebook}
@@ -31,8 +31,8 @@ defmodule CursifWeb.Resolvers.Notebooks do
   end
 
   @spec delete_notebook(map(), map()) :: {:ok, Notebook.t()} | {:error, atom()}
-  def delete_notebook(%{id: id}, %{context: %{current_user: current_user}}) do
-    notebook = Notebooks.get_notebook!(id, user: current_user)
+  def delete_notebook(%{id: id}, _context) do
+    notebook = Notebooks.get_notebook!(id)
 
     case Notebooks.delete_notebook(notebook) do
       {:ok, notebook} -> {:ok, notebook}
@@ -41,7 +41,6 @@ defmodule CursifWeb.Resolvers.Notebooks do
   end
 
   @spec get_owner(map(), map(), map()) :: {:ok, User.t()}
-  def get_owner(notebook, _args, _context) do
-    {:ok, Notebooks.owner(notebook)}
-  end
+  def get_owner(notebook, _args, _context),
+    do: {:ok, Notebook.owner(notebook)}
 end

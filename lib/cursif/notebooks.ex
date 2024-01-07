@@ -2,9 +2,10 @@ defmodule Cursif.Notebooks do
   @moduledoc """
   The Notebooks context.
   """
-  import Ecto.Query, warn: false
 
+  import Ecto.Query, warn: false
   alias Cursif.Repo
+
   alias Cursif.Notebooks.{Notebook, Collaborator, Policy}
   alias Cursif.Accounts.User
 
@@ -48,26 +49,10 @@ defmodule Cursif.Notebooks do
 
   """
   @spec get_notebook!(binary()) :: Notebook.t()
-  def get_notebook!(id, opts \\ [])
-
-  def get_notebook!(id, [owner: owner]),
-    do: Repo.get_by!(Notebook, [id: id, owner_id: owner.id])
-  
-  def get_notebook!(id, [user: user] = opts) do
-    query = from n in Notebook,
-             left_join: c in assoc(n, :collaborators),
-             where: n.id == ^id and (n.owner_id == ^user.id or c.id == ^user.id),
-             select: n,
-             distinct: true
-
-    get_notebook!(id, Keyword.put(opts, :query, query))
-  end
-
-  def get_notebook!(id, opts) do
-    query = Keyword.get(opts, :query, Notebook)
-    preloads = Keyword.get(opts, :preloads, [:macros, :collaborators, pages: [:author]])
-
-    Repo.get!(query, id) |> Repo.preload(preloads)
+  def get_notebook!(id) do
+    Notebook
+    |> Repo.get!(id) 
+    |> Repo.preload([:macros, :collaborators, pages: [:author]])
   end
 
   @doc """
@@ -140,7 +125,7 @@ defmodule Cursif.Notebooks do
   end
 
   @doc """
-  Creates a collaborator.
+  Adds a collaborator to the notebook.
 
   """
   @spec add_collaborator(map()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
@@ -151,7 +136,7 @@ defmodule Cursif.Notebooks do
   end
 
   @doc """
-  Deletes a collaborator.
+  Deletes a given collaborator.
 
   """
   def delete_collaborator_by_user_id(notebook_id, user_id) do

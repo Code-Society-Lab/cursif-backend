@@ -2,6 +2,7 @@ defmodule Cursif.Notebooks.Notebook do
   use Ecto.Schema
   import Ecto.Changeset
 
+  import Ecto.Query, warn: false
   alias Cursif.Repo
 
   alias Cursif.Accounts
@@ -72,6 +73,8 @@ defmodule Cursif.Notebooks.Notebook do
     do: owner_id == user_id
 
   @spec collaborator?(Notebook.t(), User.t()) :: boolean()
-  def collaborator?(%{owner_id: owner_id}, %{id: user_id}),
-    do: Repo.exists?(Collaborator, owner_id: owner_id, user_id: user_id)
+  def collaborator?(%{id: notebook_id}, %{id: user_id}) do
+    Repo.exists?(from c in Collaborator,
+      where: c.notebook_id == ^notebook_id and c.user_id == ^user_id)
+  end
 end
