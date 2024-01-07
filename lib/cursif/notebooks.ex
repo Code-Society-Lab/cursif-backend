@@ -55,8 +55,10 @@ defmodule Cursif.Notebooks do
   
   def get_notebook!(id, [user: user] = opts) do
     query = from n in Notebook,
-                 left_join: c in assoc(n, :collaborators),
-                 where: n.id == ^id and (n.owner_id == ^user.id or c.id == ^user.id)
+             left_join: c in assoc(n, :collaborators),
+             where: n.id == ^id and (n.owner_id == ^user.id or c.id == ^user.id),
+             select: n,
+             distinct: true
 
     get_notebook!(id, Keyword.put(opts, :query, query))
   end
