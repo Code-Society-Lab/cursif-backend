@@ -57,13 +57,12 @@ defmodule CursifWeb.Schema do
   Middleware handling, particularly authentication, is an integral part of the schema. 
   Authentication middleware is applied selectively based on the nature of the field being accessed. 
   Fields listed in the @skip_authentication attribute are exempt from authentication checks.
-
-  The SafeResolution and ErrorHandler middleware are applied by default to enhance safety and error handling. 
-  The default_middleware/1 function ensures consistent application of this middleware.
   """
   use Absinthe.Schema
-  alias CursifWeb.Middlewares.{ErrorHandler, SafeResolution, Authentication}
+  alias CursifWeb.Middlewares.{SafeResolution, Authentication}
   
+  import_types(Absinthe.Type.Custom)
+
   # Add types here
   import_types(CursifWeb.Schemas.{
     AccountTypes, 

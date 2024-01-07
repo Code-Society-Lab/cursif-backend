@@ -6,8 +6,8 @@ defmodule CursifWeb.Emails.UserEmail do
   import Swoosh.Email
   alias Cursif.Mailer
 
-  @client_url Application.get_env(:cursif, :client_url)
-  @client_email Application.get_env(:cursif, :email_from)
+  @client_url Application.compile_env(:cursif, :client_url)
+  @client_email Application.compile_env(:cursif, :email_from)
 
   defp send_email(user, subject, base_url, context) do
     email =
