@@ -8,6 +8,7 @@ defmodule Cursif.Notebooks do
 
   alias Cursif.Notebooks.{Notebook, Collaborator, Policy}
   alias Cursif.Accounts.User
+  alias Cursif.Accounts
 
   defdelegate authorize(action, user, params), to: Policy
 
@@ -111,18 +112,31 @@ defmodule Cursif.Notebooks do
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking notebook changes.
+  Fetch the owner of the notebook
+
+  ## Example
+
+    iex> get_owner(notebook)
+    %User{}
+  """
+  @spec get_owner(Notebook.t()) :: User.t()
+  def get_owner(%{owner_id: owner_id}),
+    do: Accounts.get_user!(owner_id)
+
+  @doc """
+  Checks if the user is the owner of the notebook
 
   ## Examples
 
-      iex> change_notebook(notebook)
-      %Ecto.Changeset{data: %Notebook{}}
+    iex> owner?(notebook, user)
+    true
 
+    iex> owner?(notebook, user)
+    false  
   """
-  @spec change_notebook(Notebook.t(), map()) :: %Ecto.Changeset{}
-  def change_notebook(%Notebook{} = notebook, attrs \\ %{}) do
-    Notebook.changeset(notebook, attrs)
-  end
+  @spec owner?(Notebook.t(), User.t()) :: boolean()
+  def owner?(%{owner_id: owner_id}, %{id: user_id}),
+    do: owner_id == user_id
 
   @doc """
   Adds a collaborator to the notebook.
@@ -137,10 +151,14 @@ defmodule Cursif.Notebooks do
 
   @doc """
   Deletes a given collaborator.
-
   """
-  def delete_collaborator_by_user_id(notebook_id, user_id) do
-    Repo.delete_all(from n in Collaborator, 
-      where: n.user_id == ^user_id and n.notebook_id == ^notebook_id)
+  @spec delete_collaborator(Collaborator.t()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
+  def delete_collaborator(collaborator),
+    do: Repo.delete(collaborator)
+
+  @spec collaborator?(Notebook.t(), User.t()) :: boolean()
+  def collaborator?(%{id: notebook_id}, %{id: user_id}) do
+    Repo.exists?(from c in Collaborator,
+      where: c.notebook_id == ^notebook_id and c.user_id == ^user_id)
   end
 end

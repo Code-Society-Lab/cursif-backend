@@ -2,10 +2,6 @@ defmodule Cursif.Notebooks.Notebook do
   use Ecto.Schema
   import Ecto.Changeset
 
-  import Ecto.Query, warn: false
-  alias Cursif.Repo
-
-  alias Cursif.Accounts
   alias Cursif.Accounts.User
   alias Cursif.Notebooks.{Page, Collaborator, Macro}
 
@@ -62,19 +58,4 @@ defmodule Cursif.Notebooks.Notebook do
 
   defp validate_association(changeset),
     do: changeset
-
-
-  @spec owner(Notebook.t()) :: User.t()
-  def owner(%{owner_id: owner_id}),
-    do: Accounts.get_user!(owner_id)
-
-  @spec owner?(Notebook.t(), User.t()) :: boolean()
-  def owner?(%{owner_id: owner_id}, %{id: user_id}),
-    do: owner_id == user_id
-
-  @spec collaborator?(Notebook.t(), User.t()) :: boolean()
-  def collaborator?(%{id: notebook_id}, %{id: user_id}) do
-    Repo.exists?(from c in Collaborator,
-      where: c.notebook_id == ^notebook_id and c.user_id == ^user_id)
-  end
 end

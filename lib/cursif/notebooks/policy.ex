@@ -1,13 +1,13 @@
 defmodule Cursif.Notebooks.Policy do
   @behaviour Bodyguard.Policy
 
-  alias Cursif.Notebooks.Notebook
+  alias Cursif.Notebooks
 
   def authorize(:owner, user, notebook),
-    do: Notebook.owner?(notebook, user)
+    do: Notebooks.owner?(notebook, user)
 
   def authorize(:collaborator, user, notebook),
-    do: Notebook.owner?(notebook, user) || Notebook.collaborator?(notebook, user)
+    do: Notebooks.owner?(notebook, user) || Notebooks.collaborator?(notebook, user)
 
   def authorize(_, _, _),
     do: false
