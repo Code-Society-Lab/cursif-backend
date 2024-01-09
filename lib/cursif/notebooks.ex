@@ -118,6 +118,7 @@ defmodule Cursif.Notebooks do
 
     iex> get_owner(notebook)
     %User{}
+
   """
   @spec get_owner(Notebook.t()) :: User.t()
   def get_owner(%{owner_id: owner_id}),
@@ -132,7 +133,8 @@ defmodule Cursif.Notebooks do
     true
 
     iex> owner?(notebook, user)
-    false  
+    false
+
   """
   @spec owner?(Notebook.t(), User.t()) :: boolean()
   def owner?(%{owner_id: owner_id}, %{id: user_id}),
@@ -140,6 +142,14 @@ defmodule Cursif.Notebooks do
 
   @doc """
   Adds a collaborator to the notebook.
+
+  ## Examples
+
+      iex> add_collaborator(%{field: value})
+      {:ok, %Collaborator{}}
+
+      iex> add_collaborator(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
 
   """
   @spec add_collaborator(map()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
@@ -151,6 +161,15 @@ defmodule Cursif.Notebooks do
 
   @doc """
   Deletes a given collaborator.
+
+  ## Examples
+
+      iex> delete_collaborator(collaborator)
+      {:ok, %Collaborator{}}
+
+      iex> delete_collaborator(collaborator)
+      {:error, %Ecto.Changeset{}}
+
   """
   @spec delete_collaborator(Collaborator.t()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
   def delete_collaborator(collaborator),

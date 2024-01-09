@@ -18,7 +18,7 @@ defmodule CursifWeb.Schemas.Notebook do
       field :notebook, :notebook do
         arg(:id, non_null(:id))
 
-        middleware Speakeasy.LoadResource, &Cursif.Macros.get_notebook!/1
+        middleware Speakeasy.LoadResource, &Cursif.Notebooks.get_notebook!/1
         middleware Speakeasy.Authz, {Cursif.Notebooks, :collaborator}
 
         resolve(&Notebooks.get_notebook_by_id/2)
