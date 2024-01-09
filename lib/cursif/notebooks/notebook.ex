@@ -2,6 +2,8 @@ defmodule Cursif.Notebooks.Notebook do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Cursif.Repo
+
   alias Cursif.Accounts.User
   alias Cursif.Notebooks.{Page, Collaborator, Macro}
 
@@ -45,10 +47,11 @@ defmodule Cursif.Notebooks.Notebook do
   end
 
   defp validate_association(%{changes: %{owner_type: "user", owner_id: owner_id}} = changeset) do
-    Repo.get!(User, owner_id)
-    changeset
-  rescue
-    Ecto.NoResultsError -> add_error(changeset, :owner_id, "is not a valid user")
+    if Repo.exists?(User, owner_id) do
+      changeset
+    else
+      add_error(changeset, :owner_id, "is not a valid user")
+    end
   end
 
   defp validate_association(%{changes: %{owner_type: owner_type}} = changeset)
