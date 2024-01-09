@@ -6,7 +6,8 @@ defmodule Cursif.Pages do
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
-  alias Cursif.Notebooks.Page
+  alias Cursif.Notebooks
+  alias Cursif.Notebooks.{Notebook, Page}
 
   @doc """
   Gets a single page.
@@ -72,5 +73,73 @@ defmodule Cursif.Pages do
   @spec delete_page(Page.t()) :: {:ok, Page.t()} | {:error, %Ecto.Changeset{}}
   def delete_page(%Page{} = page) do
     Repo.delete(page)
+  end
+
+  @doc """
+  Gets a page's parent.
+
+  ## Examples
+
+      iex> get_parent!(%Page{})
+      %Page{}
+
+      iex> get_parent!(%Page{})
+      ** (RuntimeError)
+
+  """
+  @spec get_parent!(Page.t()) :: Page.t() | Notebook.t() | {:error, String.t()}
+  def get_parent!(%Page{} = page) do
+    case page.parent_type do
+      "notebook"
+        -> Notebooks.get_notebook!(page.parent_id)
+      "page"
+        -> get_page!(page.parent_id)
+      _
+        -> raise "Invalid parent type"
+    end
+  end
+
+  @doc """
+  Checks if the user is the owner of the notebook
+
+  ## Examples
+
+    iex> owner?(notebook, user)
+    true
+
+    iex> owner?(notebook, user)
+    false
+
+  """
+  @spec owner?(Page.t(), User.t()) :: boolean()
+  def owner?(page, user) do
+    parent = get_parent!(page)
+
+    case parent do
+      %Notebook{} -> Notebooks.owner?(parent, user)
+      %Page{} -> owner?(parent, user)
+    end
+  end
+
+  @doc """
+  Checks if the user is a collaborator of the notebook
+
+  ## Examples
+
+    iex> collaborator?(notebook, user)
+    true
+
+    iex> collaborator?(notebook, user)
+    false
+
+  """
+  @spec collaborator?(Page.t(), User.t()) :: boolean()
+  def collaborator?(page, user) do
+    parent = get_parent!(page)
+
+    case parent do
+      %Notebook{} -> Notebooks.collaborator?(parent, user)
+      %Page{} -> collaborator?(parent, user)
+    end
   end
 end

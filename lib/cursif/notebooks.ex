@@ -116,12 +116,15 @@ defmodule Cursif.Notebooks do
 
   ## Example
 
-    iex> get_owner(notebook)
+    iex> get_owner!(notebook)
     %User{}
 
+    iex> get_owner!(notebook)
+    {:error, "No owner found"}
+
   """
-  @spec get_owner(Notebook.t()) :: User.t()
-  def get_owner(%{owner_id: owner_id}),
+  @spec get_owner!(Notebook.t()) :: User.t() | {:error, String.t()}
+  def get_owner!(%{owner_id: owner_id}),
     do: Accounts.get_user!(owner_id)
 
   @doc """
@@ -175,6 +178,18 @@ defmodule Cursif.Notebooks do
   def delete_collaborator(collaborator),
     do: Repo.delete(collaborator)
 
+  @doc """
+  Checks if the user is a collaborator of the notebook
+
+  ## Examples
+
+    iex> collaborator?(notebook, user)
+    true
+
+    iex> collaborator?(notebook, user)
+    false
+
+  """
   @spec collaborator?(Notebook.t(), User.t()) :: boolean()
   def collaborator?(%{id: notebook_id}, %{id: user_id}) do
     Repo.exists?(from c in Collaborator,
