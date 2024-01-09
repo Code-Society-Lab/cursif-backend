@@ -27,7 +27,7 @@ defmodule Cursif.Notebooks.Notebook do
     field :title, :string
     field :description, :string
     field :owner_id, :binary_id
-    field :owner_type, :string
+    field :owner_type, :string, default: "user"
 
     has_many :macros, Macro
     has_many :pages, Page, foreign_key: :parent_id
@@ -52,11 +52,6 @@ defmodule Cursif.Notebooks.Notebook do
     else
       add_error(changeset, :owner_id, "is not a valid user")
     end
-  end
-
-  defp validate_association(%{changes: %{owner_type: owner_type}} = changeset)
-       when owner_type not in ["user", "organization"] do
-    add_error(changeset, :owner_type, "is not a valid owner type")
   end
 
   defp validate_association(changeset),

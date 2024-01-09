@@ -4,9 +4,8 @@ defmodule Cursif.Macros do
   """
 
   import Ecto.Query, warn: false
-  alias Cursif.Repo
 
-  alias Cursif.Notebooks
+  alias Cursif.Repo
   alias Cursif.Notebooks.{Notebook, Macro}
 
   @doc """
@@ -100,7 +99,7 @@ defmodule Cursif.Macros do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec get_notebook(Macro.t()) :: {:ok, Notebook.t()} | {:error, %Ecto.Changeset{}}
+  @spec get_notebook!(Macro.t()) :: {:ok, Notebook.t()} | {:error, %Ecto.Changeset{}}
   def get_notebook!(%{id: macro_id}) do
     query = from n in Notebook,
       left_join: m in Macro, on: n.id == m.notebook_id,
