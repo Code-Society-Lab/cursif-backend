@@ -2,7 +2,7 @@ FROM elixir:1.14.5
 
 # Install debian packages
 RUN apt update \
-    && apt install build-essential inotify-tools postgresql-client git make gcc \
+    && apt install -y build-essential inotify-tools postgresql-client git make gcc \
     && apt clean
 
 ADD . /app
