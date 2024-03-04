@@ -54,7 +54,7 @@ defmodule Cursif.Notebooks.Notebook do
   end
 
   defp validate_association(%{changes: %{owner_type: owner_type}} = changeset)
-       when owner_type not in ["user", "organization"] do
+       when owner_type not in ["User", "organization"] do
     add_error(changeset, :owner_type, "is not a valid owner type")
   end
 
