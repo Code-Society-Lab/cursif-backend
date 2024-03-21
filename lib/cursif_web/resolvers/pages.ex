@@ -28,6 +28,16 @@ defmodule CursifWeb.Resolvers.Pages do
     end
   end
 
+  @spec delete_page(map(), map()) :: {:ok, Page.t()} | {:error, atom()}
+  def delete_page(%{id: id}, %{context: %{current_user: current_user}}) do
+    page = Pages.get_page!(id)
+
+    case Pages.delete_page(page) do
+      {:ok, page} -> {:ok, page}
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
+
   # Perhaps it should be defined in the context rather than here
   @spec get_parent(map(), map()) :: {:ok, Page.t()} | {:error, atom()}
   def get_parent(%{parent_id: parent_id, parent_type: "page"}, _context) do

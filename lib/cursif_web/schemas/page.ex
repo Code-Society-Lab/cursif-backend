@@ -19,6 +19,8 @@ defmodule CursifWeb.Schemas.Page do
 
   @desc "Collection of mutations"
   object :page_mutations do
+
+    @desc "Create a page"
     field :create_page, :page do
       arg(:title, non_null(:string))
       arg(:content, :string)
@@ -33,6 +35,7 @@ defmodule CursifWeb.Schemas.Page do
       resolve(&Pages.create_page/2)
     end
 
+    @desc "Update a page"
     field :update_page, :page do
       arg(:id, non_null(:id))
       arg(:title, :string)
@@ -44,6 +47,13 @@ defmodule CursifWeb.Schemas.Page do
       middleware Speakeasy.Authz, {Cursif.Pages, :collaborator}
 
       resolve(&Pages.update_page/2)
+    end
+
+    @desc "Delete a page"
+    field :delete_page, :page do
+      arg(:id, non_null(:id))
+
+      resolve(&Pages.delete_page/2)
     end
   end
 end
