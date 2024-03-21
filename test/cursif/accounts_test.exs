@@ -6,6 +6,8 @@ defmodule Cursif.AccountsTest do
   alias Cursif.Accounts
   alias Cursif.Accounts.User
 
+  setup [:create_unique_user]
+
   describe "accounts" do
     @invalid_attrs %{
       email: "helloError",
