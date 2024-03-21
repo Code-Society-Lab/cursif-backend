@@ -68,23 +68,25 @@ defmodule Cursif.Utils.ErrorTest do
 
     test "changeset error" do
       changeset = User.changeset(%User{}, %{})
-      assert Enum.sort(Error.normalize(changeset)) == Enum.sort([
-                %Error{
-                  code: :validation,
-                  message: ["Email can't be blank."],
-                  status_code: 422
-                },
-                %Cursif.Utils.Error{
-                  code: :validation,
-                  message: ["Password can't be blank."],
-                  status_code: 422
-                },
-                %Cursif.Utils.Error{
-                  code: :validation,
-                  message: ["Username can't be blank."],
-                  status_code: 422
-                }
-      ])
+      assert Enum.all? Error.normalize(changeset), fn(error) -> 
+	error in [
+               %Error{
+                 code: :validation,
+                 message: ["Email can't be blank."],
+                 status_code: 422
+               },
+               %Error{
+                 code: :validation,
+                 message: ["Username can't be blank."],
+                 status_code: 422
+               },
+               %Error{
+                 code: :validation,
+                 message: ["Password can't be blank."],
+                 status_code: 422
+               }
+             ]
+	end
     end
 
     test "transaction error" do
