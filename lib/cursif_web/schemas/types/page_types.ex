@@ -13,6 +13,10 @@ defmodule CursifWeb.Schemas.PageTypes do
     field :id, :id
     field :title, :string
     field :content, :string
+    
+    field :inserted_at, :naive_datetime
+    field :updated_at, :naive_datetime
+
     field :author, :user
     field :parent_id, :id
     field :parent_type, :string
