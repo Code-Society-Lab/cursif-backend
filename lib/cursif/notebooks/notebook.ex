@@ -27,11 +27,11 @@ defmodule Cursif.Notebooks.Notebook do
     field :title, :string
     field :description, :string
     field :owner_id, :binary_id
-    field :owner_type, :string
+    field :owner_type, :string, default: "user"
 
+    has_many :macros, Macro
     has_many :pages, Page, foreign_key: :parent_id
     many_to_many :collaborators, User, join_through: Collaborator
-    has_many :macros, Macro
 
     timestamps()
   end
@@ -47,15 +47,11 @@ defmodule Cursif.Notebooks.Notebook do
   end
 
   defp validate_association(%{changes: %{owner_type: "user", owner_id: owner_id}} = changeset) do
-    Repo.get!(User, owner_id)
-    changeset
-  rescue
-    Ecto.NoResultsError -> add_error(changeset, :owner_id, "is not a valid user")
-  end
-
-  defp validate_association(%{changes: %{owner_type: owner_type}} = changeset)
-       when owner_type not in ["User", "organization"] do
-    add_error(changeset, :owner_type, "is not a valid owner type")
+    if Repo.exists?(User, owner_id) do
+      changeset
+    else
+      add_error(changeset, :owner_id, "is not a valid user")
+    end
   end
 
   defp validate_association(changeset),

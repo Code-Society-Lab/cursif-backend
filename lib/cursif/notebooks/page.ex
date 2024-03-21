@@ -2,9 +2,10 @@ defmodule Cursif.Notebooks.Page do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Cursif.Repo
+
   alias Cursif.Accounts.User
   alias Cursif.Notebooks.Notebook
-  alias Cursif.Repo
 
   @type t :: %__MODULE__{
     title: String.t(),
@@ -49,10 +50,11 @@ defmodule Cursif.Notebooks.Page do
 
   # TODO: See if there's a better way to handle that. Maybe a custom validator?
   defp validate_association(%{changes: %{parent_type: "notebook", parent_id: parent_id}} = changeset) do
-    Repo.get!(Notebook, parent_id)
-    changeset
-  rescue
-    Ecto.NoResultsError -> add_error(changeset, :parent_id, "is not a valid notebook")
+    if Repo.exists?(Notebook, parent_id) do
+      changeset
+    else
+      add_error(changeset, :parent_id, "is not a valid notebook")
+    end
   end
 
   defp validate_association(%{changes: %{parent_type: "page", parent_id: parent_id}} = changeset) do
