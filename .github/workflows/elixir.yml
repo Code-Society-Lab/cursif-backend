@@ -24,8 +24,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-elixir@v1.5.0
+      - uses: actions/checkout@v2
+      - uses: actions/setup-elixir@v1
         with:
           elixir-version: '1.14.5'
           otp-version: '25'
