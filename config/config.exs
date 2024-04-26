@@ -65,11 +65,11 @@ config :phoenix, :json_library, Jason
 #
 # In test and development environment, it is permissible to not generate any secret key for authentification, in that
 # case one will be temporarily generate one at startup, but in production you will need to generate one via
-# `mix guardian.gen.secret` and that you set it in your environment variables under `CURSIF_SECRET_KEY`.
+# `mix guardian.gen.secret` and that you set it in your environment variables under `GUARDIAN_SECRET_KEY`.
 config :cursif, Cursif.Guardian,
   issuer: "cursif",
-  ttl: Application.get_env(:cursif, :ttl, {52, :weeks}),
-  secret_key: Application.get_env(:cursif, :secret_key)
+  ttl: { 3, :days },
+  verify_issuer: true
 
 config :cursif, env: :dev
 # Import environment specific config. This must remain at the bottom
