@@ -27,6 +27,8 @@ defmodule Cursif.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
+    many_to_many :favorites, Notebook, join_through: Favorite
+
     timestamps()
   end
 
@@ -45,7 +47,7 @@ defmodule Cursif.Accounts.User do
   @doc false
   @spec update_changeset(User.t(), %{}) :: User.t()
   def update_changeset(user, attrs) do
-    user 
+    user
     |> cast(attrs, [:first_name, :last_name, :username, :email])
     |> unique_constraint(:email)
     |> unique_constraint(:username)
