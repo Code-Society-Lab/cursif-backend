@@ -108,7 +108,6 @@ defmodule CursifWeb.Schemas.Notebook do
       @desc "Add to favorites"
       field :add_favorite, :favorite do
         arg(:notebook_id, non_null(:id))
-        arg(:user_id, non_null(:id))
 
         resolve(&Favorites.add_favorite/2)
       end
@@ -116,7 +115,6 @@ defmodule CursifWeb.Schemas.Notebook do
       @desc "Remove from favorites"
       field :remove_favorite, :favorite do
         arg(:notebook_id, non_null(:id))
-        arg(:user_id, non_null(:id))
 
         resolve(&Favorites.remove_favorite/2)
       end
