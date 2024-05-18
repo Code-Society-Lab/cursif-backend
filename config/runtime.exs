@@ -22,7 +22,7 @@ end
 
 if config_env() == :prod do
   database_url =
-    System.get_env("POSTGRES_URL") ||
+    System.get_env("DATABASE_URL") ||
       raise """
       environment variable POSTGRES_URL is missing.
       For example: ecto://USER:PASS@HOST/DATABASE
@@ -42,9 +42,9 @@ if config_env() == :prod do
   # to check this value into version control, so we use an environment
   # variable instead.
   secret_key_base =
-    System.get_env("CURSIF_SECRET_KEY") ||
+    System.get_env("SECRET_KEY_BASE") ||
       raise """
-      environment variable CURSIF_SECRET_KEY is missing.
+      environment variable SECRET_KEY_BASE is missing.
       You can generate one by calling: mix phx.gen.secret
       """
 
@@ -70,13 +70,8 @@ if config_env() == :prod do
   # are not using SMTP. Here is an example of the configuration:
   
   config :cursif, Cursif.Mailer,
-    adapter: Swoosh.Adapters.SMTP,
-    relay: System.fetch_env!("SMTP_RELAY"),
-    username: System.fetch_env!("SMTP_USERNAME"),
-    password: System.fetch_env!("SMTP_PASSWORD"),
-    ssl: System.fetch_env!("SMTP_SSL", false),
-    tls: :always,
-    port: System.fetch_env!("SMTP_PORT")
+    adapter: Swoosh.Adapters.Sendgrid,
+    api_key: System.fetch_env!("SENDGRID_API_KEY")
   
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:
@@ -84,8 +79,9 @@ if config_env() == :prod do
   config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
-
+  config :cursif, env: :dev
+  
   config :cursif,
-    client_url: System.fetch_env!("CLIENT_URL"),
-    email_from: System.fetch_env!("EMAIL_FROM")
+    client_url:   System.fetch_env!("CLIENT_URL"),
+    email_sender: System.fetch_env!("EMAIL_SENDER")
 end

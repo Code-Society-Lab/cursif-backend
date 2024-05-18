@@ -7,10 +7,6 @@ defmodule Cursif.Application do
 
   @impl true
   def start(_type, _args) do
-    unless Mix.env == :prod do
-      Mix.Task.run("loadconfig")
-    end
-
     children = [
       # Start the Ecto repository
       Cursif.Repo,

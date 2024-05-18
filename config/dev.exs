@@ -64,7 +64,8 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 # See Guardian setup in `config/config.exs`
-config :cursif, :secret_key, "dev_secret_key"
+config :cursif, Cursif.Guardian,
+  secret_key: "2u+cpWaMaZnD06KWaZ6+Yy8GmysPCMwTujDmpIy66/34ABuGfbEjEziEUFoW+Hak"
 
 # Configure the mailer
 config :cursif, Cursif.Mailer,

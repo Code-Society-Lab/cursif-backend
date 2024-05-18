@@ -32,7 +32,8 @@ config :logger, level: :warning
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :cursif, :secret_key, "test_secret_key"
+config :cursif, Cursif.Guardian,
+  secret_key: "test_secret_key"
 
 # Get the client URL from the environment or use a default
 config :cursif, 

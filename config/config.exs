@@ -11,7 +11,7 @@ config :cursif,
   ecto_repos: [Cursif.Repo],
   generators: [binary_id: true],
   client_url: System.get_env("CLIENT_URL", "http://localhost:3000"),
-  email_from: System.get_env("EMAIL_FROM", "cursif@example.com")
+  email_sender: System.get_env("EMAIL_SENDER", "cursif@example.com")
 
 # Configures the endpoint
 config :cursif, CursifWeb.Endpoint,
@@ -65,17 +65,18 @@ config :phoenix, :json_library, Jason
 #
 # In test and development environment, it is permissible to not generate any secret key for authentification, in that
 # case one will be temporarily generate one at startup, but in production you will need to generate one via
-# `mix guardian.gen.secret` and that you set it in your environment variables under `CURSIF_SECRET_KEY`.
+# `mix guardian.gen.secret` and that you set it in your environment variables under `GUARDIAN_SECRET_KEY`.
 config :cursif, Cursif.Guardian,
   issuer: "cursif",
-  ttl: Application.get_env(:cursif, :ttl, {52, :weeks}),
-  secret_key: Application.get_env(:cursif, :secret_key)
+  ttl: { 3, :days },
+  verify_issuer: true
 
 config :speakeasy,
   user_key: :current_user,
   authn_error_message: :unauthenticated
 
-config :cursif, env: Mix.env()
+config :cursif, env: :dev
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
