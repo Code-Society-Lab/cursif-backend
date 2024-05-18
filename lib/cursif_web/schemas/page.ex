@@ -10,7 +10,7 @@ defmodule CursifWeb.Schemas.Page do
     field :page, :page do
       arg(:id, non_null(:id))
 
-      middleware Speakeasy.LoadResource, &Cursif.Pages.get_parent!/1
+      middleware Speakeasy.LoadResourceByID, &Cursif.Pages.get_page!/1
       middleware Speakeasy.Authz, {Cursif.Pages, :collaborator}
 
       resolve(&Pages.get_page_by_id/2)
@@ -27,9 +27,7 @@ defmodule CursifWeb.Schemas.Page do
       arg(:parent_id, non_null(:id))
       arg(:parent_type, non_null(:string))
 
-      middleware Speakeasy.LoadResource, fn(attrs) ->
-        Cursif.Pages.get_parent!(%{parent_id: attrs.parent_id, parent_type: attrs.parent_type})
-      end
+      middleware Speakeasy.LoadResourceByID, &Cursif.Pages.get_page!/1
       middleware Speakeasy.Authz, {Cursif.Pages, :collaborator}
 
       resolve(&Pages.create_page/2)
@@ -43,7 +41,7 @@ defmodule CursifWeb.Schemas.Page do
       arg(:parent_id, :id)
       arg(:parent_type, :string)
 
-      middleware Speakeasy.LoadResource, &Cursif.Pages.get_parent!/1
+      middleware Speakeasy.LoadResourceByID, &Cursif.Pages.get_page!/1
       middleware Speakeasy.Authz, {Cursif.Pages, :collaborator}
 
       resolve(&Pages.update_page/2)
@@ -52,6 +50,9 @@ defmodule CursifWeb.Schemas.Page do
     @desc "Delete a page"
     field :delete_page, :page do
       arg(:id, non_null(:id))
+
+      middleware Speakeasy.LoadResourceByID, &Cursif.Pages.get_page!/1
+      middleware Speakeasy.Authz, {Cursif.Pages, :owner}
 
       resolve(&Pages.delete_page/2)
     end

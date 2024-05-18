@@ -13,33 +13,29 @@ defmodule CursifWeb.Schemas.Notebook do
       field :notebooks, list_of(:notebook) do
         resolve(&Notebooks.list_notebooks/2)
       end
-  
+
       @desc "Get a notebook by id"
       field :notebook, :notebook do
         arg(:id, non_null(:id))
 
-        middleware Speakeasy.LoadResource, &Cursif.Notebooks.get_notebook!/1
+        middleware Speakeasy.LoadResourceByID, &Cursif.Notebooks.get_notebook!/1
         middleware Speakeasy.Authz, {Cursif.Notebooks, :collaborator}
 
         resolve(&Notebooks.get_notebook_by_id/2)
       end
-  
+
       @desc "Get a macro by id"
       field :macro, :macro do
         arg(:id, non_null(:id))
-
-        middleware Speakeasy.LoadResource, &Cursif.Macros.get_notebook!/1
-        middleware Speakeasy.Authz, {Cursif.Notebooks, :collaborator}
-
         resolve(&Macros.get_macro_by_id/2)
       end
-  
+
       @desc "Get the list of macros for the given notebook"
       field :macros, list_of(:macro) do
         arg(:notebook_id, non_null(:id))
 
-        middleware Speakeasy.LoadResource, fn(attrs) ->
-          Cursif.Notebooks.get_notebook!(attrs.notebook_id)
+        middleware Speakeasy.LoadResource, fn(%{notebook_id: notebook_id}) ->
+          Cursif.Notebooks.get_notebook!(notebook_id)
         end
         middleware Speakeasy.Authz, {Cursif.Notebooks, :collaborator}
 
@@ -89,8 +85,8 @@ defmodule CursifWeb.Schemas.Notebook do
         arg(:code, non_null(:string))
         arg(:notebook_id, non_null(:id))
 
-        middleware Speakeasy.LoadResource, fn(attrs) -> 
-          Cursif.Notebooks.get_notebook!(attrs.notebook_id) 
+        middleware Speakeasy.LoadResource, fn(%{notebook_id: notebook_id}) -> 
+          Cursif.Notebooks.get_notebook!(notebook_id) 
         end
         middleware Speakeasy.Authz, {Cursif.Notebooks, :collaborator}
   
@@ -104,7 +100,11 @@ defmodule CursifWeb.Schemas.Notebook do
         arg(:pattern, :string)
         arg(:code, :string)
 
-        middleware Speakeasy.LoadResourceByID, &Cursif.Macros.get_notebook!/1
+        middleware Speakeasy.LoadResourceByID, fn(id) -> 
+          id
+          |> Cursif.Macros.get_macro!()
+          |> Cursif.Notebooks.get_notebook!() 
+        end
         middleware Speakeasy.Authz, {Cursif.Notebooks, :collaborator}
 
         resolve(&Macros.update_macro/2)
@@ -114,8 +114,12 @@ defmodule CursifWeb.Schemas.Notebook do
       field :delete_macro, :macro do
         arg(:id, non_null(:id))
 
-        middleware Speakeasy.LoadResourceByID, &Cursif.Macros.get_notebook!/1
-        middleware Speakeasy.Authz, {Cursif.Notebooks, :collaborator}
+        middleware Speakeasy.LoadResourceByID, fn(id) -> 
+          id
+          |> Cursif.Macros.get_macro!()
+          |> Cursif.Notebooks.get_notebook!() 
+        end
+        middleware Speakeasy.Authz, {Cursif.Notebooks, :owner}
 
         resolve(&Macros.delete_macro/2)
       end
@@ -125,8 +129,8 @@ defmodule CursifWeb.Schemas.Notebook do
         arg(:notebook_id, non_null(:id))
         arg(:user_id, non_null(:id))
   
-        middleware Speakeasy.LoadResource, fn(attrs) -> 
-          Cursif.Notebooks.get_notebook!(attrs.notebook_id) 
+        middleware Speakeasy.LoadResource, fn(%{notebook_id: notebook_id}) -> 
+          Cursif.Notebooks.get_notebook!(notebook_id) 
         end
         middleware Speakeasy.Authz, {Cursif.Notebooks, :owner}
 
@@ -138,8 +142,8 @@ defmodule CursifWeb.Schemas.Notebook do
         arg(:notebook_id, non_null(:id))
         arg(:user_id, non_null(:id))
 
-        middleware Speakeasy.LoadResource, fn(attrs) -> 
-          Cursif.Notebooks.get_notebook!(attrs.notebook_id) 
+        middleware Speakeasy.LoadResource, fn(%{notebook_id: notebook_id}) -> 
+          Cursif.Notebooks.get_notebook!(notebook_id) 
         end
         middleware Speakeasy.Authz, {Cursif.Notebooks, :owner}
 

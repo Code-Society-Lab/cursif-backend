@@ -7,7 +7,9 @@ defmodule Cursif.Pages do
   alias Cursif.Repo
 
   alias Cursif.Notebooks
-  alias Cursif.Notebooks.{Notebook, Page}
+  alias Cursif.Notebooks.{Notebook, Page, Policy}
+
+  defdelegate authorize(action, user, params), to: Policy
 
   @doc """
   Gets a single page.
