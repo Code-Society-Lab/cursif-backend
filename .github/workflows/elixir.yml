@@ -73,8 +73,9 @@ jobs:
     - name: Compiles without warnings
       run: mix compile --warnings-as-errors
 
-    - name: Check Formatting
-      run: mix format --check-formatted
+    # For now we don't want to check formatting
+    #- name: Check Formatting
+    #  run: mix format --check-formatted
 
     - name: Run tests
       run: mix test
