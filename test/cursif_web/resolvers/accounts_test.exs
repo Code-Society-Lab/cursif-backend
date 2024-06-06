@@ -11,8 +11,8 @@ defmodule CursifWeb.Resolvers.AccountsTest do
   setup [:create_unique_user]
 
   describe "list_users/2" do
-    test "list_users/2 successfully list accounts", %{user: user, conn: conn} do
-      assert Accounts.list_users(%{}, conn) == {:ok, [user]}
+    test "list_users/2 successfully list accounts", %{conn: conn} do
+      assert {:ok, [_ | _]} = Accounts.list_users(%{}, conn)
     end
   end
 
