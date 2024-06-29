@@ -3,6 +3,7 @@ defmodule Cursif.Accounts.User do
   import Ecto.Changeset
 
   alias Cursif.Repo
+  alias Cursif.Notebooks.Notebook
 
   @type t :: %__MODULE__{
     username: String.t(),

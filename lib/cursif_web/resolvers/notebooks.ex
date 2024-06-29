@@ -4,7 +4,7 @@ defmodule CursifWeb.Resolvers.Notebooks do
 
   @spec list_notebooks(map(), map()) :: {:ok, list(Notebook.t())}
   def list_notebooks(%{favorite: favorite}, %{context: %{current_user: current_user}}) do
-    {:ok, Notebooks.list_notebooks(current_user, favorite)}
+    {:ok, Notebooks.list_notebooks(current_user, favorite: favorite)}
   end
 
   @spec get_notebook_by_id(map(), map()) :: {:ok, Notebook.t()}

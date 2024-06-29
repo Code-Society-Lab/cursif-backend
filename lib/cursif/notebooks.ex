@@ -15,12 +15,16 @@ defmodule Cursif.Notebooks do
 
   ## Examples
 
-      iex> list_notebooks()
+      iex> list_notebooks(user)
       [%Notebook{}, ...]
 
+      iex> list_notebooks(user, [favorite: true])
+      [%Notebook{}, ...]
   """
-  @spec list_notebooks_favorites(User.t()) :: list(Notebook.t())
-  def list_notebooks_favorites(%User{id: user_id}) do
+  @spec list_notebooks(User.t(), map()) :: list(Notebook.t())
+  def list_notebooks(user, opts \\ [])
+
+  def list_notebooks(%User{id: user_id}, [favorite: true]) do
     query = from n in Notebook,
               left_join: f in assoc(n, :favorites),
               where: f.id == ^user_id,
@@ -30,17 +34,7 @@ defmodule Cursif.Notebooks do
     Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
   end
 
-  @doc """
-  Returns the list of notebooks available to a user.
-
-  ## Examples
-
-      iex> list_notebooks()
-      [%Notebook{}, ...]
-
-  """
-  @spec list_notebooks_all(User.t()) :: list(Notebook.t())
-  def list_notebooks_all(%User{id: user_id}) do
+  def list_notebooks(%User{id: user_id}, _opts) do
     query = from n in Notebook,
               left_join: c in assoc(n, :collaborators),
               where: n.owner_id == ^user_id or c.id == ^user_id,
@@ -50,24 +44,6 @@ defmodule Cursif.Notebooks do
               distinct: true
 
     Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
-  end
-
-  @doc """
-  Returns the list of notebooks available to a user.
-
-  ## Examples
-
-      iex> list_notebooks()
-      [%Notebook{}, ...]
-
-  """
-  @spec list_notebooks(User.t(), boolean()) :: list(Notebook.t())
-  def list_notebooks(%User{id: user_id}, favorites) do
-    if favorites do
-      list_notebooks_favorites(%User{id: user_id})
-    else
-      list_notebooks_all(%User{id: user_id})
-    end
   end
 
   @doc """
