@@ -2,8 +2,6 @@ defmodule Cursif.Notebooks.Favorite do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Cursif.Repo
-
   alias Cursif.Accounts.User
   alias Cursif.Notebooks.Notebook
 
