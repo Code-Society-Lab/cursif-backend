@@ -19,18 +19,55 @@ defmodule Cursif.Notebooks do
       [%Notebook{}, ...]
 
   """
-  @spec list_notebooks(User.t()) :: list(Notebook.t())
-  def list_notebooks(%User{id: user_id}) do
-    # TODO : Use exists instead of left_join and distinct
+  @spec list_notebooks_favorites(User.t()) :: list(Notebook.t())
+  def list_notebooks_favorites(%User{id: user_id}) do
     query = from n in Notebook,
-                 left_join: c in assoc(n, :collaborators),
-                 where: n.owner_id == ^user_id or c.id == ^user_id,
-                 left_join: f in assoc(n, :favorites),
-                 where: f.id == ^user_id or is_nil(f.id),
-                 select: %{n | favorite: not is_nil(f.id)},
-                 distinct: true
+              left_join: f in assoc(n, :favorites),
+              where: f.id == ^user_id,
+              select: %{n | favorite: true},
+              distinct: true
 
     Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
+  end
+
+  @doc """
+  Returns the list of notebooks available to a user.
+
+  ## Examples
+
+      iex> list_notebooks()
+      [%Notebook{}, ...]
+
+  """
+  @spec list_notebooks_all(User.t()) :: list(Notebook.t())
+  def list_notebooks_all(%User{id: user_id}) do
+    query = from n in Notebook,
+              left_join: c in assoc(n, :collaborators),
+              where: n.owner_id == ^user_id or c.id == ^user_id,
+              left_join: f in assoc(n, :favorites),
+              where: f.id == ^user_id or is_nil(f.id),
+              select: %{n | favorite: not is_nil(f.id)},
+              distinct: true
+
+    Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
+  end
+
+  @doc """
+  Returns the list of notebooks available to a user.
+
+  ## Examples
+
+      iex> list_notebooks()
+      [%Notebook{}, ...]
+
+  """
+  @spec list_notebooks(User.t(), boolean()) :: list(Notebook.t())
+  def list_notebooks(%User{id: user_id}, favorites) do
+    if favorites do
+      list_notebooks_favorites(%User{id: user_id})
+    else
+      list_notebooks_all(%User{id: user_id})
+    end
   end
 
   @doc """

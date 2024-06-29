@@ -3,8 +3,8 @@ defmodule CursifWeb.Resolvers.Notebooks do
   alias Cursif.Notebooks.Notebook
 
   @spec list_notebooks(map(), map()) :: {:ok, list(Notebook.t())}
-  def list_notebooks(_args, %{context: %{current_user: current_user}}) do
-    {:ok, Notebooks.list_notebooks(current_user)}
+  def list_notebooks(%{favorite: favorite}, %{context: %{current_user: current_user}}) do
+    {:ok, Notebooks.list_notebooks(current_user, favorite)}
   end
 
   @spec get_notebook_by_id(map(), map()) :: {:ok, Notebook.t()}

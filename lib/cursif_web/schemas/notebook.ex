@@ -12,6 +12,7 @@ defmodule CursifWeb.Schemas.Notebook do
     object :notebook_queries do
       @desc "Get the list of notebooks"
       field :notebooks, list_of(:notebook) do
+        arg(:favorite, :boolean, default_value: false)
         resolve(&Notebooks.list_notebooks/2)
       end
 
