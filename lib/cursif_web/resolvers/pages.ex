@@ -29,7 +29,7 @@ defmodule CursifWeb.Resolvers.Pages do
   end
 
   @spec delete_page(map(), map()) :: {:ok, Page.t()} | {:error, atom()}
-  def delete_page(%{id: id}, %{context: %{current_user: current_user}}) do
+  def delete_page(%{id: id}, %{context: %{current_user: _current_user}}) do
     page = Pages.get_page!(id)
 
     case Pages.delete_page(page) do
