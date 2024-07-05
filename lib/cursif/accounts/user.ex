@@ -3,7 +3,7 @@ defmodule Cursif.Accounts.User do
   import Ecto.Changeset
 
   alias Cursif.Repo
-  alias Cursif.Notebooks.Notebook
+  alias Cursif.Notebooks.{Favorite, Notebook}
   alias Cursif.Settings.{Language, Theme}
 
   @type t :: %__MODULE__{
