@@ -14,18 +14,8 @@ RUN mix local.hex --force && \
 
 WORKDIR /app
 
-# Server setup
-ENV PORT=4000
-ENV MIX_ENV=prod
-
-CMD mix deps.get --only prod
-CMD mix compile
-
-# Compile assets
-CMD mix assets.deploy
-
-# Custom tasks (like DB migrations)
-CMD mix ecto.migrate
-
-# Finally run the server
-CMD mix phx.server
+CMD mix deps.get && \
+    mix compile && \
+    mix assets.deploy && \
+    mix ecto.migrate && \
+    mix phx.server
