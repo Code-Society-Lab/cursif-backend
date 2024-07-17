@@ -12,7 +12,6 @@
 alias Cursif.Repo
 alias Cursif.Accounts.User
 alias Cursif.{Accounts, Notebooks}
-alias Cursif.Settings.{Language, Theme}
 
 defmodule Utils do
   def create_user(args \\ []) do
@@ -57,13 +56,4 @@ if not Repo.exists?(User) && Application.get_env(:cursif, :env) == :dev do
       Notebooks.add_collaborator(%{notebook_id: notebook_id, user_id: user_id})
     end
   end
-end
-
-if not Repo.exists?(Language) do
-  Repo.insert!(%Language{name: "English"})
-end
-
-if not Repo.exists?(Theme) do
-  Repo.insert!(%Theme{name: "Light"})
-  Repo.insert!(%Theme{name: "Dark"})
 end

@@ -31,8 +31,8 @@ defmodule CursifWeb.Schemas.Account do
       arg(:username, non_null(:string))
       arg(:email, non_null(:string))
       arg(:password, non_null(:string))
-      arg(:language_id, :id)
-      arg(:theme_id, :id)
+      arg(:language, :string)
+      arg(:theme, :string)
 
       resolve(&Accounts.register/2)
     end
@@ -44,8 +44,8 @@ defmodule CursifWeb.Schemas.Account do
       arg(:username, :string)
       arg(:first_name, :string)
       arg(:last_name, :string)
-      arg(:language_id, :id)
-      arg(:theme_id, :id)
+      arg(:language, :string)
+      arg(:theme, :string)
 
       resolve(&Accounts.update_user/2)
     end

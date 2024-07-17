@@ -4,7 +4,6 @@ defmodule Cursif.Accounts.User do
 
   alias Cursif.Repo
   alias Cursif.Notebooks.{Favorite, Notebook}
-  alias Cursif.Settings.{Language, Theme}
 
   @type t :: %__MODULE__{
     username: String.t(),
@@ -12,11 +11,8 @@ defmodule Cursif.Accounts.User do
     hashed_password: String.t(),
     first_name: String.t() | nil,
     last_name: String.t() | nil,
-    theme_id: binary() | nil,
-    language_id: binary() | nil,
-
-    theme: Theme.t() | nil,
-    language: Language.t() | nil,
+    theme: String.t() | nil,
+    language: String.t() | nil,
 
     confirmed_at: NaiveDateTime.t(),
     inserted_at: DateTime.t(),
@@ -33,9 +29,8 @@ defmodule Cursif.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-
-    belongs_to :theme, Theme
-    belongs_to :language, Language
+    field :theme, :string
+    field :language, :string
 
     many_to_many :favorites, Notebook, join_through: Favorite
 
@@ -46,9 +41,7 @@ defmodule Cursif.Accounts.User do
   @spec changeset(User.t(), %{}) :: User.t()
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :first_name, :last_name, :email, :password, :theme_id, :language_id])
-    |> cast_assoc(:theme)
-    |> cast_assoc(:language)
+    |> cast(attrs, [:username, :first_name, :last_name, :email, :password, :theme, :language])
     |> validate_required([:username, :email, :password])
     |> unique_constraint(:email)
     |> unique_constraint(:username)
@@ -60,7 +53,7 @@ defmodule Cursif.Accounts.User do
   @spec update_changeset(User.t(), %{}) :: User.t()
   def update_changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :username, :email, :theme_id, :language_id])
+    |> cast(attrs, [:first_name, :last_name, :username, :email, :theme, :language])
     |> unique_constraint(:email)
     |> unique_constraint(:username)
     |> validate_email()

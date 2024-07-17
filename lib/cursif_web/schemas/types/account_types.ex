@@ -18,8 +18,8 @@ defmodule CursifWeb.Schemas.AccountTypes do
     field :email, :string
     field :first_name, :string
     field :last_name, :string
-    field :language_id, :id
-    field :theme_id, :id
+    field :language, :string
+    field :theme, :string
   end
 
   @desc "Represents a session"
