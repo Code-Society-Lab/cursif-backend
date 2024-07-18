@@ -3,7 +3,7 @@ defmodule Cursif.Accounts.User do
   import Ecto.Changeset
 
   alias Cursif.Repo
-  alias Cursif.Notebooks.Notebook
+  alias Cursif.Notebooks.{Favorite, Notebook}
 
   @type t :: %__MODULE__{
     username: String.t(),
@@ -60,6 +60,12 @@ defmodule Cursif.Accounts.User do
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
     |> validate_length(:email, max: 160)
     |> unique_constraint(:email)
+    |> lowercase_email()
+  end
+
+  defp lowercase_email(changeset) do
+    changeset
+    |> update_change(:email, &String.downcase/1)
   end
 
   defp validate_password(changeset) do
