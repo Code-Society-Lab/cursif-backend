@@ -11,8 +11,8 @@ defmodule Cursif.Accounts.User do
     hashed_password: String.t(),
     first_name: String.t() | nil,
     last_name: String.t() | nil,
-    theme: String.t() | nil,
-    language: String.t() | nil,
+    theme_id: Integer.t() | nil,
+    language_id: Integer.t() | nil,
 
     confirmed_at: NaiveDateTime.t(),
     inserted_at: DateTime.t(),
@@ -29,8 +29,8 @@ defmodule Cursif.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-    field :theme, :string
-    field :language, :string
+    field :theme_id, :integer
+    field :language_id, :integer
 
     many_to_many :favorites, Notebook, join_through: Favorite
 
@@ -41,7 +41,7 @@ defmodule Cursif.Accounts.User do
   @spec changeset(User.t(), %{}) :: User.t()
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :first_name, :last_name, :email, :password, :theme, :language])
+    |> cast(attrs, [:username, :first_name, :last_name, :email, :password, :theme_id, :language_id])
     |> validate_required([:username, :email, :password])
     |> unique_constraint(:email)
     |> unique_constraint(:username)
@@ -53,7 +53,7 @@ defmodule Cursif.Accounts.User do
   @spec update_changeset(User.t(), %{}) :: User.t()
   def update_changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :username, :email, :theme, :language])
+    |> cast(attrs, [:first_name, :last_name, :username, :email, :theme_id, :language_id])
     |> unique_constraint(:email)
     |> unique_constraint(:username)
     |> validate_email()
