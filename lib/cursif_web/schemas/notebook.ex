@@ -93,7 +93,8 @@ defmodule CursifWeb.Schemas.Notebook do
       @desc "Add a collaborator"
       field :add_collaborator, :collaborator do
         arg(:notebook_id, non_null(:id))
-        arg(:user_id, non_null(:id))
+        arg(:user_id, :id)
+        arg(:email, non_null(:string))
 
         resolve(&Collaborators.add_collaborator/2)
       end
