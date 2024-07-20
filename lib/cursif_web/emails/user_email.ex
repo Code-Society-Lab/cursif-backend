@@ -37,4 +37,12 @@ defmodule CursifWeb.Emails.UserEmail do
     base_url = "#{@client_url}/reset-password?token=#{token}"
     send_email(user, "Cursif ~ Password Reset", base_url, "reset.html")
   end
+
+  @doc """
+  Sends a collaboration invitation email to a user.
+  """
+  def send_collaborator_invitation_email(user, notebook) do
+    base_url = "#{@client_url}/notebooks/#{notebook}"
+    send_email(user, "Cursif ~ Collaboration Invitation", base_url, "invite.html")
+  end
 end
