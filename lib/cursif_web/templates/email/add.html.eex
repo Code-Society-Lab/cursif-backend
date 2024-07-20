@@ -13,9 +13,9 @@
           </p>
         </div>
         <div class="button-container">
-          <a class="button" href="<%= @base_url %>">Notebook</a>
+          <a class="button" href="<%= @base_url %>">See Notebook</a>
           <div class="message signature">
-            <p>If you didn't sign up for Cursif, please disregard this email.</p>
+            <p>If it isn't you, please disregard this email.</p>
           </div>
       </div>
       <div style="margin-left: 20px" class="email-signature signature">
