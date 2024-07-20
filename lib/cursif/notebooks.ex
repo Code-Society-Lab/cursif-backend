@@ -6,6 +6,7 @@ defmodule Cursif.Notebooks do
   import Ecto.Query, warn: false
   alias Cursif.Repo
 
+  alias CursifWeb.Emails.UserEmail
   alias Cursif.Notebooks.{Notebook, Collaborator, Favorite}
   alias Cursif.Accounts.{User}
   alias Cursif.Accounts
@@ -207,5 +208,13 @@ defmodule Cursif.Notebooks do
   def delete_favorite_by_user_id(notebook_id, user_id) do
     Repo.delete_all(from n in Favorite,
       where: n.user_id == ^user_id and n.notebook_id == ^notebook_id)
+  end
+
+  @doc """
+  Send invite to a collaborator.
+  """
+  def send_invite(%User{} = user, notebook_id) do
+    # Send email to email
+    UserEmail.send_collaborator_invitation_email(user, notebook_id)
   end
 end
