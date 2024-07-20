@@ -14,8 +14,4 @@ RUN mix local.hex --force && \
 
 WORKDIR /app
 
-CMD mix deps.get && \
-    mix compile && \
-    mix assets.deploy && \
-    mix ecto.migrate && \
-    mix phx.server
+CMD mix setup && mix phx.server
