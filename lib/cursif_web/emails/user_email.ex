@@ -43,8 +43,8 @@ defmodule CursifWeb.Emails.UserEmail do
   @doc """
   Sends a collaboration invitation email to a user.
   """
-  def send_collaborator_invitation_email(user, notebook, owner) do
+  def send_collaborator_email(user, notebook, owner) do
     base_url = "#{@client_url}/notebooks/#{notebook}"
-    send_email(user, "Cursif ~ Collaboration Invitation", base_url, "invite.html", %{owner: owner})
+    send_email(user, "Cursif ~ Collaboration Notification", base_url, "add.html", %{owner: owner})
   end
 end

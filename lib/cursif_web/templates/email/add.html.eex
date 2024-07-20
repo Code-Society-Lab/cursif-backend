@@ -10,11 +10,10 @@
           <p>Hi <strong><%= @username %></strong>,</p>
           <p>
             You have been added to a notebook by <%= @owner.username%> (<strong><%= @owner.email%></strong>).
-            Click the button below to join the notebook and start collaborating with your team today.
           </p>
         </div>
         <div class="button-container">
-          <a class="button" href="<%= @base_url %>">Join the notebook</a>
+          <a class="button" href="<%= @base_url %>">Notebook</a>
           <div class="message signature">
             <p>If you didn't sign up for Cursif, please disregard this email.</p>
           </div>

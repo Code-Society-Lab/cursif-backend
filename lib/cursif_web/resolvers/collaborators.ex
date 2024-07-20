@@ -14,7 +14,7 @@ defmodule CursifWeb.Resolvers.Collaborators do
 		collaborator_attrs = %{notebook_id: collaborator.notebook_id, user_id: user.id}
 		case Notebooks.add_collaborator(collaborator_attrs) do
 			{:ok, collaborator} ->
-				case Notebooks.send_invite(user, collaborator.notebook_id, current_user) do
+				case Notebooks.send_notification(user, collaborator.notebook_id, current_user) do
 					{:ok, _} -> {:ok, collaborator}
 					{:error, reason} -> {:error, reason}
 				end
