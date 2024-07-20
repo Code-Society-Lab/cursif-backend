@@ -213,8 +213,8 @@ defmodule Cursif.Notebooks do
   @doc """
   Send invite to a collaborator.
   """
-  def send_invite(%User{} = user, notebook_id) do
+  def send_invite(%User{} = user, notebook_id, owner) do
     # Send email to email
-    UserEmail.send_collaborator_invitation_email(user, notebook_id)
+    UserEmail.send_collaborator_invitation_email(user, notebook_id, owner)
   end
 end

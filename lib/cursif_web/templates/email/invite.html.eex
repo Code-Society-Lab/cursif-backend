@@ -9,7 +9,7 @@
         <div class="email-body">
           <p>Hi <strong><%= @username %></strong>,</p>
           <p>
-            You have been added to a notebook on Cursif.
+            You have been added to a notebook  by <%= @owner.username%> (<strong><%= @owner.email%></strong>).
             Click the button below to join the notebook and start collaborating with your team today.
           </p>
         </div>
