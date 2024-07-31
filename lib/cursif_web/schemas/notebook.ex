@@ -50,8 +50,6 @@ defmodule CursifWeb.Schemas.Notebook do
         arg(:id, non_null(:id))
         arg(:title, :string)
         arg(:description, :string)
-        arg(:owner_id, :id)
-        arg(:owner_type, :string)
 
         resolve(&Notebooks.update_notebook/2)
       end
