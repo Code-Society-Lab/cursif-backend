@@ -43,6 +43,7 @@ defmodule CursifWeb.Schemas.NotebookTypes do
     field :id, :id
     field :notebook_id, :string
     field :user_id, :string
+    field :email, :string
   end
 
   @desc "Favorite representation"
