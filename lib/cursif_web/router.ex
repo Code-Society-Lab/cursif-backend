@@ -22,16 +22,14 @@ defmodule CursifWeb.Router do
   end
 
 
-  # Enables GraphiQL for development only.
+  # Enables GraphiQL.
   #
   # You can access it by browsing to http://localhost:4000/graphiql. Authentication is still
   # required to perform requests.
-  if Mix.env() == :dev do
-    scope "/graphiql" do
-      pipe_through :graphql
+  scope "/graphiql" do
+    pipe_through :graphql
 
-      forward "/", Absinthe.Plug.GraphiQL, schema: CursifWeb.Schema
-    end
+    forward "/", Absinthe.Plug.GraphiQL, schema: CursifWeb.Schema, interface: :playground
   end
 
   # Enables LiveDashboard only for development

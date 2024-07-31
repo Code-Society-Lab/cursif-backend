@@ -1,6 +1,7 @@
 defmodule CursifWeb.Resolvers.Collaborators do
 	alias Cursif.Notebooks
 	alias Cursif.Notebooks.Collaborator
+	alias Cursif.Accounts
 
 	@spec add_collaborator(map(), map()) :: {:ok, Collaborator.t()}  | {:error, atom()}
 	def add_collaborator(collaborator, _context) do

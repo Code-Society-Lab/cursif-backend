@@ -30,7 +30,7 @@ defmodule Cursif.AccountsTest do
     test "create_user/1 with valid data creates a user" do
       valid_attrs = %{
         username: "jdoe",
-        email: "jdoe@email.com",
+        email: "JdOe@email.com",
         first_name: "John",
         last_name: "Doe",
         password: "HelloWorld!",
@@ -51,7 +51,7 @@ defmodule Cursif.AccountsTest do
       user = user_fixture()
       update_attrs = %{
         username: "jdoe",
-        email: "jdoe@email.com",
+        email: "JDOE@email.com",
         first_name: "John",
         last_name: "Doe",
       }

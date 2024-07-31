@@ -12,8 +12,10 @@ defmodule CursifWeb.Schemas.NotebookTypes do
     field :updated_at, :naive_datetime
 
     field :pages, list_of(:page)
-    field :collaborators, list_of(:partial_user)
+    field :collaborators, list_of(:collaborator)
     field :macros, list_of(:macro)
+
+    field :favorite, :boolean
 
     field :owner, :owner do
       resolve(&Notebooks.get_owner/3)
@@ -41,5 +43,14 @@ defmodule CursifWeb.Schemas.NotebookTypes do
     field :id, :id
     field :notebook_id, :string
     field :user_id, :string
+    field :email, :string
+    field :username, :string
+  end
+
+  @desc "Favorite representation"
+  object :favorite do
+    field :id, :id
+    field :user_id, :string
+    field :notebook_id, :string
   end
 end

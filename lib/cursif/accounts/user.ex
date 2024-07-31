@@ -3,6 +3,7 @@ defmodule Cursif.Accounts.User do
   import Ecto.Changeset
 
   alias Cursif.Repo
+  alias Cursif.Notebooks.{Favorite, Notebook}
 
   @type t :: %__MODULE__{
     username: String.t(),
@@ -27,6 +28,8 @@ defmodule Cursif.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
+    many_to_many :favorites, Notebook, join_through: Favorite
+
     timestamps()
   end
 
@@ -45,7 +48,7 @@ defmodule Cursif.Accounts.User do
   @doc false
   @spec update_changeset(User.t(), %{}) :: User.t()
   def update_changeset(user, attrs) do
-    user 
+    user
     |> cast(attrs, [:first_name, :last_name, :username, :email])
     |> unique_constraint(:email)
     |> unique_constraint(:username)
@@ -57,6 +60,12 @@ defmodule Cursif.Accounts.User do
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
     |> validate_length(:email, max: 160)
     |> unique_constraint(:email)
+    |> lowercase_email()
+  end
+
+  defp lowercase_email(changeset) do
+    changeset
+    |> update_change(:email, &String.downcase/1)
   end
 
   defp validate_password(changeset) do
