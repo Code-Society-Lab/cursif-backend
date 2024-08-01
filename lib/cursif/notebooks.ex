@@ -7,8 +7,9 @@ defmodule Cursif.Notebooks do
   alias Cursif.Repo
 
   alias CursifWeb.Emails.UserEmail
+
   alias Cursif.Notebooks.{Notebook, Collaborator, Favorite, Policy}
-  alias Cursif.Accounts.{User}
+  alias Cursif.Accounts.User
   alias Cursif.Accounts
 
   defdelegate authorize(action, user, params), to: Policy

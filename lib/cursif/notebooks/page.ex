@@ -50,7 +50,7 @@ defmodule Cursif.Notebooks.Page do
 
   # TODO: See if there's a better way to handle that. Maybe a custom validator?
   defp validate_association(%{changes: %{parent_type: "notebook", parent_id: parent_id}} = changeset) do
-    if Repo.exists?(Notebook, parent_id) do
+    if Repo.exists?(Notebook, id: parent_id) do
       changeset
     else
       add_error(changeset, :parent_id, "is not a valid notebook")
@@ -58,7 +58,7 @@ defmodule Cursif.Notebooks.Page do
   end
 
   defp validate_association(%{changes: %{parent_type: "page", parent_id: parent_id}} = changeset) do
-    Repo.get!(Page, parent_id)
+    Repo.get!(Page, id: parent_id)
     changeset
   rescue
     Ecto.NoResultsError -> add_error(changeset, :parent_id, "is not a valid page")

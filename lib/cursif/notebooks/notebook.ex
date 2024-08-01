@@ -5,7 +5,7 @@ defmodule Cursif.Notebooks.Notebook do
   alias Cursif.Repo
 
   alias Cursif.Accounts.User
-  alias Cursif.Notebooks.{Page, Collaborator, Macro, Favorite}
+  alias Cursif.Notebooks.{Page, Macro, Favorite, Collaborator}
 
   @type t :: %__MODULE__{
     title: String.t(),
