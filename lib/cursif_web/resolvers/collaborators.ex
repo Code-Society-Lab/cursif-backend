@@ -1,6 +1,7 @@
 defmodule CursifWeb.Resolvers.Collaborators do
 	alias Cursif.Notebooks
 	alias Cursif.Notebooks.Collaborator
+	alias Cursif.Accounts
 
 	@spec add_collaborator(map(), map()) :: {:ok, Collaborator.t()}  | {:error, atom()}
 	def add_collaborator(collaborator, %{context: %{current_user: current_user}}) do
@@ -8,9 +9,16 @@ defmodule CursifWeb.Resolvers.Collaborators do
 			collaborator.notebook_id,
 			owner: current_user
 		)
-			
-		case Notebooks.add_collaborator(collaborator) do
-			{:ok, collaborator} -> {:ok, collaborator}
+
+		user = Accounts.get_user_by_email!(collaborator.email)
+		collaborator_attrs = %{notebook_id: collaborator.notebook_id, user_id: user.id}
+		case Notebooks.add_collaborator(collaborator_attrs) do
+			{:ok, collaborator} ->
+				case Notebooks.send_notification(user, collaborator.notebook_id, current_user) do
+					{:ok, _} -> {:ok, collaborator}
+					{:error, reason} -> {:error, reason}
+				end
+			{:ok, collaborator}
 			{:error, changeset} -> {:error, changeset}
 		end
 	end

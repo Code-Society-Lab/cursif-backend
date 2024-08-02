@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <span style="font-family: Montez; font-size: 1.2em;">Cursif</span>
+      </div>
+      <div class="content">
+        <div class="email-body">
+          <p>Hi <strong><%= @username %></strong>,</p>
+          <p>
+            You have been added to a notebook by <%= @owner.username%> (<strong><%= @owner.email%></strong>).
+          </p>
+        </div>
+        <div class="button-container">
+          <a class="button" href="<%= @base_url %>">See Notebook</a>
+          <div class="message signature">
+            <p>If it isn't you, please disregard this email.</p>
+          </div>
+      </div>
+      <div style="margin-left: 20px" class="email-signature signature">
+        <p>
+          Best regards,<br />
+          The Cursif Team
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
