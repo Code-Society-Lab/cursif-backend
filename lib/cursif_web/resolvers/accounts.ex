@@ -1,8 +1,6 @@
 defmodule CursifWeb.Resolvers.Accounts do
-  alias Cursif.Accounts
+  alias Cursif.{Accounts, Notebooks, Pages}
   alias Cursif.Accounts.User
-  alias Cursif.Notebooks
-  alias Cursif.Pages
 
   @spec list_users(map(), map()) :: {:ok, list(User.t())}
   def list_users(_args, _context) do
