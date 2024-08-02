@@ -239,7 +239,7 @@ defmodule Cursif.Notebooks do
       iex> delete_collaborator_by_user_id(notebook_id, user_id)
       {:error, "No collaborator found"}
   """
-  @spec delete_notebook_by_user_id(binary(), binary()) :: {:ok, integer()} | {:error, String.t()}
+  @spec delete_collaborator_by_user_id(binary(), binary()) :: {:ok, integer()} | {:error, String.t()}
   def delete_collaborator_by_user_id(notebook_id, user_id) do
     Repo.delete_all(from n in Collaborator,
       where: n.user_id == ^user_id and n.notebook_id == ^notebook_id)
