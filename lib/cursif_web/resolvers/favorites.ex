@@ -4,8 +4,6 @@ defmodule CursifWeb.Resolvers.Favorites do
 
   @spec add_favorite(map(), map()) :: {:ok, Favorite.t()} | {:error, atom()}
   def add_favorite(%{notebook_id: notebook_id}, %{context: %{current_user: current_user}}) do
-    Notebooks.get_notebook!(notebook_id)
-
     case Notebooks.add_favorite(%{notebook_id: notebook_id, user_id: current_user.id}) do
       {:ok, favorite} -> {:ok, favorite}
       {:error, changeset} -> {:error, changeset}
@@ -14,8 +12,6 @@ defmodule CursifWeb.Resolvers.Favorites do
 
   @spec remove_favorite(map(), map()) :: {:ok, Favorite.t()} | {:error, atom()}
   def remove_favorite(%{notebook_id: notebook_id}, %{context: %{current_user: current_user}}) do
-    Notebooks.get_notebook!(notebook_id)
-
     case Notebooks.delete_favorite_by_user_id(notebook_id, current_user.id) do
       {1, nil} -> {:ok, %{message: "favorite removed successfully"}}
       {0, nil} -> {:error, :not_found}
