@@ -14,7 +14,7 @@ defmodule Cursif.Notebooks.Notebook do
     owner_type: String.t(),
 
     pages: [Page.t()],
-    collaborators: [User.t()],
+    collaborators: [Collaborator.t()],
     macros: [Macro.t()],
 
     inserted_at: DateTime.t(),
@@ -28,12 +28,11 @@ defmodule Cursif.Notebooks.Notebook do
     field :description, :string
     field :owner_id, :binary_id
     field :owner_type, :string, default: "user"
-    field :favorite, :boolean, virtual: true
 
     has_many :macros, Macro
     has_many :pages, Page, foreign_key: :parent_id
+    has_many :collaborators, Collaborator
 
-    many_to_many :collaborators, User, join_through: Collaborator
     many_to_many :favorites, User, join_through: Favorite
 
     timestamps()

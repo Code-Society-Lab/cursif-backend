@@ -29,5 +29,6 @@ defmodule Cursif.Notebooks.Favorite do
     |> cast_assoc(:user)
     |> cast_assoc(:notebook)
     |> validate_required([:user_id, :notebook_id])
+    |> unique_constraint([:user_id, :notebook_id], error_key: :notebook, message: "already a favorite")
   end
 end

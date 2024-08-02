@@ -36,7 +36,15 @@ defmodule Cursif.Notebooks do
               where: f.id == ^user_id,
               distinct: true
 
-    Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
+    Repo.preload(
+      Repo.all(query),
+      [
+        :macros,
+        :favorites,
+        collaborators: [:user],
+        pages: [:author]
+      ]
+    )
   end
 
   def list_notebooks(%User{id: user_id}, _opts) do
@@ -45,7 +53,15 @@ defmodule Cursif.Notebooks do
               where: n.owner_id == ^user_id or c.id == ^user_id,
               distinct: true
 
-    Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
+    Repo.preload(
+      Repo.all(query),
+      [
+        :macros,
+        :favorites,
+        collaborators: [:user],
+        pages: [:author]
+      ]
+    )
   end
 
   @doc """
@@ -212,15 +228,30 @@ defmodule Cursif.Notebooks do
       where: c.notebook_id == ^notebook_id and c.user_id == ^user_id)
   end
 
+  @doc """
+  Deletes a collaborator by user id.
+
+  ## Examples
+
+      iex> delete_collaborator_by_user_id(notebook_id, user_id)
+      {:ok, 1}
+
+      iex> delete_collaborator_by_user_id(notebook_id, user_id)
+      {:error, "No collaborator found"}
+  """
+  @spec delete_notebook_by_user_id(binary(), binary()) :: {:ok, integer()} | {:error, String.t()}
   def delete_collaborator_by_user_id(notebook_id, user_id) do
     Repo.delete_all(from n in Collaborator,
       where: n.user_id == ^user_id and n.notebook_id == ^notebook_id)
   end
 
-  @doc """
-  Adds a notebook to a user's favorites.
+  @doc "Send invite notification to a user."
+  @spec send_notification(User.t(), binary(), User.t()) :: {:ok, String.t()} | {:error, String}
+  def send_notification(%User{} = user, notebook_id, owner) do
+    UserEmail.send_collaborator_email(user, notebook_id, owner)
+  end
 
-  """
+  @doc "Adds a notebook to a user's favorites."
   @spec add_favorite(map()) :: {:ok, Favorite.t()} | {:error, %Ecto.Changeset{}}
   def add_favorite(attrs) do
     %Favorite{}
@@ -228,19 +259,15 @@ defmodule Cursif.Notebooks do
     |> Repo.insert()
   end
 
-  @doc """
-  Removes a notebook from a user's favorites.
-
-  """
+  @doc "Removes a notebook from a user's favorites."
+  @spec delete_favorite_by_user_id(binary(), binary()) :: {:ok, integer()} | {:error, String.t()}
   def delete_favorite_by_user_id(notebook_id, user_id) do
     Repo.delete_all(from n in Favorite,
       where: n.user_id == ^user_id and n.notebook_id == ^notebook_id)
   end
 
-  @doc """
-  Send invite to a collaborator.
-  """
-  def send_notification(%User{} = user, notebook_id, owner) do
-    UserEmail.send_collaborator_email(user, notebook_id, owner)
+  def favorite?(notebook, user) do
+    Repo.exists?(from f in Favorite,
+      where: f.notebook_id == ^notebook.id and f.user_id == ^user.id)
   end
 end

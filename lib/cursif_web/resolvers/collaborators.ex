@@ -14,13 +14,12 @@ defmodule CursifWeb.Resolvers.Collaborators do
 					{:ok, _} -> {:ok, collaborator}
 					{:error, reason} -> {:error, reason}
 				end
-			{:ok, collaborator}
 			{:error, changeset} -> {:error, changeset}
 		end
 	end
 
 	@spec delete_collaborator(map(), map()) :: {:ok, Collaborator.t()} | {:error, atom()}
-	def delete_collaborator(collaborator, %{context: %{current_user: current_user}}) do
+	def delete_collaborator(collaborator, _context) do
 		case Notebooks.delete_collaborator_by_user_id(collaborator.notebook_id, collaborator.user_id) do
 			{1, nil} -> {:ok, %{message: "collaborator removed successfully"}}
 			{0, nil} -> {:error, :not_found}
