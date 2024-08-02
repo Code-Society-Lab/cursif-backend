@@ -1,6 +1,8 @@
 defmodule CursifWeb.Resolvers.Accounts do
   alias Cursif.Accounts
   alias Cursif.Accounts.User
+  alias Cursif.Notebooks
+  alias Cursif.Pages
 
   @spec list_users(map(), map()) :: {:ok, list(User.t())}
   def list_users(_args, _context) do
@@ -21,13 +23,44 @@ defmodule CursifWeb.Resolvers.Accounts do
   def get_current_user(_, _),
     do: {:error, :unauthenticated}
 
-  @spec register(map(), map()) :: {:ok, User.t()} | {:error, list(map())}
+  defp read_template_content do
+    case File.read("priv/templates/welcome.md") do
+      {:ok, content} -> content
+      {:error, reason} -> "Failed to load template: #{reason}"
+    end
+  end
+
+  @doc """
+  Register a new user and create a template notebook and page for them.
+  """
+  @spec register(map(), map()) :: {:ok, {User.t(), Notebook.t(), Page.t()}} | {:error, list(map())}
   def register(args, _context) do
     case Accounts.create_user(args) do
       {:ok, user} ->
-        {:ok, _} = Accounts.verify_user(user)
-        {:ok, user}
-
+        case Accounts.verify_user(user) do
+          {:ok, _} ->
+            template_notebook = %{
+              title: "Cursif Introduction",
+              description: "Welcome new Cursif user!",
+              owner_type: "user",
+              owner_id: user.id,
+            }
+            case Notebooks.create_notebook(template_notebook) do
+              {:ok, notebook} ->
+                template_page = %{
+                  title: "Welcome",
+                  content: read_template_content(),
+                  parent_id: notebook.id,
+                  parent_type: "notebook"
+                }
+                case Pages.create_page(Map.merge(template_page, %{author_id: user.id})) do
+                  {:ok, page} -> {:ok, page}
+                  {:error, changeset} -> {:error, changeset}
+                end
+              {:error, notebook_changeset} -> {:error, notebook_changeset}
+            end
+          {:error, _} -> {:error, "User verification failed"}
+        end
       {:error, changeset} -> {:error, changeset}
     end
   end
