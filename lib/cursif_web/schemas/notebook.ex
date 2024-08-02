@@ -129,7 +129,7 @@ defmodule CursifWeb.Schemas.Notebook do
       @desc "Add a collaborator"
       field :add_collaborator, :collaborator do
         arg(:notebook_id, non_null(:id))
-        arg(:user_id, non_null(:id))
+        arg(:email, non_null(:string))
   
         middleware Speakeasy.LoadResource, fn(%{notebook_id: notebook_id}) -> 
           Cursif.Notebooks.get_notebook!(notebook_id) 

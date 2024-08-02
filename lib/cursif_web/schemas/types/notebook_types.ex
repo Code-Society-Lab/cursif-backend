@@ -17,16 +17,8 @@ defmodule CursifWeb.Schemas.NotebookTypes do
 
     field :favorite, :boolean
 
-    field :owner, :owner do
+    field :owner, :partial_user do
       resolve(&Notebooks.get_owner/3)
-    end
-  end
-
-  union :owner do
-    types([:partial_user])
-
-    resolve_type fn
-      %Cursif.Accounts.User{}, _ -> :partial_user
     end
   end
 
@@ -43,8 +35,23 @@ defmodule CursifWeb.Schemas.NotebookTypes do
     field :id, :id
     field :notebook_id, :string
     field :user_id, :string
-    field :email, :string
-    field :username, :string
+
+    field :username, :string do
+      resolve(fn
+        %{user: user}, _arg, _ctx when not is_nil(user) ->
+          {:ok, user.username}
+        _, _, _ ->
+          {:ok, nil}
+      end)
+    end
+    field :email, :string do
+      resolve(fn
+        %{user: user}, _arg, _ctx when not is_nil(user) ->
+          {:ok, user.email}
+        _, _, _ ->
+          {:ok, nil}
+      end)
+    end
   end
 
   @desc "Favorite representation"
