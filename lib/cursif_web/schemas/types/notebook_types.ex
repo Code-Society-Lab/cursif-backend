@@ -38,7 +38,7 @@ defmodule CursifWeb.Schemas.NotebookTypes do
 
     field :username, :string do
       resolve(fn
-        %{user: user}, _arg, _ctx when not is_nil(user) ->
+        %{user: %Cursif.Accounts.User{} = user}, _arg, _ctx ->
           {:ok, user.username}
         _, _, _ ->
           {:ok, nil}
@@ -46,7 +46,7 @@ defmodule CursifWeb.Schemas.NotebookTypes do
     end
     field :email, :string do
       resolve(fn
-        %{user: user}, _arg, _ctx when not is_nil(user) ->
+        %{user: %Cursif.Accounts.User{} = user}, _args, _ctx ->
           {:ok, user.email}
         _, _, _ ->
           {:ok, nil}
