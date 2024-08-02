@@ -29,7 +29,7 @@ defmodule CursifWeb.Emails.UserEmail do
   """
   def send_confirmation_email(user, token) do
     base_url = "#{@client_url}/confirm?token=#{token}"
-    send_email(user, "Welcome to Cursif ~ Email Verification", base_url, "welcome.html")
+    send_email(user, "Welcome to Cursif ~ Email Verification", base_url, "welcome.html", %{token: token})
   end
 
   @doc """
@@ -37,7 +37,7 @@ defmodule CursifWeb.Emails.UserEmail do
   """
   def send_password_reset_email(user, token) do
     base_url = "#{@client_url}/reset-password?token=#{token}"
-    send_email(user, "Cursif ~ Password Reset", base_url, "reset.html")
+    send_email(user, "Cursif ~ Password Reset", base_url, "reset.html", %{token: token})
   end
 
   @doc """

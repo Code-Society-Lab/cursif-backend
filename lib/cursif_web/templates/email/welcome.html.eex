@@ -15,6 +15,7 @@
         </div>
         <div class="button-container">
           <a class="button" href="<%= @base_url %>">Verify your account</a>
+          <p style="color: gray; font-size: 0.9em; word-wrap: break-word;"><%= @token %></p>
           <div class="message signature">
             <p>If you didn't sign up for Cursif, please disregard this email.</p>
           </div>
