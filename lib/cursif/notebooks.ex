@@ -85,7 +85,7 @@ defmodule Cursif.Notebooks do
   def get_notebook!(id) do
     Notebook
     |> Repo.get!(id) 
-    |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
+    |> Repo.preload([:macros, :favorites, collaborators: [:user], pages: [:author]])
   end
 
   @doc """
