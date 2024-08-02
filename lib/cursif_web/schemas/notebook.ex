@@ -150,12 +150,16 @@ defmodule CursifWeb.Schemas.Notebook do
         middleware Speakeasy.Authz, {Cursif.Notebooks, :owner}
 
         resolve(&Collaborators.delete_collaborator/2)
-        resolve(&Collaborators.delete_collaborator/2)
       end
 
       @desc "Add to favorites"
       field :add_favorite, :favorite do
         arg(:notebook_id, non_null(:id))
+
+        middleware Speakeasy.LoadResource, fn(%{notebook_id: notebook_id}) ->
+          Cursif.Notebooks.get_notebook!(notebook_id)
+        end
+        middleware Speakeasy.Authz, {Cursif.Notebooks, :collaborator}
 
         resolve(&Favorites.add_favorite/2)
       end
