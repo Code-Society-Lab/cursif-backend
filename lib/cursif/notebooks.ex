@@ -30,9 +30,10 @@ defmodule Cursif.Notebooks do
 
   def list_notebooks(%User{id: user_id}, [favorite: true]) do
     query = from n in Notebook,
+              left_join: c in assoc(n, :collaborators),
               left_join: f in assoc(n, :favorites),
+              where: (n.owner_id == ^user_id or c.id == ^user_id),
               where: f.id == ^user_id,
-              select: %{n | favorite: true},
               distinct: true
 
     Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
@@ -42,9 +43,6 @@ defmodule Cursif.Notebooks do
     query = from n in Notebook,
               left_join: c in assoc(n, :collaborators),
               where: n.owner_id == ^user_id or c.id == ^user_id,
-              left_join: f in assoc(n, :favorites),
-              where: f.id == ^user_id or is_nil(f.id),
-              select: %{n | favorite: not is_nil(f.id)},
               distinct: true
 
     Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
@@ -71,7 +69,7 @@ defmodule Cursif.Notebooks do
   def get_notebook!(id) do
     Notebook
     |> Repo.get!(id) 
-    |> Repo.preload([:macros, :collaborators, pages: [:author]])
+    |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
   end
 
   @doc """
