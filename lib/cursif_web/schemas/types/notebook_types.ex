@@ -32,10 +32,10 @@ defmodule CursifWeb.Schemas.NotebookTypes do
 
 	@desc "Collaborator representation"
   object :collaborator do
-    field :id, :id
-    field :notebook_id, :string
-    field :user_id, :string
+    field :user_id, :id, name: "id"
 
+    # This is kinda ugly and would be more interesting to handle this
+    # directly in the ecto schema. Maybe as a virtual field or smth. 
     field :username, :string do
       resolve(fn
         %{user: %Cursif.Accounts.User{} = user}, _arg, _ctx ->
