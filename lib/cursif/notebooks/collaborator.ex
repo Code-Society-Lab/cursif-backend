@@ -10,8 +10,8 @@ defmodule Cursif.Notebooks.Collaborator do
     user: User.t(),
 
     # Timestamps
-    inserted_at: any(),
-    updated_at: any()
+    inserted_at: DateTime.t(),
+    updated_at: DateTime.t()
   }
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -23,6 +23,14 @@ defmodule Cursif.Notebooks.Collaborator do
     timestamps()
   end
 
+  @spec username(Collaborator.t()) :: String
+  def username(%{user: user}) when not is_nil(user),
+    do: user.username
+
+  @spec email(Collaborator.t()) :: String
+  def email(%{user: user}) when not is_nil(user),
+    do: user.email
+
   @doc false
   @spec changeset(Collaborator.t(), %{}) :: Collaborator.t()
   def changeset(collaborator, attrs) do
@@ -31,5 +39,6 @@ defmodule Cursif.Notebooks.Collaborator do
     |> cast_assoc(:notebook)
     |> cast_assoc(:user)
     |> validate_required([:notebook_id, :user_id])
+    |> unique_constraint([:notebook_id, :user_id], error_key: :user, message: "already a collaborator")
   end
 end
