@@ -6,7 +6,6 @@ defmodule CursifWeb.Resolvers.AccountsTest do
 
   alias CursifWeb.Resolvers.Accounts
   alias Cursif.Notebooks.Page
-  alias Cursif.Accounts.User
 
 
   setup [:create_unique_user]
