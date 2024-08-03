@@ -71,7 +71,12 @@ config :cursif, Cursif.Guardian,
   ttl: { 3, :days },
   verify_issuer: true
 
+config :speakeasy,
+  user_key: :current_user,
+  authn_error_message: :unauthenticated
+
 config :cursif, env: :dev
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

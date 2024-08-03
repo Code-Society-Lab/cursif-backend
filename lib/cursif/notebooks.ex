@@ -7,9 +7,12 @@ defmodule Cursif.Notebooks do
   alias Cursif.Repo
 
   alias CursifWeb.Emails.UserEmail
-  alias Cursif.Notebooks.{Notebook, Collaborator, Favorite}
-  alias Cursif.Accounts.{User}
+
+  alias Cursif.Notebooks.{Notebook, Collaborator, Favorite, Policy}
+  alias Cursif.Accounts.User
   alias Cursif.Accounts
+
+  defdelegate authorize(action, user, params), to: Policy
 
   @doc """
   Returns the list of notebooks available to a user.
@@ -27,24 +30,38 @@ defmodule Cursif.Notebooks do
 
   def list_notebooks(%User{id: user_id}, [favorite: true]) do
     query = from n in Notebook,
+              left_join: c in assoc(n, :collaborators),
               left_join: f in assoc(n, :favorites),
+              where: (n.owner_id == ^user_id or c.id == ^user_id),
               where: f.id == ^user_id,
-              select: %{n | favorite: true},
               distinct: true
 
-    Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
+    Repo.preload(
+      Repo.all(query),
+      [
+        :macros,
+        :favorites,
+        collaborators: [:user],
+        pages: [:author]
+      ]
+    )
   end
 
   def list_notebooks(%User{id: user_id}, _opts) do
     query = from n in Notebook,
               left_join: c in assoc(n, :collaborators),
               where: n.owner_id == ^user_id or c.id == ^user_id,
-              left_join: f in assoc(n, :favorites),
-              where: f.id == ^user_id or is_nil(f.id),
-              select: %{n | favorite: not is_nil(f.id)},
               distinct: true
 
-    Repo.all(query) |> Repo.preload([:macros, :collaborators, :favorites, pages: [:author]])
+    Repo.preload(
+      Repo.all(query),
+      [
+        :macros,
+        :favorites,
+        collaborators: [:user],
+        pages: [:author]
+      ]
+    )
   end
 
   @doc """
@@ -65,28 +82,10 @@ defmodule Cursif.Notebooks do
 
   """
   @spec get_notebook!(binary()) :: Notebook.t()
-  def get_notebook!(id, opts \\ [])
-
-  def get_notebook!(id, [owner: owner]),
-    do: Repo.get_by!(Notebook, [id: id, owner_id: owner.id])
-
-  def get_notebook!(id, [user: user] = opts) do
-    query = from n in Notebook,
-             left_join: c in assoc(n, :collaborators),
-             where: n.id == ^id and (n.owner_id == ^user.id or c.id == ^user.id),
-             left_join: f in assoc(n, :favorites),
-             where: f.id == ^user.id or is_nil(f.id),
-             select: %{n | favorite: not is_nil(f.id)},
-             distinct: true
-
-    get_notebook!(id, Keyword.put(opts, :query, query))
-  end
-
-  def get_notebook!(id, opts) do
-    query = Keyword.get(opts, :query, Notebook)
-    preloads = Keyword.get(opts, :preloads, [:macros, :collaborators, :favorites, pages: [:author]])
-
-    Repo.get!(query, id) |> Repo.preload(preloads)
+  def get_notebook!(id) do
+    Notebook
+    |> Repo.get!(id) 
+    |> Repo.preload([:macros, :favorites, collaborators: [:user], pages: [:author]])
   end
 
   @doc """
@@ -145,33 +144,47 @@ defmodule Cursif.Notebooks do
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking notebook changes.
+  Fetch the owner of the notebook
 
-  ## Examples
+  ## Example
 
-      iex> change_notebook(notebook)
-      %Ecto.Changeset{data: %Notebook{}}
+    iex> get_owner!(notebook)
+    %User{}
+
+    iex> get_owner!(notebook)
+    {:error, "No owner found"}
 
   """
-  @spec change_notebook(Notebook.t(), map()) :: %Ecto.Changeset{}
-  def change_notebook(%Notebook{} = notebook, attrs \\ %{}) do
-    Notebook.changeset(notebook, attrs)
-  end
-
-  @doc """
-  Returns the owner of a notebook.
-
-  ## Examples
-
-      iex> get_owner!(%{owner_id: owner_id, owner_type: "user"})
-      %User{}
-  """
-  @spec get_owner!(Notebook.t()) :: User.t()
-  def get_owner!(%Notebook{owner_id: owner_id, owner_type: "user"}),
+  @spec get_owner!(Notebook.t()) :: User.t() | {:error, String.t()}
+  def get_owner!(%{owner_id: owner_id}),
     do: Accounts.get_user!(owner_id)
 
   @doc """
-  Creates a collaborator.
+  Checks if the user is the owner of the notebook
+
+  ## Examples
+
+    iex> owner?(notebook, user)
+    true
+
+    iex> owner?(notebook, user)
+    false
+
+  """
+  @spec owner?(Notebook.t(), User.t()) :: boolean()
+  def owner?(%{owner_id: owner_id}, %{id: user_id}),
+    do: owner_id == user_id
+
+  @doc """
+  Adds a collaborator to the notebook.
+
+  ## Examples
+
+      iex> add_collaborator(%{field: value})
+      {:ok, %Collaborator{}}
+
+      iex> add_collaborator(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
 
   """
   @spec add_collaborator(map()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
@@ -182,18 +195,63 @@ defmodule Cursif.Notebooks do
   end
 
   @doc """
-  Deletes a collaborator.
+  Deletes a given collaborator.
+
+  ## Examples
+
+      iex> delete_collaborator(collaborator)
+      {:ok, %Collaborator{}}
+
+      iex> delete_collaborator(collaborator)
+      {:error, %Ecto.Changeset{}}
 
   """
+  @spec delete_collaborator(Collaborator.t()) :: {:ok, Collaborator.t()} | {:error, %Ecto.Changeset{}}
+  def delete_collaborator(collaborator),
+    do: Repo.delete(collaborator)
+
+  @doc """
+  Checks if the user is a collaborator of the notebook
+
+  ## Examples
+
+    iex> collaborator?(notebook, user)
+    true
+
+    iex> collaborator?(notebook, user)
+    false
+
+  """
+  @spec collaborator?(Notebook.t(), User.t()) :: boolean()
+  def collaborator?(%{id: notebook_id}, %{id: user_id}) do
+    Repo.exists?(from c in Collaborator,
+      where: c.notebook_id == ^notebook_id and c.user_id == ^user_id)
+  end
+
+  @doc """
+  Deletes a collaborator by user id.
+
+  ## Examples
+
+      iex> delete_collaborator_by_user_id(notebook_id, user_id)
+      {:ok, 1}
+
+      iex> delete_collaborator_by_user_id(notebook_id, user_id)
+      {:error, "No collaborator found"}
+  """
+  @spec delete_collaborator_by_user_id(binary(), binary()) :: {:ok, integer()} | {:error, String.t()}
   def delete_collaborator_by_user_id(notebook_id, user_id) do
     Repo.delete_all(from n in Collaborator,
       where: n.user_id == ^user_id and n.notebook_id == ^notebook_id)
   end
 
-  @doc """
-  Adds a notebook to a user's favorites.
+  @doc "Send invite notification to a user."
+  @spec send_notification(User.t(), binary(), User.t()) :: {:ok, String.t()} | {:error, String}
+  def send_notification(%User{} = user, notebook_id, owner) do
+    UserEmail.send_collaborator_email(user, notebook_id, owner)
+  end
 
-  """
+  @doc "Adds a notebook to a user's favorites."
   @spec add_favorite(map()) :: {:ok, Favorite.t()} | {:error, %Ecto.Changeset{}}
   def add_favorite(attrs) do
     %Favorite{}
@@ -201,19 +259,15 @@ defmodule Cursif.Notebooks do
     |> Repo.insert()
   end
 
-  @doc """
-  Removes a notebook from a user's favorites.
-
-  """
+  @doc "Removes a notebook from a user's favorites."
+  @spec delete_favorite_by_user_id(binary(), binary()) :: {:ok, integer()} | {:error, String.t()}
   def delete_favorite_by_user_id(notebook_id, user_id) do
     Repo.delete_all(from n in Favorite,
       where: n.user_id == ^user_id and n.notebook_id == ^notebook_id)
   end
 
-  @doc """
-  Send invite to a collaborator.
-  """
-  def send_notification(%User{} = user, notebook_id, owner) do
-    UserEmail.send_collaborator_email(user, notebook_id, owner)
+  def favorite?(notebook, user) do
+    Repo.exists?(from f in Favorite,
+      where: f.notebook_id == ^notebook.id and f.user_id == ^user.id)
   end
 end
