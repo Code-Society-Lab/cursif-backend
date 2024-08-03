@@ -5,6 +5,7 @@ defmodule CursifWeb.Resolvers.AccountsTest do
   import Cursif.AccountsFixtures
 
   alias CursifWeb.Resolvers.Accounts
+  alias Cursif.Notebooks.Page
   alias Cursif.Accounts.User
 
 
