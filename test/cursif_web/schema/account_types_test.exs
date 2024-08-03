@@ -89,8 +89,10 @@ defmodule CursifWeb.Schema.AccountTypesTest do
 
       conn = post(conn, "/api", %{
         "query" => """
-          mutation Login($email: String!, $username: String!, $password: String!) {
+          mutation Register($email: String!, $username: String!, $password: String!) {
             register(email: $email, username: $username, password: $password) {
+              id
+              email
               username
             }
           }
@@ -101,6 +103,8 @@ defmodule CursifWeb.Schema.AccountTypesTest do
       assert json_response(conn, 200) == %{
         "data" => %{
           "register" => %{
+            "id" => user.id,
+            "email" => user.email,
             "username" => user.username
           }
         }
