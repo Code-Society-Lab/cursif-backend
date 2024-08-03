@@ -15,6 +15,7 @@
         </div>
         <div class="button-container">
           <a class="button" href="<%= @base_url %>">Reset your password</a>
+          <p style="color: gray; font-size: 0.6em; word-wrap: break-word;"><%= @token %></p>
           <div class="message signature">
             <p>If you didn't request a new password, please disregard this email.</p>
           </div>
