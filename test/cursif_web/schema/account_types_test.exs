@@ -91,7 +91,6 @@ defmodule CursifWeb.Schema.AccountTypesTest do
         "query" => """
           mutation Register($email: String!, $username: String!, $password: String!) {
             register(email: $email, username: $username, password: $password) {
-              id
               email
               username
             }
