@@ -9,7 +9,7 @@ defmodule CursifWeb.Emails.UserEmail do
   @client_url Application.compile_env(:cursif, :client_url)
   @client_email Application.compile_env(:cursif, :email_sender)
 
-  defp send_email(user, subject, base_url, context, extra_context \\ %{}) do
+  defp send_email(user, subject, base_url, context, extra_context) do
     email_context = Map.merge(%{username: user.username, base_url: base_url}, extra_context)
     
     email =
