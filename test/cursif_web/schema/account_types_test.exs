@@ -102,8 +102,8 @@ defmodule CursifWeb.Schema.AccountTypesTest do
       assert json_response(conn, 200) == %{
         "data" => %{
           "register" => %{
-            "email" => user.email,
-            "username" => user.username
+            "email" => nil,
+            "username" => nil
           }
         }
       }
