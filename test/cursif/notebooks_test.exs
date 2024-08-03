@@ -33,7 +33,6 @@ defmodule Cursif.NotebooksTest do
       attrs = %{
         title: "some title",
         description: "some description",
-        owner_type: "user",
         owner_id: user.id,
       }
 

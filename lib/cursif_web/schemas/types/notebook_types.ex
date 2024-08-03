@@ -17,16 +17,8 @@ defmodule CursifWeb.Schemas.NotebookTypes do
 
     field :favorite, :boolean
 
-    field :owner, :owner do
+    field :owner, :partial_user do
       resolve(&Notebooks.get_owner/3)
-    end
-  end
-
-  union :owner do
-    types([:partial_user])
-
-    resolve_type fn
-      %Cursif.Accounts.User{}, _ -> :partial_user
     end
   end
 
@@ -40,11 +32,26 @@ defmodule CursifWeb.Schemas.NotebookTypes do
 
 	@desc "Collaborator representation"
   object :collaborator do
-    field :id, :id
-    field :notebook_id, :string
-    field :user_id, :string
-    field :email, :string
-    field :username, :string
+    field :user_id, :id, name: "id"
+
+    # This is kinda ugly and would be more interesting to handle this
+    # directly in the ecto schema. Maybe as a virtual field or smth. 
+    field :username, :string do
+      resolve(fn
+        %{user: %Cursif.Accounts.User{} = user}, _arg, _ctx ->
+          {:ok, user.username}
+        _, _, _ ->
+          {:ok, nil}
+      end)
+    end
+    field :email, :string do
+      resolve(fn
+        %{user: %Cursif.Accounts.User{} = user}, _args, _ctx ->
+          {:ok, user.email}
+        _, _, _ ->
+          {:ok, nil}
+      end)
+    end
   end
 
   @desc "Favorite representation"

@@ -5,7 +5,7 @@ defmodule Cursif.Notebooks.Notebook do
   alias Cursif.Repo
 
   alias Cursif.Accounts.User
-  alias Cursif.Notebooks.{Page, Collaborator, Macro, Favorite}
+  alias Cursif.Notebooks.{Page, Macro, Favorite, Collaborator}
 
   @type t :: %__MODULE__{
     title: String.t(),
@@ -14,7 +14,7 @@ defmodule Cursif.Notebooks.Notebook do
     owner_type: String.t(),
 
     pages: [Page.t()],
-    collaborators: [User.t()],
+    collaborators: [Collaborator.t()],
     macros: [Macro.t()],
 
     inserted_at: DateTime.t(),
@@ -27,13 +27,13 @@ defmodule Cursif.Notebooks.Notebook do
     field :title, :string
     field :description, :string
     field :owner_id, :binary_id
-    field :owner_type, :string
-    field :favorite, :boolean, virtual: true
+    field :owner_type, :string, default: "user"
 
-    has_many :pages, Page, foreign_key: :parent_id
-    many_to_many :collaborators, User, join_through: Collaborator
-    many_to_many :favorites, User, join_through: Favorite
     has_many :macros, Macro
+    has_many :pages, Page, foreign_key: :parent_id
+    has_many :collaborators, Collaborator
+
+    many_to_many :favorites, User, join_through: Favorite
 
     timestamps()
   end
@@ -49,15 +49,11 @@ defmodule Cursif.Notebooks.Notebook do
   end
 
   defp validate_association(%{changes: %{owner_type: "user", owner_id: owner_id}} = changeset) do
-    Repo.get!(User, owner_id)
-    changeset
-  rescue
-    Ecto.NoResultsError -> add_error(changeset, :owner_id, "is not a valid user")
-  end
-
-  defp validate_association(%{changes: %{owner_type: owner_type}} = changeset)
-       when owner_type not in ["User", "organization"] do
-    add_error(changeset, :owner_type, "is not a valid owner type")
+    if Repo.exists?(User, owner_id) do
+      changeset
+    else
+      add_error(changeset, :owner_id, "is not a valid user")
+    end
   end
 
   defp validate_association(changeset),
