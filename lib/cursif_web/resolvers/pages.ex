@@ -5,6 +5,11 @@ defmodule CursifWeb.Resolvers.Pages do
 
   @spec get_page_by_id(map(), map()) :: {:ok, Page.t()} | {:error, atom()}
   def get_page_by_id(%{id: id}, _context) do
+    get_page_by_id(id)
+  end
+
+  @spec get_page_by_id(binary()) :: {:ok, Page.t()} | {:error, atom()}
+  def get_page_by_id(id) do
     {:ok, Pages.get_page!(id)}
   rescue _ ->
     {:error, :not_found}

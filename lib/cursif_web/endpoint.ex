@@ -1,5 +1,12 @@
 defmodule CursifWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :cursif
+  use Absinthe.Phoenix.Endpoint
+
+  socket "/socket", CursifWeb.UserSocket,
+    websocket: [
+      connect_info: [:peer_data, :trace_context_headers, :x_headers, :uri]
+    ],
+    longpoll: false
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.

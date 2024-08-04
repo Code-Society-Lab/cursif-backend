@@ -23,7 +23,8 @@ defmodule Cursif.Pages do
       ** (Ecto.NoResultsError)
   """
   @spec get_page!(binary()) :: Page.t()
-  def get_page!(id), do: Repo.get!(Page, id) |> Repo.preload([:author, :children])
+  def get_page!(id),
+    do: Repo.get!(Page, id) |> Repo.preload([:author, :children])
 
   @doc """
   Creates a page.

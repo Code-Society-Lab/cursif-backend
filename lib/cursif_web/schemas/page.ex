@@ -11,7 +11,7 @@ defmodule CursifWeb.Schemas.Page do
     field :page, :page do
       arg(:id, non_null(:id))
 
-      middleware Speakeasy.LoadResourceByID, &Cursif.Pages.get_page!/1
+      middleware Speakeasy.LoadResourceByID, &Pages.get_page_by_id/1
       middleware Speakeasy.Authz, {Cursif.Pages, :collaborator}
 
       resolve(&Pages.get_page_by_id/2)
@@ -21,7 +21,6 @@ defmodule CursifWeb.Schemas.Page do
   @desc "Collection of mutations"
   object :page_mutations do
 
-    @desc "Create a page"
     field :create_page, :page do
       arg(:title, non_null(:string))
       arg(:content, :string, default_value: "")
@@ -30,7 +29,7 @@ defmodule CursifWeb.Schemas.Page do
 
       middleware Speakeasy.LoadResource, fn(params) ->
         if params.parent_type == "page" do
-          Cursif.Pages.get_page!(params.parent_id)
+          Pages.get_page_by_id(params.parent_id)
         else
           Cursif.Notebooks.get_notebook!(params.parent_id)
         end
@@ -40,15 +39,12 @@ defmodule CursifWeb.Schemas.Page do
       resolve(&Pages.create_page/2)
     end
 
-    @desc "Update a page"
     field :update_page, :page do
       arg(:id, non_null(:id))
       arg(:title, :string)
       arg(:content, :string)
-      arg(:parent_id, :id)
-      arg(:parent_type, :string)
 
-      middleware Speakeasy.LoadResourceByID, &Cursif.Pages.get_page!/1
+      middleware Speakeasy.LoadResourceByID, &Pages.get_page_by_id/1
       middleware Speakeasy.Authz, {Cursif.Pages, :collaborator}
 
       resolve(&Pages.update_page/2)
@@ -58,10 +54,29 @@ defmodule CursifWeb.Schemas.Page do
     field :delete_page, :page do
       arg(:id, non_null(:id))
 
-      middleware Speakeasy.LoadResourceByID, &Cursif.Pages.get_page!/1
+      middleware Speakeasy.LoadResourceByID, &Pages.get_page_by_id/1
       middleware Speakeasy.Authz, {Cursif.Pages, :collaborator}
 
       resolve(&Pages.delete_page/2)
+    end
+  end
+
+  @desc "Collection of subscriptions"
+  object :page_subscriptions do
+    field :page_updated, :page do
+      arg(:id, non_null(:id))
+
+      config fn args, _info ->
+        {:ok, topic: args.id}
+      end
+
+      trigger :update_page, topic: fn page ->
+        page.id
+      end
+
+      resolve fn page, _, _ ->
+        {:ok, page}
+      end
     end
   end
 end

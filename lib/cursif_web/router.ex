@@ -1,36 +1,37 @@
 defmodule CursifWeb.Router do
   use CursifWeb, :router
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
-
   pipeline :graphql do
+    plug :accepts, ["json"]
     plug CursifWeb.Context
   end
 
-  # API routes
-  scope "/api", CursifWeb do
-    pipe_through :api
-  end
-
-  # GraphQL API (authenticate required)
-  scope "/api" do
+  scope "/" do
     pipe_through :graphql
 
-    forward "/", Absinthe.Plug, schema: CursifWeb.Schema
-  end
+    forward "/api", Absinthe.Plug,
+            schema: CursifWeb.Schema,
+            socket: CursifWeb.UserSocket
 
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+            schema: CursifWeb.Schema,
+            socket: CursifWeb.UserSocket,
+            interface: :playground
+  end
 
   # Enables GraphiQL.
   #
   # You can access it by browsing to http://localhost:4000/graphiql. Authentication is still
   # required to perform requests.
-  scope "/graphiql" do
-    pipe_through :graphql
+  # scope "/graphiql" do
+  #   pipe_through :graphql
 
-    forward "/", Absinthe.Plug.GraphiQL, schema: CursifWeb.Schema, interface: :playground
-  end
+  #   forward "/",
+  #           Absinthe.Plug.GraphiQL,
+  #           schema: CursifWeb.Schema,
+  #           socket: CursifWeb.UserSocket,
+  #           interface: :playground
+  # end
 
   # Enables LiveDashboard only for development
   #

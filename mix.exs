@@ -41,7 +41,9 @@ defmodule Cursif.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:absinthe, "~> 1.7.5"},
+      {:absinthe, "~> 1.7"},
+      {:phoenix_pubsub, "~> 2.0"},
+      {:absinthe_phoenix, "~> 2.0"},
       {:absinthe_plug, "~> 1.5.8"},
       {:argon2_elixir, "~> 3.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},

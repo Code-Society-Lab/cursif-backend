@@ -73,7 +73,7 @@ defmodule CursifWeb.Schema do
   # Add schemas here
   import_types(CursifWeb.Schemas.{
     Account, 
-    Notebook, 
+    Notebook,
     Page,
   })
 
@@ -98,9 +98,24 @@ defmodule CursifWeb.Schema do
     import_fields(:page_mutations)
   end
 
-  # subscriptions do
-  #   import_fields(:your_subscription)
-  # end
+  subscription do
+    # import_fields(:page_subscriptions)
+    field :page_updated, :page do
+      arg(:id, non_null(:id))
+
+      config fn args, _info ->
+        {:ok, topic: args.id}
+      end
+
+      trigger :update_page, topic: fn page ->
+        page.id
+      end
+
+      resolve fn page, _, _ ->
+        {:ok, page}
+      end
+    end
+  end
 
   def middleware(middleware, field, %{identifier: type}) when type in [:query, :mutation, :subscription] do
     if field.identifier in @skip_authentication do
