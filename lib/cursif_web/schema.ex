@@ -99,22 +99,7 @@ defmodule CursifWeb.Schema do
   end
 
   subscription do
-    # import_fields(:page_subscriptions)
-    field :page_updated, :page do
-      arg(:id, non_null(:id))
-
-      config fn args, _info ->
-        {:ok, topic: args.id}
-      end
-
-      trigger :update_page, topic: fn page ->
-        page.id
-      end
-
-      resolve fn page, _, _ ->
-        {:ok, page}
-      end
-    end
+    import_fields(:page_subscriptions)
   end
 
   def middleware(middleware, field, %{identifier: type}) when type in [:query, :mutation, :subscription] do

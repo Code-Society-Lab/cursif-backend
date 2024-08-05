@@ -73,10 +73,6 @@ defmodule CursifWeb.Schemas.Page do
       trigger :update_page, topic: fn page ->
         page.id
       end
-
-      resolve fn page, _, _ ->
-        {:ok, page}
-      end
     end
   end
 end
