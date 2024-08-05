@@ -1,23 +1,18 @@
-defmodule CursifWeb.UserSocket do
+defmodule CursifWeb.GraphqlWSSocket do
   import Cursif.Guardian
 
-  use Phoenix.Socket
-  use Absinthe.Phoenix.Socket,
+  use Absinthe.GraphqlWS.Socket,
     schema: CursifWeb.Schema
 
-
-  def connect(params, socket) do
+  @impl true
+  def handle_init(params, socket) do
     current_user = get_current_user(params)
+    socket = assign_context(socket, current_user: current_user)
 
-    socket = Absinthe.Phoenix.Socket.put_options(socket, context: %{
-      current_user: current_user
-    })
-
-    {:ok, socket}
+    {:ok, %{}, socket}
   end
 
-  # move to context
-  defp get_current_user(%{"Authorization" => "Bearer " <> token}) do
+  defp get_current_user(%{"authToken" => token}) do
     with {:ok, user} <- CursifWeb.Context.authorize(token) do
       user
     end
@@ -33,6 +28,4 @@ defmodule CursifWeb.UserSocket do
       {:error, reason} -> {:error, reason}
     end
   end
-
-  def id(_socket), do: nil
 end

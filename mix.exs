@@ -45,6 +45,7 @@ defmodule Cursif.MixProject do
       {:phoenix_pubsub, "~> 2.0"},
       {:absinthe_phoenix, "~> 2.0"},
       {:absinthe_plug, "~> 1.5.8"},
+      {:absinthe_graphql_ws, "~> 0.3"}, # handle none-phoenix standard
       {:argon2_elixir, "~> 3.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:cors_plug, "~> 3.0"},

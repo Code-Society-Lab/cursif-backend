@@ -8,6 +8,10 @@ defmodule CursifWeb.Endpoint do
     ],
     longpoll: false
 
+  # change name of this Router
+  socket "/api/websocket", CursifWeb.GraphqlWSSocket,
+    websocket: [path: "", subprotocols: ["graphql-transport-ws"]]
+
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
