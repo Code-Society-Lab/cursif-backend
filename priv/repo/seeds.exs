@@ -42,15 +42,15 @@ defmodule Utils do
 end
 
 if not Repo.exists?(User) && Application.get_env(:cursif, :env) == :dev do
-  %{user: %{id: user_id}, notebook: %{id: notebook_id}} = 
+  %{user: %{id: user_id}, notebook: %{id: notebook_id}} =
     Utils.create_user(
       username: "dev",
       first_name: "Dev",
       last_name: "Elopment"
     )
 
-  Enum.map 0..10, fn i -> 
-    %{user: %{id: user_id}} = Utils.create_user() 
+  Enum.map 0..10, fn i ->
+    %{user: %{id: user_id}} = Utils.create_user()
 
     if i < 3 do
       Notebooks.add_collaborator(%{notebook_id: notebook_id, user_id: user_id})
