@@ -32,7 +32,7 @@ defmodule Cursif.Notebooks do
     query = from n in Notebook,
               left_join: c in assoc(n, :collaborators),
               left_join: f in assoc(n, :favorites),
-              where: (n.owner_id == ^user_id or c.id == ^user_id),
+              where: (n.owner_id == ^user_id or c.user_id == ^user_id),
               where: f.id == ^user_id,
               distinct: true
 
@@ -50,7 +50,7 @@ defmodule Cursif.Notebooks do
   def list_notebooks(%User{id: user_id}, _opts) do
     query = from n in Notebook,
               left_join: c in assoc(n, :collaborators),
-              where: n.owner_id == ^user_id or c.id == ^user_id,
+              where: n.owner_id == ^user_id or c.user_id == ^user_id,
               distinct: true
 
     Repo.preload(
