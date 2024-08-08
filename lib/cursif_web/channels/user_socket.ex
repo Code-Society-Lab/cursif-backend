@@ -5,6 +5,7 @@ defmodule CursifWeb.UserSocket do
   use Absinthe.Phoenix.Socket,
     schema: CursifWeb.Schema
 
+  channel "page:*", CursifWeb.PageChannel
 
   def connect(params, socket) do
     current_user = get_current_user(params)
@@ -17,6 +18,12 @@ defmodule CursifWeb.UserSocket do
   end
 
   # move to context
+  defp get_current_user(%{"token" => token}) do
+    with {:ok, user} <- CursifWeb.Context.authorize(token) do
+      user
+    end
+  end
+
   defp get_current_user(%{"Authorization" => "Bearer " <> token}) do
     with {:ok, user} <- CursifWeb.Context.authorize(token) do
       user
