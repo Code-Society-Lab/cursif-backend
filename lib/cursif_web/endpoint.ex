@@ -8,8 +8,7 @@ defmodule CursifWeb.Endpoint do
     ],
     longpoll: false
 
-  # change name of this Router
-  socket "/api/websocket", CursifWeb.GraphqlWSSocket,
+  socket "/subscriptions", CursifWeb.GraphqlWSSocket,
     websocket: [path: "", subprotocols: ["graphql-transport-ws"]]
 
   # The session will be stored in the cookie and signed,

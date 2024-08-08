@@ -12,6 +12,12 @@ defmodule CursifWeb.GraphqlWSSocket do
     {:ok, %{}, socket}
   end
 
+  @impl true
+  def handle_info({:subscription, _id, %{"data" => %{"pageUpdated" => thing_changes}}}, %{assigns: %{thing: thing}} = socket) do
+    IO.inspect(thing_changes)
+    {:ok, socket}
+  end
+
   defp get_current_user(%{"authToken" => token}) do
     with {:ok, user} <- CursifWeb.Context.authorize(token) do
       user
