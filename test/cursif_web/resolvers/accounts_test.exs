@@ -5,7 +5,7 @@ defmodule CursifWeb.Resolvers.AccountsTest do
   import Cursif.AccountsFixtures
 
   alias CursifWeb.Resolvers.Accounts
-  alias Cursif.Accounts.User
+  alias Cursif.Notebooks.Page
 
 
   setup [:create_unique_user]
@@ -34,7 +34,18 @@ defmodule CursifWeb.Resolvers.AccountsTest do
 
   describe "register/2" do
     test "successful user registration", %{conn: conn} do
-      assert {:ok, %User{} = _} = Accounts.register(unique_user_attributes(), conn)
+      user_attributes = unique_user_attributes()
+
+      case Accounts.register(user_attributes, conn) do
+        {:ok, page} ->
+          assert %Page{} = page
+          assert page.title == "Welcome"
+          assert page.content != nil
+          assert page.parent_id != nil
+          assert page.parent_type == "notebook"
+        {:error, _} ->
+          flunk("Expected successful registration but got an error")
+      end
     end
 
     test "failing user registration, missing attributes", %{conn: conn} do
@@ -42,7 +53,7 @@ defmodule CursifWeb.Resolvers.AccountsTest do
       assert [username: _, email: _, password: _] = errors
     end
 
-    test "failing user registration, invalide attributes", %{conn: conn, user: user} do
+    test "failing user registration, invalid attributes", %{conn: conn, user: user} do
       unique_user = unique_user_attributes()
       assert {:error, %Ecto.Changeset{}} = Accounts.register(%{unique_user | username: user.username}, conn)
       assert {:error, %Ecto.Changeset{}} = Accounts.register(%{unique_user | email: user.email}, conn)
