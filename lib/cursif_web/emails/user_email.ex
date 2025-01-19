@@ -9,7 +9,7 @@ defmodule CursifWeb.Emails.UserEmail do
   @client_url Application.compile_env(:cursif, :client_url)
   @client_email Application.compile_env(:cursif, :email_sender)
 
-  defp send_email(user, subject, base_url, context, extra_context) do
+  defp send_email(user, subject, base_url, context, extra_context \\ %{}) do
     email_context = Map.merge(%{username: user.username, base_url: base_url}, extra_context)
     
     email =
@@ -29,7 +29,7 @@ defmodule CursifWeb.Emails.UserEmail do
   """
   def send_confirmation_email(user, token) do
     base_url = "#{@client_url}/confirm?token=#{token}"
-    send_email(user, "Welcome to Cursif ~ Email Verification", base_url, "welcome.html", %{token: token})
+    send_email(user, "Welcome to Cursif ~ Email Verification", base_url, "welcome.html")
   end
 
   @doc """
@@ -37,7 +37,7 @@ defmodule CursifWeb.Emails.UserEmail do
   """
   def send_password_reset_email(user, token) do
     base_url = "#{@client_url}/reset-password?token=#{token}"
-    send_email(user, "Cursif ~ Password Reset", base_url, "reset.html", %{token: token})
+    send_email(user, "Cursif ~ Password Reset", base_url, "reset.html")
   end
 
   @doc """
