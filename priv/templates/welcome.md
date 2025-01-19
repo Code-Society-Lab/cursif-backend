@@ -12,5 +12,5 @@ Here are some tips: Use markdown for formatting content, and check out the docum
 
 ## Contact Us
 - Email: cursif@codesociety.xyz
-- Discord: [Cursif Community](https://discord.gg/xxxxxx)
+- Discord: [Cursif Community](https://discord.gg/FzgwHD7Am3)
 - Github: [Cursif](https://github.com/Code-Society-Lab/cursif)
