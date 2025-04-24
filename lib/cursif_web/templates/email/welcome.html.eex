@@ -14,7 +14,8 @@
           </p>
         </div>
         <div class="button-container">
-          <a class="button" href="<%= @base_url %>">Verify your account</a>
+          <a class="button" href="<%= @base_url %>">Verify your account</a><br><br>
+          <a style="color: gray; font-size: 0.6em; word-wrap: break-word;" href="<%= @base_url %>"><%= @base_url %></a>
           <div class="message signature">
             <p>If you didn't sign up for Cursif, please disregard this email.</p>
           </div>
